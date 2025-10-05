@@ -482,11 +482,14 @@ class SubscriberController extends Controller
                 $n = $now->copy()->addMonth();
                 $daysAdded = $now->diffInDays($n);
                 } else {
-                    $new_expiration = $lastExpiration->addMonth()->format('d M Y H:i');
+                    // $new_expiration = $lastExpiration->addMonth()->format('d M Y H:i');
                     
                     
-                    $n = $lastExpiration->copy()->addMonth();
-                    $daysAdded = $lastExpiration->diffInDays($n);
+                    $new_expiration = $lastExpiration->copy()->addMonth()->format('d M Y 12:00');
+                                $daysAdded = $lastExpiration->diffInDays($new_expiration);
+                    
+                    // $n = $lastExpiration->copy()->addMonth();
+                    // $daysAdded = $lastExpiration->diffInDays($n);
                 }
             }
 

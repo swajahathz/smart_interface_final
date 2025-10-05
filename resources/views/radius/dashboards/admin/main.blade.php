@@ -39,7 +39,7 @@
 
                     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                         <div>
-                            <p class="fw-semibold fs-18 mb-0">Welcome back, {{ $firstname.' '.$lastname }} !</p>
+                            <p class="fw-semibold fs-18 mb-0">Welcome backss, {{ $firstname.' '.$lastname }} !</p>
                             <span class="fs-semibold text-muted">Track your subscriber activity here.</span>
                         </div>
                         <div class="btn-list mt-md-0 mt-2">

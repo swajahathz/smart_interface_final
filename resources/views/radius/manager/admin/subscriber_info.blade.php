@@ -213,6 +213,10 @@
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#addons" id="addons_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Addons </a>
+                                                        
+                                                          <a class="nav-link" data-bs-toggle="tab" role="tab"
+                                                aria-current="page" href="#extras" id="extras_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
+                                                        class="ri-contacts-book-2-line me-2 align-middle d-inline-block"></i>Extras</a>
                                                   @endif      
                                                 <!--<a class="nav-link" data-bs-toggle="tab" role="tab"-->
                                                 <!--aria-current="page" href="#usage-vertical-link" aria-selected="false"><i-->
@@ -234,6 +238,7 @@
                                                 aria-current="page" href="#invoice" id="invoice_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-bank-line me-2 align-middle d-inline-block"></i>Invoices</a>
                                                         
+                                                      
                                                         
                                                         <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#session" id="session_btn" data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
@@ -569,6 +574,55 @@
                                                                                     <td colspan="2">
                                                                                         <table class="table table-sm text-nowrap mb-0 table-borderless">
                                                                                             <tbody>
+                                                                                                @if ($subscriber[0]['discount'] > 0)
+                                                                                                    <tr>
+                                                                                                        <th scope="row">
+                                                                                                            <p class="mb-0 fs-14">Discount :</p>
+                                                                                                        </th>
+                                                                                                        <td>
+                                                                                                            <p class="mb-0 fw-semibold fs-16 text-danger">
+                                                                                                                
+                                                                                                              -  @if ($recharge_type == 2)
+                                                                                                                        {{ number_format(($subscriber[0]['discount'] / 30) * $daysAdded) }}
+                                                                                                                         @elseif ($recharge_type == 4)
+                                                                                                                                 @if ($fullamount == 0)
+                                                                                                                                {{ number_format($subscriber[0]['discount'] / 30 * $daysAdded) }}
+                                                                                                                            @else
+                                                                                                                                 {{ $subscriber[0]['discount']}}
+                                                                                                                            @endif
+                                                                                                            
+                                                                                                                    @else
+                                                                                                                        {{ $subscriber[0]['discount']}}
+                                                                                                                    @endif
+                                                                                                                </p>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
+                                                                                                
+                                                                                                @if ($subscriber[0]['extra_charges'] > 0)
+                                                                                                    <tr>
+                                                                                                        <th scope="row">
+                                                                                                            <p class="mb-0 fs-14">Other Charges :</p>
+                                                                                                        </th>
+                                                                                                        <td>
+                                                                                                            <p class="mb-0 fw-semibold fs-16 text-success">
+                                                                                                                
+                                                                                                                @if ($recharge_type == 2)
+                                                                                                                        {{ number_format(($subscriber[0]['extra_charges'] / 30) * $daysAdded) }}
+                                                                                                                         @elseif($recharge_type == 4)
+                                                                                                                                 @if ($fullamount == 0)
+                                                                                                                                {{ number_format($subscriber[0]['extra_charges'] / 30 * $daysAdded) }}
+                                                                                                                            @else
+                                                                                                                                 {{ $subscriber[0]['extra_charges']}}
+                                                                                                                            @endif
+                                                                                                            
+                                                                                                                    @else
+                                                                                                                        {{ $subscriber[0]['extra_charges']}}
+                                                                                                                    @endif
+                                                                                                                </p>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
                                                                                                 <tr>
                                                                                                     <th scope="row">
                                                                                                         <p class="mb-0 fs-14">Total :</p>
@@ -576,19 +630,29 @@
                                                                                                     <td>
                                                                                                         <p class="mb-0 fw-semibold fs-16 text-success">
                                                                                                             
+                                                                                                            
+                                                                                                            
+                                                                                                            
+                                                                                                            
                                                                                                             @if ($recharge_type == 2)
-                                                                                                    {{ number_format(($subscriber[0]['totalPrice'] / 30) * $daysAdded, 2) }}
-                                                                                                     @endif
-                                                                                                        @if ($recharge_type == 4)
-                                                                                                             @if ($fullamount == 0)
-                                                                                                                    {{ number_format($subscriber[0]['totalPrice'] / 30 * $daysAdded, 2) }}
-                                                                                                                @else
-                                                                                                                     {{ $subscriber[0]['totalPrice']}}.00
-                                                                                                                @endif
-                                                                                                        
-                                                                                                                @else
-                                                                                                                    {{ $subscriber[0]['totalPrice']}}.00
-                                                                                                                @endif
+    {{ number_format((($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges']) / 30) * $daysAdded, 2) }}
+
+@elseif ($recharge_type == 4)
+    @if ($fullamount == 0)
+        {{ number_format((($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges']) / 30) * $daysAdded, 2) }}
+    @else
+        {{ number_format($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'], 2) }}
+    @endif
+
+@else
+    {{ number_format($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'], 2) }}
+@endif
+
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+                                                                                                                     
+                                                                                                           
                                                                                                             </p>
                                                                                                     </td>
                                                                                                 </tr>
@@ -781,13 +845,40 @@
                                                                                     <td colspan="2">
                                                                                         <table class="table table-sm text-nowrap mb-0 table-borderless">
                                                                                             <tbody>
+                                                                                                @if ($subscriber[0]['discount'] > 0)
+                                                                                                    <tr>
+                                                                                                     
+                                                                                                        <th scope="row">
+                                                                                                            <p class="mb-0 fs-14">Discount :</p>
+                                                                                                        </th>
+                                                                                                        <td>
+                                                                                                            <p class="mb-0 fw-semibold fs-16 text-danger" id="discounttotalvalue">
+                                                                                                              - {{ number_format(($subscriber[0]['discount'] / 30), 2) }}
+                                                                                                                </p>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
+                                                                                                @if ($subscriber[0]['extra_charges'] > 0)
+                                                                                                    <tr>
+                                                                                                     
+                                                                                                        <th scope="row">
+                                                                                                            <p class="mb-0 fs-14">Other Charges :</p>
+                                                                                                        </th>
+                                                                                                        <td>
+                                                                                                            <p class="mb-0 fw-semibold fs-16 text-success" id="extra_chargestotalvalue">
+                                                                                                                {{ number_format(($subscriber[0]['extra_charges'] / 30), 2) }}
+                                                                                                                </p>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
                                                                                                 <tr>
+                                                                                                     
                                                                                                     <th scope="row">
                                                                                                         <p class="mb-0 fs-14">Total :</p>
                                                                                                     </th>
                                                                                                     <td>
                                                                                                         <p class="mb-0 fw-semibold fs-16 text-success" id="perdaytotalvalue">
-                                                                                                            {{ number_format(($subscriber[0]['totalPrice'] / 30), 2) }}
+                                                                                                            {{ number_format(($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'] / 30), 2) }}
                                                                                                             </p>
                                                                                                     </td>
                                                                                                 </tr>
@@ -940,7 +1031,47 @@
                                                     
                                                     
                                                 </div>
+                                                
+                                                 <div class="tab-pane text-muted" id="extras"
+                                                    role="tabpanel" style="padding:0;">
+                                            
+                                                    <form id="extras_form" method="POST">
+                                                            <div class="card-body" style="padding:10px;">
+                                                            <div class="alert-container"></div>
+                                                                <div class="row gy-4 mb-4">
+                                                                    
+                                                                    <div class="col-xl-6">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                        <div class="input-group">
+                                                                                <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
+                                                                                <input type="number" class="form-control" id="discount" value="{{ $subscriber[0]['discount'] }}" >
+                                                                                <div class="input-group-text">Discount</div>
+                                                                            </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="col-xl-6">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                        <div class="input-group">
+                                                                              <input type="number" class="form-control" id="extra_charges" value="{{ $subscriber[0]['extra_charges'] }}" >
+                                                                                <div class="input-group-text">Extra Charges</div>
+                                                                            </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer text-end pt-0">
+                                                                            <button type="submit" id="extrassubmitBtn" href="javascript:void(0);" class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;">
+                                                                                Update
+                                                                            </button>
+                                                                            <button class="btn btn-primary-light loadingBtn" style="display:none;" type="button" disabled="" style="width:100%;">
+                                                                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                                                                                Loading...
+                                                                            </button>
+                                                            </div>
+                                                            </form>
+                                                </div>
                                             </div>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -1415,6 +1546,80 @@ $('#subscriber_form').on('submit', function (e) {
 });
 
 
+            // INSERT DATA
+$('#extras_form').on('submit', function (e) {
+            e.preventDefault();
+
+
+            // Disable all inputs and buttons
+          $('#extras_form input, #extras_form button').prop('disabled', true);
+            
+
+          
+            // Prepare form data
+            let formData = {
+               
+                discount: $('#discount').val(),
+                extra_charges: $('#extra_charges').val(),
+            };
+
+            var subscriber_id = $('#subscriber_id').val();
+
+            // Send AJAX request
+            $.ajax({
+                url: baseUrl+'/subscriberextrasupdate/'+subscriber_id,  // Replace with your API endpoint
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    console.log(response.status);
+
+                    if (response.status === 1) {
+                        showToast("bg-success","Subscriber Updated.",response.message)
+                        // $('#subscriber_form')[0].reset();
+
+                    }
+                    else if (response.status === 2) {
+                        // ALREADY AVALIABLE
+                        showToast("bg-warning","Already Available. ",response.message)
+
+                        // alert(response.message);
+                    } 
+                    else if (response.status === 501) {
+                        //RADIUS SERVER ERROR
+                        // showAlert(response.message,"danger");
+                        showToast("bg-danger","Server error. ",response.message)
+                    }
+                    else if (response.status === 500) {
+                        //RADIUS SERVER ERROR
+                        showAlert(response.message,"danger");
+                    }
+                    else if (response.status === 404) {
+                        //RADIUS SERVER ERROR
+                        showAlert(response.message,"danger");
+                    }
+                    
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    showAlert('Something Wrong!',"danger");
+                },
+                complete: function () {
+                // Hide the Loading button and show the Submit button again
+
+                $('#extras_form input, #extras_form button').prop('disabled', false);
+                $('.loadingBtn').hide();
+                $('#extrassubmitBtn').show();
+                 }
+            });
+});
+
+
 $("#change_password").on('click',function(e){
     e.preventDefault();
     
@@ -1878,6 +2083,8 @@ $("#change_service").on('click',function(e){
         let cardAmount = {{ $subscriber[0]['card_amount'] }};
         let addonAmount = {{ $subscriber[0]['addonsPrice'] }};
         let totalAmount = {{ $subscriber[0]['totalPrice'] }};
+        let discountAmount = {{ $subscriber[0]['discount'] }};
+        let extra_chargesAmount = {{ $subscriber[0]['extra_charges'] }};
          let originalExpiration = new Date("{{ $subscriber[0]['expiration'] }}");
         let now = new Date();
 
@@ -1901,13 +2108,28 @@ $("#change_service").on('click',function(e){
             let perDay = cardAmount / 30;
             let perDay2 = addonAmount / 30;
             let perDay3 = totalAmount / 30;
+            let perDay4 = discountAmount / 30;
+            let perDay5 = extra_chargesAmount / 30;
+            
+            
+            
+            
             let totalcardvalue = (perDay * days).toFixed(2);
-    let totaladdonvalue = (perDay2 * days).toFixed(2);
-    let totalamountvalue = (perDay3 * days).toFixed(2);
+            let totaladdonvalue = (perDay2 * days).toFixed(2);
+            let totalamountvalue = (perDay3 * days).toFixed(2);
+            let discountamountvalue = (perDay4 * days).toFixed(2);
+            let extra_chargesamountvalue = (perDay5 * days).toFixed(2);
+            
+     
+
+let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + parseFloat(extra_chargesamountvalue)).toFixed(2);
+
 
             $("#perdaycardvalue").html(totalcardvalue);
             $("#perdayaddonvalue").html(totaladdonvalue);
-            $("#perdaytotalvalue").html(totalamountvalue);
+            $("#discounttotalvalue").html(discountamountvalue);
+            $("#extra_chargestotalvalue").html(extra_chargesamountvalue);
+            $("#perdaytotalvalue").html(add);
             $(".quantity").html(days+" Days");
             
             updateExpiration(days);
@@ -1982,52 +2204,52 @@ $("#change_service").on('click',function(e){
         </script>
         
         <script>
-const basePathKey = 'subscriber_info_tab';
-const currentTabId = Math.random().toString(36).substr(2, 9);
-const currentUrl = window.location.pathname;
+// const basePathKey = 'subscriber_info_tab';
+// const currentTabId = Math.random().toString(36).substr(2, 9);
+// const currentUrl = window.location.pathname;
 
-// BroadcastChannel create karo
-const channel = new BroadcastChannel('subscriber_info_channel');
+// // BroadcastChannel create karo
+// const channel = new BroadcastChannel('subscriber_info_channel');
 
-// function: claim tab
-function claimTab() {
-    const stored = JSON.parse(localStorage.getItem(basePathKey) || '{}');
+// // function: claim tab
+// function claimTab() {
+//     const stored = JSON.parse(localStorage.getItem(basePathKey) || '{}');
 
-    if (stored.tabId && stored.tabId !== currentTabId) {
-        // dusri tab already owner → usse notify karo ki nayi URL load karni hai
-        channel.postMessage({ type: 'load-new-url', url: currentUrl });
-        // aur current tab close ya redirect
-        alert("Multi user tab not allowed.")
-        window.close(); // ya window ko redirect kar do
-        return false;
-    }
+//     if (stored.tabId && stored.tabId !== currentTabId) {
+//         // dusri tab already owner → usse notify karo ki nayi URL load karni hai
+//         channel.postMessage({ type: 'load-new-url', url: currentUrl });
+//         // aur current tab close ya redirect
+//         alert("Multi user tab not allowed.")
+//         window.close(); // ya window ko redirect kar do
+//         return false;
+//     }
 
-    // ye tab ab owner
-    localStorage.setItem(basePathKey, JSON.stringify({ tabId: currentTabId, timestamp: Date.now(), url: currentUrl }));
-    return true;
-}
+//     // ye tab ab owner
+//     localStorage.setItem(basePathKey, JSON.stringify({ tabId: currentTabId, timestamp: Date.now(), url: currentUrl }));
+//     return true;
+// }
 
-// receive messages from other tabs
-channel.onmessage = (ev) => {
-    const data = ev.data;
-    if (data.type === 'load-new-url') {
-        if (window.location.pathname !== data.url) {
-            // existing tab ko update karo
-            window.location.href = data.url; // ya AJAX load kar do content
-        }
-    }
-}
+// // receive messages from other tabs
+// channel.onmessage = (ev) => {
+//     const data = ev.data;
+//     if (data.type === 'load-new-url') {
+//         if (window.location.pathname !== data.url) {
+//             // existing tab ko update karo
+//             window.location.href = data.url; // ya AJAX load kar do content
+//         }
+//     }
+// }
 
-// release lock on close/refresh
-window.addEventListener('beforeunload', () => {
-    const stored = JSON.parse(localStorage.getItem(basePathKey) || '{}');
-    if (stored.tabId === currentTabId) {
-        localStorage.removeItem(basePathKey);
-    }
-});
+// // release lock on close/refresh
+// window.addEventListener('beforeunload', () => {
+//     const stored = JSON.parse(localStorage.getItem(basePathKey) || '{}');
+//     if (stored.tabId === currentTabId) {
+//         localStorage.removeItem(basePathKey);
+//     }
+// });
 
-// run claim
-claimTab();
+// // run claim
+// claimTab();
 </script>
 
         
