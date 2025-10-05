@@ -379,6 +379,12 @@
                                                                             </div>
                                                                         @endif
                                                                    
+                                                                   <div class="col-xl-12">
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" id="vlan" value="{{ $manager['vlan'] }}" placeholder="Leave blank for disable.  Example 401, 402, 403">
+                                                                                    <div class="input-group-text">VLAN ALLOWED</div>
+                                                                                     </div>
+                                                                            </div>
                                                                     <div class="col-xl-12">
                                                                         <label for="job-description" class="form-label">Description :</label>
                                                                         <textarea class="form-control" id="remarks" rows="2">{{ $manager['remarks'] }}</textarea>
@@ -1415,6 +1421,7 @@ $('#service_table').on('click', '.alert-confirm', function() {
                 dplc_id: $('#dplc_id').val(),
                 aggr_id: $('#aggr_id').val(),
                 ref_id: $('#ref_id').val(),
+                vlan: $('#vlan').val(),
             };
             
             
