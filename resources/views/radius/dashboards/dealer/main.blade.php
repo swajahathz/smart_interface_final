@@ -503,8 +503,13 @@
                         $('#activeValue').removeClass('shimmer').text(response.active_users);
                         $('#expireValue').removeClass('shimmer').text(response.expired_users);
                         $('#disableValue').removeClass('shimmer').text(response.disabled_users);
-                        $('#thismonthtopup').removeClass('shimmer').text(response.thismonthtopup);
-                        $('#lastmonthtopup').removeClass('shimmer').text(response.lastmonthtopup);
+                          $('#thismonthtopup')
+    .removeClass('shimmer')
+    .text(Number(response.thismonthtopup).toLocaleString('en-US', { minimumFractionDigits: 2 }));
+
+$('#lastmonthtopup')
+    .removeClass('shimmer')
+    .text(Number(response.lastmonthtopup).toLocaleString('en-US', { minimumFractionDigits: 2 }));
                         $('#wallet_balance').removeClass('shimmer').text("Wallet "+response.balance);
                         $('#pending_commission').removeClass('shimmer').text("Commission "+response.commission);
                         $('#expire3Value').removeClass('shimmer').text(response.upcomingexpire3days);
@@ -622,6 +627,7 @@
                         
                         let html = '';
                         response.forEach(function(item) {
+                            let amount =  Number(item.amount).toLocaleString('en-US', { minimumFractionDigits: 2 });
                             html += `
                                 <li>
                                     <div class="d-flex align-items-top flex-wrap">
@@ -634,7 +640,7 @@
                                             <p class="fw-semibold mb-0">${item.recevierName}</p>
                                             <span class="text-muted fs-12">${item.datetime}</span>
                                         </div>
-                                        <div class="fw-semibold fs-15">${item.amount}</div>
+                                        <div class="fw-semibold fs-15">${amount}</div>
                                     </div>
                                 </li>
                             `;

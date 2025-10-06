@@ -1303,6 +1303,7 @@ $('#service_table').on('click', '.alert-confirm', function() {
                 email: $('#email').val(),
                 cnic: $('#cnic').val(),
                 remarks: $('#remarks').val(),
+                vlan: '{{ $manager['vlan'] }}',
             };
 
             var manager_id = $('#user_id').val();

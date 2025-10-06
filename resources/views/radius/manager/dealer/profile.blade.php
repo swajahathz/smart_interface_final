@@ -228,7 +228,7 @@
                                                                         <!-- <label for="mobile" class="form-label">Mobile</label> -->
                                                                         <div class="input-group">
                                                                                 <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
-                                                                                <input type="text" class="form-control" id="firstname" value="{{ $manager['firstname'] }}" placeholder="Type firstname" required>
+                                                                                <input type="text" class="form-control" id="firstname" value="{{ $manager['firstname'] }}" placeholder="Type firstname" disabled>
                                                                                 <input type="hidden" class="form-control" id="user_id" value="{{ $manager['user_id'] }}" required>
                                                                                 <input type="hidden" class="form-control" id="token" value="{{$token}}" disabled>
                                                                                 <div class="input-group-text">Firstname</div>
@@ -290,6 +290,13 @@
                                                                         <textarea class="form-control" id="remarks" rows="2"  disabled>{{ $manager['remarks'] }}</textarea>
                                                                     </div>
                                                                 </div>
+                                                                  <button type="submit" id="submitBtn" href="javascript:void(0);" class="btn btn-primary-light btn-wave waves-effect waves-light" style="width:100%;">
+                                                                                Update Password
+                                                                            </button>
+                                                                            <button class="btn btn-primary-light loadingBtn" style="display:none;width:100%;" type="button" disabled="">
+                                                                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                                                                                Loading...
+                                                                            </button>
                                                         </form>
                                                     </div>
                                                     <div class="tab-pane fade p-0 border-0" id="posts-tab-pane"
@@ -560,6 +567,7 @@
         
         
         
+        
             $('#subscriber_form').on('submit', function (e) {
                     e.preventDefault();
 
@@ -574,15 +582,16 @@
             let formData = {
                
                
-                firstname: $('#firstname').val(),
+                firstname: '{{$manager['firstname']}}',
                 token: $('#password').val(),
-                lastname: $('#lastname').val(),
-                address: $('#address').val(),
-                mobile: $('#mobile').val(),
-                phone: $('#phone').val(),
-                email: $('#email').val(),
-                cnic: $('#cnic').val(),
-                remarks: $('#remarks').val(),
+                lastname: '{{$manager['lastname']}}',
+                address:'{{$manager['address']}}',
+                mobile: '{{$manager['mobile']}}',
+                phone: '{{$manager['mobile']}}',
+                email: '{{$manager['email']}}',
+                cnic: '{{$manager['cnic']}}',
+                remarks: '{{$manager['remarks']}}',
+                vlan: '{{$manager['vlan']}}',
             };
 
             var manager_id = $('#user_id').val();
@@ -601,7 +610,7 @@
                     console.log(response.status);
 
                     if (response.status === 1) {
-                        showToast("bg-success","Manager Updated.",response.message)
+                        showToast("bg-success","Password Updated.",response.message)
                         // $('#subscriber_form')[0].reset();
 
                     }
@@ -640,6 +649,7 @@
                  }
             });
 });
+
 
 
 $("#posts-tab").on('click',function(){
