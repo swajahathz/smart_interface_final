@@ -187,6 +187,8 @@
                                         data-bs-target="#change_expire" class="btn btn-success btn-raised-shadow btn-wave btn-sm">Change Expire</button>
                                       @endif
                                       
+                                      <button id="sync" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Sync</button>
+                                      
                              
                                       </div>
                                     </div>
@@ -1617,6 +1619,33 @@ $('#extras_form').on('submit', function (e) {
                 $('#extrassubmitBtn').show();
                  }
             });
+});
+
+
+$("#sync").on('click',function(){
+   
+   let userid = '{{ $subscriber[0]['username'] }}';
+   
+       $.ajax({
+                url: baseUrl+'/subscribersync/'+userid,  // Replace with your API endpoint
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    
+                    if (response.status === 1) {
+                        showToast("bg-success","Subscriber Synced.",response.message)
+                        // $('#subscriber_form')[0].reset();
+
+                    }
+                    
+                }
+       });
+   
+    
 });
 
 
