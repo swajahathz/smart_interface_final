@@ -204,6 +204,24 @@
                                                     aria-current="page" href="#recharge" aria-selected="true"><i
                                                         class="ri-home-smile-line me-2 align-middle d-inline-block"></i>Recharge</a>
                                                         
+                                                         @php
+                                                                $apiUrll = config('app.api_base_url');
+                                                            @endphp
+                                                            
+                                                            @if ($apiUrll === 'https://smartradapi.alburakinternet.net.pk/api')
+                                                              @if($subscriber[0]['status'] == 'active')
+                                                                                           
+                                                                                                    @if($subscriber[0]['add_days_limit'] == 1)
+                                                                                                              <a class="nav-link" data-bs-toggle="tab" role="tab"
+                                                                                            aria-current="page" href="#adddays" aria-selected="true"><i
+                                                                                                class="ri-home-smile-line me-2 align-middle d-inline-block"></i>Add Days</a>
+                                                                                                
+                                                                                                 @endif
+                                                                                           @endif 
+                                                            @endif
+                                                       
+                                                        
+                                                        
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#ledger" id="ledger_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-bank-line me-2 align-middle d-inline-block"></i>Ledger</a>
@@ -631,6 +649,232 @@
                                                     
                                                     
                                                 </div>
+                                                
+                                                <div class="tab-pane text-muted" id="adddays"
+                                                    role="tabpanel" style="padding:5px;">
+                                                    <div class="col-xl-12 tran_card_success" style="display:none;height: 50vh;justify-content: center;
+                                                                align-items: center;flex-direction: column;">
+
+                                                       <div class="mb-3">
+                                                           <span class="avatar avatar-md avatar-rounded bg-success" style="width: 5rem;height: 5rem;">
+                                                              <i class='bx bx-check' style="    color:rgb(255, 255, 255);font-size: 30px;"></i>
+                                                            </span>
+                                                        </div>
+                                                       <div style="text-align:center;cursor: pointer;" onclick="location.reload();"><h5>Transaction Successful.</h5><br><i class='bx bx-refresh'></i> Click for Refresh your page.</div>
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-12 tran_card" style="display:none;height: 50vh;justify-content: center;
+                                                                align-items: center;flex-direction: column;">
+
+                                                       <div class="mb-3">
+                                                           <span class="avatar avatar-md avatar-rounded bg-warning" style="width: 5rem;height: 5rem;">
+                                                              <i class='bx bx-loader bx-spin' style="    color:rgb(255, 255, 255);font-size: 30px;"></i>
+                                                            </span>
+                                                        </div>
+                                                       <div>Transaction Processing...</div>
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-12 recharge_card">
+                                                        <div class="card custom-card">
+                                                      <div class="card-header d-md-flex d-block">
+                                                            <div class="h5 mb-0 d-sm-flex d-bllock align-items-center">
+                                                                <div class="ms-0 mt-sm-0 mt-2">
+                                                                    <div class="h6 fw-semibold mb-0">Recharge Type : <span class="text-primary">Add Days</span></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ms-auto mt-md-0 mt-2 d-flex">
+                                                                <div><label class="form-control">SELECT</label></div>
+                                                                <select name="days" id="days" class="form-control">
+                                                                    @for ($i = 1; $i <= 3; $i++)
+                                                                        <option value="{{ $i }}" {{ $i == 1 ? 'selected' : '' }}>
+                                                                            {{ $i }} Day{{ $i > 1 ? 's' : '' }}
+                                                                        </option>
+                                                                    @endfor
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row gy-3">
+                                                                <!-- <div class="col-xl-12">
+                                                                    <div class="row">
+                                                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                                                            <p class="text-muted mb-2">
+                                                                                Billing From :
+                                                                            </p>
+                                                                            <p class="fw-bold mb-1">
+                                                                                SPRUKO TECHNOLOGIES
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                Mig-1-11,Manroe street
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                Georgetown,Washington D.C,USA,200071
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                sprukotrust.ynex@gmail.com
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                (555) 555-1234
+                                                                            </p>
+                                                                            <p class="text-muted">For more information check for <a href="javascript:void(0);" class="text-primary fw-semibold"><u>GSTIN</u></a> Details.</p>
+                                                                        </div>
+                                                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ms-auto mt-sm-0 mt-3">
+                                                                            <p class="text-muted mb-2">
+                                                                                Billing To :
+                                                                            </p>
+                                                                            <p class="fw-bold mb-1">
+                                                                                Json Taylor
+                                                                            </p>
+                                                                            <p class="text-muted mb-1">
+                                                                                Lig-22-1,20 Covington Place
+                                                                            </p>
+                                                                            <p class="text-muted mb-1">
+                                                                                New Castle,de, United States,19320
+                                                                            </p>
+                                                                            <p class="text-muted mb-1">
+                                                                                jsontaylor2134@gmail.com
+                                                                            </p>
+                                                                            <p class="text-muted">
+                                                                                +1 202-918-2132
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> -->
+                                                                <div class="col-xl-3">
+                                                                    <p class="fw-semibold text-muted mb-1">Transaction ID :</p>
+                                                                    <p class="fs-15 mb-1">#@php
+                                                                            $tranID = bin2hex(random_bytes(6));
+                                                                        @endphp
+                                                                        
+                                                                        {{ $tranID }}</p>
+                                                                </div>
+                                                                <div class="col-xl-3">
+                                                                    <p class="fw-semibold text-muted mb-1">Renew Date :</p>
+                                                                    <p class="fs-15 mb-1">{{ $currentDateTime->format('d,M Y') }}</p>
+                                                                </div>
+                                                                <div class="col-xl-3">
+                                                                    <p class="fw-semibold text-muted mb-1">Last Expire :</p>
+                                                                    <p class="fs-15 mb-1">{{$subscriber[0]['expiration']}}</p>
+                                                                </div>
+                                                                <div class="col-xl-3">
+                                                                    <p class="fw-semibold text-muted mb-1">New Expire :</p>
+                                                                    <p class="fs-16 mb-1 fw-semibold" id="newexpiration">{{ $new_expiration }}</span></p>
+                                                                </div>
+                                                                <div class="col-xl-12">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table nowrap text-nowrap border mt-4">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Type</th>
+                                                                                    <th>DESCRIPTION</th>
+                                                                                    <th>QUANTITY</th>
+                                                                                    <th>TOTAL</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <div class="fw-semibold">
+                                                                                            Card Recharge
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="text-muted">
+                                                                                            Service: {{ $subscriber[0]['srvid']['srvname']}}
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="product-quantity-container quantity">
+                                                                                        1
+                                                                                    </td>
+                                                                                    <td id="perdaycardvalue">{{ number_format($subscriber[0]['card_amount'] / 30, 2) }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                @if ($subscriber[0]['addons'] == 1)
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <div class="fw-semibold">
+                                                                                                Addons
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <div class="text-muted">
+                                                                                                Static IP
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        <td class="product-quantity-container quantity">
+                                                                                            1
+                                                                                        </td>
+                                                                                        <td id="perdayaddonvalue">
+                                                                                           {{ number_format(($subscriber[0]['addonsPrice'] / 30), 2) }}
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    @endif
+                                                                                <tr>
+                                                                                    <td colspan="2"></td>
+                                                                                    <td colspan="2">
+                                                                                        <table class="table table-sm text-nowrap mb-0 table-borderless">
+                                                                                            <tbody>
+                                                                                                @if ($subscriber[0]['discount'] > 0)
+                                                                                                    <tr>
+                                                                                                     
+                                                                                                        <th scope="row">
+                                                                                                            <p class="mb-0 fs-14">Discount :</p>
+                                                                                                        </th>
+                                                                                                        <td>
+                                                                                                            <p class="mb-0 fw-semibold fs-16 text-danger" id="discounttotalvalue">
+                                                                                                              - {{ number_format(($subscriber[0]['discount'] / 30), 2) }}
+                                                                                                                </p>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
+                                                                                                @if ($subscriber[0]['extra_charges'] > 0)
+                                                                                                    <tr>
+                                                                                                     
+                                                                                                        <th scope="row">
+                                                                                                            <p class="mb-0 fs-14">Other Charges :</p>
+                                                                                                        </th>
+                                                                                                        <td>
+                                                                                                            <p class="mb-0 fw-semibold fs-16 text-success" id="extra_chargestotalvalue">
+                                                                                                                {{ number_format(($subscriber[0]['extra_charges'] / 30), 2) }}
+                                                                                                                </p>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
+                                                                                                <tr>
+                                                                                                     
+                                                                                                    <th scope="row">
+                                                                                                        <p class="mb-0 fs-14">Total :</p>
+                                                                                                    </th>
+                                                                                                    <td>
+                                                                                                        <p class="mb-0 fw-semibold fs-16 text-success" id="perdaytotalvalue">
+                                                                                                            0
+                                                                                                            </p>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <div class="col-xl-12">
+                                                                    <div>
+                                                                        <label for="invoice-note" class="form-label">Note:</label>
+                                                                        <textarea class="form-control form-control-light" id="invoice-note" rows="3">Once the invoice has been verified by the accounts payable team and recorded, the only task left is to send it for approval before releasing the payment</textarea>
+                                                                    </div>
+                                                                </div> -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer text-end">
+                                                            <button class="btn btn-success addDaysBtn" data-username="{{ $subscriber[0]['username'] }}" data-tranId="{{$tranID}}">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                     </div>
+                                                    
+                                                    
+                                                </div>
 
                                                 
                                                 
@@ -1005,7 +1249,7 @@
             let u = "{{$subscriber[0]['username']}}";
             let host = "{{ request()->getHost() }}";
 
-console.log(baseUrl);
+
 
 $("#enable_subscriber").on('change', function () {
                 // Get the current state of the checkbox
@@ -1596,7 +1840,71 @@ $("#change_service").on('click',function(e){
                 });
     })
     
-    
+      $(".addDaysBtn").on('click',function(e){
+        e.preventDefault();
+
+        let rechrageUsername = $(this).attr("data-username"); 
+        let rechargeTranId = $(this).attr("data-tranId");
+        let days_count = $("#days").val();
+
+        $('.recharge_card').hide();
+        $('.tran_card').css('display', 'flex');
+
+        $.ajax({
+                    url: baseUrl+'/cardrechargeadddays/'+rechrageUsername+'/'+rechargeTranId+'/'+days_count,  // Replace with your API endpoint
+                    type: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                        'Accept': 'application/json'
+                    },
+                    success: function (response) {
+                        console.log(response.status);
+
+                        if (response.status === 1) {
+
+                            $('.tran_card').css('display', 'none');
+                             $('.tran_card_success').css('display', 'flex');
+
+                            showToast("bg-success","Recharged Subscriber",response.msg)
+                            
+                            // Play success sound
+                            var audio = new Audio('/sound/success.mp3'); // Change to .mp3 if needed
+                            audio.play();
+
+                        }
+                        else if (response.status === 501) {
+                            //RADIUS SERVER ERROR
+                            // showAlert(response.message,"danger");
+                            $('#changeService').modal('hide');
+                            showToast("bg-danger","Server error. ",response.message)
+                        }
+                        else if (response.status === 500) {
+                            //RADIUS SERVER ERROR
+                            showAlert(response.message,"danger");
+                        }
+                        else if (response.status === 404) {
+                            //RADIUS SERVER ERROR
+                            showAlert(response.message,"danger");
+                        }
+                        else if (response.status === 0) {
+                            //RADIUS SERVER ERROR
+                            $('.tran_card').css('display', 'none');
+                            showToast("bg-danger","Bad Transaction",response.error)
+                            $('.recharge_card').show();
+                        }
+                        
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(status);
+                            showAlert('Something Wrong!',"danger");
+                        },
+                        complete: function () {
+                        // Hide the Loading button and show the Submit button again
+                        // $('.recharge_card').show();
+                        }
+                });
+    })
    
     function formatBytes(bytes) {
                 const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -1632,6 +1940,107 @@ $("#change_service").on('click',function(e){
                     
          });
         
+    });
+    
+    
+    
+    
+      $(document).ready(function () {
+        let cardAmount = {{ $subscriber[0]['card_amount'] }};
+        let addonAmount = {{ $subscriber[0]['addonsPrice'] }};
+        let totalAmount = {{ $subscriber[0]['totalPrice'] }};
+        let discountAmount = {{ $subscriber[0]['discount'] }};
+        let extra_chargesAmount = {{ $subscriber[0]['extra_charges'] }};
+         let originalExpiration = new Date("{{ $subscriber[0]['expiration'] }}");
+        let now = new Date();
+
+        // Base date decide: agar expiry nikal gayi to today otherwise original
+        let baseDate = (originalExpiration < now) ? now : originalExpiration;
+
+        function updateExpiration(days) {
+            // Clone baseDate
+            let newDate = new Date(baseDate.getTime());
+            newDate.setDate(newDate.getDate() + days);
+
+            // Format -> 06 May 2027 12:00
+            let options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            let formatted = newDate.toLocaleString('en-GB', options).replace(',', '');
+
+            $("#newexpiration").text(formatted);
+        }
+
+        $("#days").on('change', function () {
+            let days = $(this).val();
+            let perDay = cardAmount / 30;
+            let perDay2 = addonAmount / 30;
+            let perDay3 = totalAmount / 30;
+            let perDay4 = discountAmount / 30;
+            let perDay5 = extra_chargesAmount / 30;
+            
+            
+            
+            
+            let totalcardvalue = (perDay * days).toFixed(2);
+            let totaladdonvalue = (perDay2 * days).toFixed(2);
+            let totalamountvalue = (perDay3 * days).toFixed(2);
+            let discountamountvalue = (perDay4 * days).toFixed(2);
+            let extra_chargesamountvalue = (perDay5 * days).toFixed(2);
+            
+     
+
+let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + parseFloat(extra_chargesamountvalue)).toFixed(2);
+
+
+            $("#perdaycardvalue").html(totalcardvalue);
+            $("#perdayaddonvalue").html(totaladdonvalue);
+            $("#discounttotalvalue").html(discountamountvalue);
+            $("#extra_chargestotalvalue").html(extra_chargesamountvalue);
+            $("#perdaytotalvalue").html(add);
+            $(".quantity").html(days+" Days");
+            
+            updateExpiration(days);
+        });
+    });
+    
+          $(document).ready(function () {
+        function parseDate(str) {
+            // Force parse "YYYY-MM-DD HH:mm:ss" as local
+            let parts = str.split(/[- :]/);
+            return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
+        }
+
+        function formatDate(date) {
+            const months = [
+                "Jan","Feb","Mar","Apr","May","Jun",
+                "Jul","Aug","Sep","Oct","Nov","Dec"
+            ];
+
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = months[date.getMonth()];
+            let year = date.getFullYear();
+
+            let hour = String(date.getHours()).padStart(2, '0');
+            let minute = String(date.getMinutes()).padStart(2, '0');
+
+            return `${day} ${month} ${year} ${hour}:${minute}`;
+        }
+
+        let expirationStr = "{{ $subscriber[0]['expiration'] }}";
+        let expiration = parseDate(expirationStr);
+        let now = new Date();
+
+        let baseDate = (expiration < now) ? now : expiration;
+
+        $("#days").on('change', function () {
+            let days = parseInt($(this).val());
+            let newDate = new Date(baseDate.getTime());
+            newDate.setDate(newDate.getDate() + days);
+
+            $("#newexpiration").text(formatDate(newDate));
+        });
+
+        // Default run
+        $("#days").trigger('change');
     });
         </script>
         
