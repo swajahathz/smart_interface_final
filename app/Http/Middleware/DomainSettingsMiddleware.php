@@ -135,12 +135,31 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://ultralinkapi.smartispsolutions.net/api']);
                 
                 
+        }elseif ($host === 'clicksat.smartispsolutions.net') {
+            $settings = [
+                'title' => 'Clicksat Billing System',
+                'logo' => '<img src="/build/assets/images/clicksat.jpg" style="width: 140px;"/>',
+                'fav' => '/build/assets/images/clicksat.jpg',
+                'description' => 'RDS RedTone Billing System',
+                'primary' => '--primary-rgb: 81, 81, 81;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #444444;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#EC2426',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://rdsapi.atozsofts.com/api']);
+                
+                
         }elseif ($host === 'ebilling.rds.net.pk') {
             $settings = [
                 'title' => 'RedTone Billing System',
                 'logo' => '<img src="/build/assets/images/rds.png" style="width: 140px;"/>',
                 'fav' => '/build/assets/images/rds_fav.png',
-                'description' => 'RDS RedTone Billing System',
+                'description' => 'ClickSat Billing System',
                 'primary' => '--primary-rgb: 81, 81, 81;',
                 'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
             --menu-bg: #444444;

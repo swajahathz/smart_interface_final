@@ -209,7 +209,7 @@
                                                                         <!-- <label for="mobile" class="form-label">Mobile</label> -->
                                                                         <div class="input-group">
                                                                                 <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
-                                                                                <input type="text" class="form-control" value="{{ $manager['managername'] }}" disabled>
+                                                                                <input type="text" name="m" class="form-control" value="{{ $manager['managername'] }}" disabled>
                                                                                 <div class="input-group-text">Managername</div>
                                                                             </div>
                                                                     </div>
@@ -581,24 +581,14 @@
             // Prepare form data
             let formData = {
                
-               
-                firstname: '{{$manager['firstname']}}',
                 token: $('#password').val(),
-                lastname: '{{$manager['lastname']}}',
-                address:'{{$manager['address']}}',
-                mobile: '{{$manager['mobile']}}',
-                phone: '{{$manager['mobile']}}',
-                email: '{{$manager['email']}}',
-                cnic: '{{$manager['cnic']}}',
-                remarks: '{{$manager['remarks']}}',
-                vlan: '{{$manager['vlan']}}',
             };
 
             var manager_id = $('#user_id').val();
 
             // Send AJAX request
             $.ajax({
-                url: baseUrl+'/managerupdate/'+manager_id,  // Replace with your API endpoint
+                url: baseUrl+'/managerpasswordupdate',  // Replace with your API endpoint
                 type: 'POST',
                 data: JSON.stringify(formData),
                 contentType: 'application/json',
