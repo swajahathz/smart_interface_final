@@ -161,6 +161,10 @@
         let baseUrls = "{{ config('app.api_base_url') }}";
 
 
+$('#searchModal').on('shown.bs.modal', function () {
+    $('#dashboard-search').trigger('focus');
+  });
+
             $("#dashboard-search").on('keyup',function(){
                 
                 $("#dashboard_search_according").show();
@@ -193,8 +197,8 @@
                                                 <td>
                                                     <div class="d-flex">
                                                         <div class="lh-1">
-                                                            <span class="avatar avatar-sm avatar-rounded bg-primary-transparent fw-semibold">
-                                                                ${item.username ? item.username.substring(0,2).toUpperCase() : "NA"}
+                                                            <span class="avatar avatar-sm avatar-rounded bg-${item.online_status == 1 ? 'success' : 'danger'}-transparent fw-semibold">
+                                                                ${item.online_status == 1 ? 'Online' : 'Offline'}
                                                             </span>
                                                         </div>
                                                         <div class="ms-2">
