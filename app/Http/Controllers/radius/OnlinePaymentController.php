@@ -33,4 +33,10 @@ class OnlinePaymentController extends Controller
         return view('radius/jazzcash', compact('user_id','token','roles_id','user_name'));
         
     }
+    
+    public function jazzcash_merchant(Request $request,$username,$password){
+        
+        return view('radius/jazzcash_marchant/info_page');
+        
+    }
 }

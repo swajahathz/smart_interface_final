@@ -396,5 +396,11 @@ Route::get('/1link', [OnlinePaymentController::class, 'onelinklist'])->name('one
 Route::get('/jazz', [OnlinePaymentController::class, 'jazzlist'])->name('jazzlist')->middleware('auth_token');
 
 
+// jazzcash Merchant
+
+Route::get('/jazzcash/invoice/{username}/{password}', [OnlinePaymentController::class, 'jazzcash_merchant'])->name('jazzcash_merchant')->middleware('auth_token');
+Route::get('/jazzcash/status', [OnlinePaymentController::class, 'jazzcash_merchant_status'])->name('jazzcash_merchant_status')->middleware('auth_token');
+Route::get('/jazzcash_form/', [OnlinePaymentController::class, 'jazzcash_merchant_form'])->name('jazzcash_merchant_form')->middleware('auth_token');
+
 
 

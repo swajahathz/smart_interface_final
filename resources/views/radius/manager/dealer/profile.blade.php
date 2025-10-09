@@ -214,15 +214,7 @@
                                                                             </div>
                                                                     </div>
                                                                     
-                                                                    <div class="col-xl-6">
-                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
-                                                                         <div class="input-group">
-                                                                                <div class="input-group-text">Password</div>
-                                                                                <input type="password" class="form-control" id="password" value="{{ $manager['token'] }}" placeholder="Type your password Min 8" required>
-                                                                                <button class="btn btn-light" type="button" onclick="createpassword('password',this)" id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
-                                                                                
-                                                                            </div>
-                                                                    </div>
+                                                                    
                                                                     
                                                                     <div class="col-xl-6">
                                                                         <!-- <label for="mobile" class="form-label">Mobile</label> -->
@@ -290,6 +282,15 @@
                                                                         <textarea class="form-control" id="remarks" rows="2"  disabled>{{ $manager['remarks'] }}</textarea>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-xl-12 mb-3">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                         <div class="input-group">
+                                                                                <div class="input-group-text">New Password</div>
+                                                                                <input type="password" class="form-control" id="password" placeholder="Type your New password Min 8" required>
+                                                                               
+                                                                                
+                                                                            </div>
+                                                                    </div>
                                                                   <button type="submit" id="submitBtn" href="javascript:void(0);" class="btn btn-primary-light btn-wave waves-effect waves-light" style="width:100%;">
                                                                                 Update Password
                                                                             </button>
