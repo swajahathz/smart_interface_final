@@ -189,7 +189,6 @@
                                       
                                       <button id="sync" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Sync</button>
                                       
-                                       <button class="btn btn-danger btn-raised-shadow btn-wave btn-sm">JazzCash testing</button>
                                       
                              
                                       </div>
