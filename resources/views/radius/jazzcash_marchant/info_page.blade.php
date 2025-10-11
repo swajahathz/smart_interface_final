@@ -4,15 +4,19 @@
 define('JAZZCASH_MERCHANT_ID', 'Merchant ID');
 define('JAZZCASH_PASSWORD', 'Merchant Password');
 define('JAZZCASH_INTEGERITY_SALT', 'Integerity Salt');
-define('JAZZCASH_RETURN_URL', 'https://gnsol.in/jazz/confirmed.php');
+define('JAZZCASH_RETURN_URL', 'https://portal.citylinkscommunications.com/jazzcash_form');
 define('JAZZCASH_CURRENCY_CODE', 'PKR');
 define('JAZZCASH_LANGUAGE', 'EN');
 define('JAZZCASH_API_VERSION_2', '2.0');
 define('JAZZCASH_HTTP_POST_URL', 'https://payments.jazzcash.com.pk/CustomerPortal/transactionmanagement/merchantform/');
 define('BASE_URL','https://gnsol.in/jazz/');
 
+
+
+$tranId = substr(time() . mt_rand(1000, 9999), -8);
+
 //============================Get Form Values=========================================================
-$packagePrice = 10;
+$packagePrice = $subscriber[0]['extra_charges'];
 //============================Get EForm Values=========================================================
 
 
@@ -20,15 +24,17 @@ $packagePrice = 10;
 $pp_Amount = $packagePrice * 100;
 
 
-// $MerchantID = "65545014"; //Your Merchant from transaction Credentials
-// $Password = "xzcf4uyz8s"; //Your Password from transaction Credentials
-// $HashKey = "9t69y5x007"; //Your HashKey/integrity salt from transaction Credentials
-// $ReturnURL = "https://gnsol.in/jazz/return.php"; //Your Return URL, It must be static
+$MerchantID = "65545014"; //Your Merchant from transaction Credentials
+$Password = "xzcf4uyz8s"; //Your Password from transaction Credentials
+$HashKey = "9t69y5x007"; //Your HashKey/integrity salt from transaction Credentials
+$ReturnURL = "https://gnsol.in/jazz/return.php"; //Your Return URL, It must be static
 
-$MerchantID = "4555745"; //Your Merchant from transaction Credentials
-$Password = "8ww61201ze"; //Your Password from transaction Credentials
-$HashKey = "x8w03t2du2"; //Your HashKey/integrity salt from transaction Credentials
-$ReturnURL = "https://portal.citylinkscommunications.com/return.php"; //Your Return URL, It must be static
+
+
+// $MerchantID = "44555745"; //Your Merchant from transaction Credentials
+// $Password = "8ww61201ze"; //Your Password from transaction Credentials
+// $HashKey = "x8w03t2du2"; //Your HashKey/integrity salt from transaction Credentials
+// $ReturnURL = "https://portal.citylinkscommunications.com/jazzcash_form"; //Your Return URL, It must be static
 
 
 
@@ -36,8 +42,8 @@ $ReturnURL = "https://portal.citylinkscommunications.com/return.php"; //Your Ret
 date_default_timezone_set("Asia/karachi");
 
 $Amount = $pp_Amount; //Last two digits will be considered as Decimal thats the reason we are multiplying amount with 100 in line number 11
-$BillReference = "billRef"; //use AlphaNumeric only
-$Description = "Product test description"; //use AlphaNumeric only
+$BillReference = $tranId.$subscriber[0]['username']; //use AlphaNumeric only
+$Description = "JazzCash"; //use AlphaNumeric only
 $IsRegisteredCustomer = "No"; // do not change it
 $Language = JAZZCASH_LANGUAGE; // do not change it
 $TxnCurrency = JAZZCASH_CURRENCY_CODE; // do not change it
@@ -111,13 +117,23 @@ $Securehash = hash_hmac('sha256', $SortedArray, $HashKey);
 <body>
   <div class="container">
     <div class="card">
-      <div class="profile-head" style="display:flex;justify-content: space-between;">
+      <div class="profile-head" style="    display: flex
+;
+    justify-content: space-between;
+    background-color: #8080801a;
+    padding: 20px;
+    border-radius: 5px;">
         <div>
-          <h2>Simple Profile</h2>
-          <div class="muted">User profile details and current payable amount</div>
+          <h2>{{ ucwords($subscriber[0]['firstname'] . ' ' . $subscriber[0]['lastname']) }}</h2>
+
+          <div class="muted">UserID: {{$subscriber[0]['username']}}</div>
+          <div class="muted">Transaction ID: {{$tranId}}</div>
+          <div style="margin-top:5px; color: {{ $subscriber[0]['status'] == 'expired' ? 'red' : 'green' }}">
+    Status: {{ ucwords($subscriber[0]['status']) }}
+</div>
         </div>
         <div>
-            <h2>1500</h2>
+            <h2>{{$subscriber[0]['extra_charges']}}</h2>
             <form method="post" action="<?php echo JAZZCASH_HTTP_POST_URL; ?>" >
         <input type="hidden" name="pp_Version" value="<?php echo $Version; ?>" />
         <input type="hidden" name="pp_TxnType" placeholder="TxnType" value="<?php echo $TxnType; ?>" />
@@ -155,131 +171,77 @@ $Securehash = hash_hmac('sha256', $SortedArray, $HashKey);
         <div class="grid">
           <div>
             <label for="userid">User ID</label>
-            <input id="userid" name="userid" type="text" readonly value="USR-1001" />
+            <input id="userid" name="userid" type="text" readonly value="{{$subscriber[0]['username']}}"  disabled=""/>
           </div>
           <div>
-            <label for="amount">Amount (₹)</label>
-            <input id="amount" name="amount" type="text" readonly value="1500" />
+            <label for="amount">Current Expiration</label>
+            <input id="amount" name="amount" type="text" readonly value="{{$subscriber[0]['expiration']}}"   disabled=""/>
           </div>
 
           <div>
             <label for="firstname">First name</label>
-            <input id="firstname" name="firstname" type="text" value="Imran" />
+            <input id="firstname" name="firstname" type="text" value="{{$subscriber[0]['firstname']}}"   disabled=""/>
           </div>
 
           <div>
             <label for="lastname">Last name</label>
-            <input id="lastname" name="lastname" type="text" value="Khan" />
+            <input id="lastname" name="lastname" type="text" value="{{$subscriber[0]['lastname']}}"   disabled=""/>
           </div>
 
           <div style="grid-column:1/3">
             <label for="cnic">CNIC</label>
-            <input id="cnic" name="cnic" type="text" placeholder="XXXXX-XXXXXXX-X" value="35202-1234567-1" />
+            <input id="cnic" name="cnic" type="text" placeholder="XXXXX-XXXXXXX-X" value="{{$subscriber[0]['cnic']}}"   disabled=""/>
           </div>
 
           <div style="grid-column:1/3">
             <label for="address">Address</label>
-            <textarea id="address" name="address">House #12, Nazimabad, Karachi</textarea>
+            <textarea id="address" name="address"   disabled="">{{$subscriber[0]['username']}}</textarea>
           </div>
 
           <div>
             <label for="mobile">Mobile</label>
-            <input id="mobile" name="mobile" type="text" value="+92-300-1234567" />
+            <input id="mobile" name="mobile" type="text" value="{{$subscriber[0]['mobile']}}"   disabled=""/>
           </div>
            <div>
             <label for="mobile">Phone</label>
-            <input id="mobile" name="mobile" type="text" value="+92-300-1234567" />
-          </div>
+            <input id="mobile" name="mobile" type="text" value="{{$subscriber[0]['phone']}}"   disabled=""/>
         </div>
       </form>
     </div>
 
-    <div class="card" style="margin-top:16px">
+    <div class="card" style="margin-top:16px; background-color:#ededed;">
       <h3 style="margin-bottom:8px">Payment History</h3>
       <div class="muted">Recent payments and their status</div>
 
-      <table id="paymentsTable" aria-label="Payments list">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Month</th>
-            <th>Package</th>
-            <th>Amount (₹)</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- rows inserted by JS -->
-        </tbody>
-      </table>
+      <div style="overflow-x:auto; width:100%;">
+  <table id="paymentsTable" aria-label="Payments list" style="width:100%; border-collapse: collapse;">
+    <thead style="background:#f5f5f5;">
+      <tr>
+        <th style="padding:8px; text-align:left;">TID</th>
+        <th style="padding:8px; text-align:left;">Date</th>
+        <th style="padding:8px; text-align:left;">Expiration</th>
+        <th style="padding:8px; text-align:left;">Package</th>
+        <th style="padding:8px; text-align:left;">Amount</th>
+        <th style="padding:8px; text-align:left;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach ($invoice as $sub)
+        <tr>
+          <td style="padding:8px;">{{ $sub['tranID'] ?? '-' }}</td>
+          <td style="padding:8px;">{{ $sub['renewDate'] ?? '-' }}</td>
+          <td style="padding:8px;">{{ $sub['newExpirationDate'] ?? '-' }}</td>
+          <td style="padding:8px;">{{ $sub['srvname'] ?? '-' }}</td>
+          <td style="padding:8px;">{{ $sub['ownerPrice'] ?? '-' }}</td>
+          <td style="padding:8px; color:green;">PAID</td>
+        </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
+
     </div>
   </div>
 
-  <script>
-    // Sample data for payment list
-    const payments = [
-      { id: 1, month: 'Aug 2025', package: 'Fiber 10Mbps', amount: 1500, status: 'Paid' },
-      { id: 2, month: 'Sep 2025', package: 'Fiber 10Mbps', amount: 1500, status: 'Pending' },
-      { id: 3, month: 'Oct 2025', package: 'Fiber 20Mbps', amount: 2500, status: 'Failed' }
-    ];
-
-    function statusClass(s){
-      if(!s) return '';
-      const lower = s.toLowerCase();
-      if(lower.includes('paid')) return 'status-paid';
-      if(lower.includes('pend')) return 'status-pending';
-      if(lower.includes('fail')) return 'status-failed';
-      return '';
-    }
-
-    function renderPayments(){
-      const tbody = document.querySelector('#paymentsTable tbody');
-      tbody.innerHTML = '';
-      payments.forEach(p => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${p.id}</td>
-          <td>${p.month}</td>
-          <td>${p.package}</td>
-          <td>${p.amount}</td>
-          <td class="${statusClass(p.status)}">${p.status}</td>
-          <td><button class="btn btn-outline" data-id="${p.id}" onclick="payAgain(${p.id})">Pay</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function payAgain(id){
-      const item = payments.find(x => x.id === id);
-      if(!item) return alert('Payment record not found');
-      alert('Start payment for ID: ' + id + '\nAmount: ' + item.amount + ' — (this is a demo)');
-      // In real app, redirect to payment gateway or open modal
-    }
-
-    document.getElementById('payNowBtn').addEventListener('click', ()=>{
-      const amount = document.getElementById('amount').value;
-      const userid = document.getElementById('userid').value;
-      alert('Proceed to pay ' + amount + ' for user ' + userid + ' (demo).');
-      // implement real payment flow here
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', ()=>{
-      const data = {
-        userid: document.getElementById('userid').value,
-        firstname: document.getElementById('firstname').value,
-        lastname: document.getElementById('lastname').value,
-        cnic: document.getElementById('cnic').value,
-        address: document.getElementById('address').value,
-        mobile: document.getElementById('mobile').value,
-        amount: document.getElementById('amount').value
-      };
-      console.log('Saved profile (demo):', data);
-      alert('Profile saved (demo). Check console for data.');
-    });
-
-    // render on load
-    renderPayments();
-  </script>
 </body>
 </html>

@@ -116,6 +116,25 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://radiusapi.atozsofts.com/api']);
                 
                 
+        }elseif ($host === 'partner.mudasirisp.net') {
+            $settings = [
+                'title' => 'Mudasir Network Billing System',
+                'logo' => '<img src="/build/assets/images/mudasirnetwork.png" style="width: 200px;"/>',
+                'fav' => '/build/assets/images/mudasirnetwork.png',
+                'description' => 'Mudasir Network Billing System Powered By SmartRad',
+                'primary' => '--primary-rgb: 96, 79, 52;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #444444;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#5151511f',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://radiusapi.atozsofts.com/api']);
+                
+                
         }elseif ($host === 'ultralink.smartispsolutions.net') {
             $settings = [
                 'title' => 'UltraLink Billing System',

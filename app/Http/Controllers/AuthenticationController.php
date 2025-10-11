@@ -126,7 +126,9 @@ class AuthenticationController extends Controller
             if ($host === 'billing.fastnet.com.pk') {
                 return view('radius/auth/fiberbeam.signin');
             }
-            
+            if ($host === 'partner.mudasirisp.net') {
+                return view('radius/auth/minternet.signin');
+            }
             
             // Default behavior
            $attempt_invalid = $request->cookie('attempt_invalid'); 
