@@ -1022,11 +1022,11 @@
                                                                     <th>
                                                                         <div class="d-flex justify-content-between">
                                                                             <div>
-                                                                                <label>Edit Expire</label>
+                                                                                <label>Update Subscriber</label>
                                                                             </div>
                                                                             
                                                                             <div class="form-check form-switch mb-2">
-                                                                                <input class="form-check-input" id="edit_expire" type="checkbox" role="switch" @if($permission['perm_ExpireEdit'] == 1) checked
+                                                                                <input class="form-check-input" id="edit_updateSubscriber" type="checkbox" role="switch" @if($permission['perm_updateSubscriber'] == 1) checked
                                                                     @endif>
                                                                             </div>
                                                                         </div>
@@ -1036,7 +1036,63 @@
                                                                     <th>
                                                                         <div class="d-flex justify-content-between">
                                                                             <div>
-                                                                                <label>Service Change</label>
+                                                                                <label>Recharge Subscriber</label>
+                                                                            </div>
+                                                                            
+                                                                            <div class="form-check form-switch mb-2">
+                                                                                <input class="form-check-input" id="edit_CardRecharge" type="checkbox" role="switch" @if($permission['perm_CardRecharge'] == 1) checked
+                                                                    @endif>
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <div>
+                                                                                <label>Add Days</label>
+                                                                            </div>
+                                                                            
+                                                                            <div class="form-check form-switch mb-2">
+                                                                                <input class="form-check-input" id="edit_AddDays" type="checkbox" role="switch" @if($permission['perm_AddDays'] == 1) checked
+                                                                    @endif>
+                                                                            </div>
+                                                                        </div>
+                                                                        </th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <div>
+                                                                                <label>Edit Expire</label>
+                                                                            </div>
+                                                                            
+                                                                            <div class="form-check form-switch mb-2">
+                                                                                <input class="form-check-input" id="edit_expire" type="checkbox" role="switch" @if($permission['perm_ExpireEdit'] == 1) checked
+                                                                    @endif>
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <div>
+                                                                                <label>Expire Service Change</label>
+                                                                            </div>
+                                                                            
+                                                                            <div class="form-check form-switch mb-2">
+                                                                                <input class="form-check-input" id="edit_expireservicechng" type="checkbox" role="switch" @if($permission['perm_ExpireServiceChng'] == 1) checked
+                                                                    @endif>
+                                                                            </div>
+                                                                        </div>
+                                                                        </th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <div>
+                                                                                <label>Active Service Change</label>
                                                                             </div>
                                                                             
                                                                             <div class="form-check form-switch mb-2">
@@ -1826,6 +1882,262 @@ $("#commission_update_form").on('submit',function(e){
             $("#adminPackages").append($(this));
         });
     });
+    
+    $("#edit_updateSubscriber").on('change', function () {
+                // Get the current state of the checkbox
+                $('.loadingBtn').show();
+                const isChecked = this.checked;
+
+                 // Declare formData outside the if-else block
+                    let formData;
+
+                if (isChecked) {
+                    formData = {
+                        perm_updateSubscriber: 1,
+                    };
+                } else {
+                    formData = {
+                        perm_updateSubscriber: 0,
+                    };
+                }
+                
+
+                         $.ajax({
+                            url: baseUrl+'/manager/permission/'+managers_name+'/4',  // Replace with your API endpoint
+                            type: 'POST',
+                             data: JSON.stringify(formData),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                                'Accept': 'application/json'
+                            },
+                        success: function (response) {
+
+                            if (response.status === 1) {
+
+                                if(response.status === 1){
+                                    showToast("bg-success","Permission Update",response.message)
+                                }
+                                
+                                // $('#subscriber_form')[0].reset();
+
+                            }
+                            else if (response.status === 501) {
+                                //RADIUS SERVER ERROR
+                                showToast("bg-danger","Server error. ",response.message)
+                            }
+                            else if (response.status === 500) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            else if (response.status === 404) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            
+                            
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(status);
+                            showAlert('Something Wrong!',"danger");
+                        },
+                        complete: function () {
+                            $('.loadingBtn').hide();
+                        }
+                    });
+            });
+            
+    $("#edit_AddDays").on('change', function () {
+                // Get the current state of the checkbox
+                $('.loadingBtn').show();
+                const isChecked = this.checked;
+
+                 // Declare formData outside the if-else block
+                    let formData;
+
+                if (isChecked) {
+                    formData = {
+                        perm_AddDays: 1,
+                    };
+                } else {
+                    formData = {
+                        perm_AddDays: 0,
+                    };
+                }
+                
+
+                         $.ajax({
+                            url: baseUrl+'/manager/permission/'+managers_name+'/5',  // Replace with your API endpoint
+                            type: 'POST',
+                             data: JSON.stringify(formData),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                                'Accept': 'application/json'
+                            },
+                        success: function (response) {
+
+                            if (response.status === 1) {
+
+                                if(response.status === 1){
+                                    showToast("bg-success","Permission Update",response.message)
+                                }
+                                
+                                // $('#subscriber_form')[0].reset();
+
+                            }
+                            else if (response.status === 501) {
+                                //RADIUS SERVER ERROR
+                                showToast("bg-danger","Server error. ",response.message)
+                            }
+                            else if (response.status === 500) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            else if (response.status === 404) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            
+                            
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(status);
+                            showAlert('Something Wrong!',"danger");
+                        },
+                        complete: function () {
+                            $('.loadingBtn').hide();
+                        }
+                    });
+            });
+    
+     $("#edit_CardRecharge").on('change', function () {
+                // Get the current state of the checkbox
+                $('.loadingBtn').show();
+                const isChecked = this.checked;
+
+                 // Declare formData outside the if-else block
+                    let formData;
+
+                if (isChecked) {
+                    formData = {
+                        perm_CardRecharge: 1,
+                    };
+                } else {
+                    formData = {
+                        perm_CardRecharge: 0,
+                    };
+                }
+                
+
+                         $.ajax({
+                            url: baseUrl+'/manager/permission/'+managers_name+'/3',  // Replace with your API endpoint
+                            type: 'POST',
+                             data: JSON.stringify(formData),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                                'Accept': 'application/json'
+                            },
+                        success: function (response) {
+
+                            if (response.status === 1) {
+
+                                if(response.status === 1){
+                                    showToast("bg-success","Permission Update",response.message)
+                                }
+                                
+                                // $('#subscriber_form')[0].reset();
+
+                            }
+                            else if (response.status === 501) {
+                                //RADIUS SERVER ERROR
+                                showToast("bg-danger","Server error. ",response.message)
+                            }
+                            else if (response.status === 500) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            else if (response.status === 404) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            
+                            
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(status);
+                            showAlert('Something Wrong!',"danger");
+                        },
+                        complete: function () {
+                            $('.loadingBtn').hide();
+                        }
+                    });
+            });
+            
+    $("#edit_expireservicechng").on('change', function () {
+                // Get the current state of the checkbox
+                $('.loadingBtn').show();
+                const isChecked = this.checked;
+
+                 // Declare formData outside the if-else block
+                    let formData;
+
+                if (isChecked) {
+                    formData = {
+                        perm_ExpireServiceChng: 1,
+                    };
+                } else {
+                    formData = {
+                        perm_ExpireServiceChng: 0,
+                    };
+                }
+                
+
+                         $.ajax({
+                            url: baseUrl+'/manager/permission/'+managers_name+'/6',  // Replace with your API endpoint
+                            type: 'POST',
+                             data: JSON.stringify(formData),
+                            contentType: 'application/json',
+                            headers: {
+                                'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                                'Accept': 'application/json'
+                            },
+                        success: function (response) {
+
+                            if (response.status === 1) {
+
+                                if(response.status === 1){
+                                    showToast("bg-success","Permission Update",response.message)
+                                }
+                                
+                                // $('#subscriber_form')[0].reset();
+
+                            }
+                            else if (response.status === 501) {
+                                //RADIUS SERVER ERROR
+                                showToast("bg-danger","Server error. ",response.message)
+                            }
+                            else if (response.status === 500) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            else if (response.status === 404) {
+                                //RADIUS SERVER ERROR
+                                showAlert(response.message,"danger");
+                            }
+                            
+                            
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(status);
+                            showAlert('Something Wrong!',"danger");
+                        },
+                        complete: function () {
+                            $('.loadingBtn').hide();
+                        }
+                    });
+            });
     
     $("#edit_service").on('change', function () {
                 // Get the current state of the checkbox

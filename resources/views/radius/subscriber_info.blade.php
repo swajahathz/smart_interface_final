@@ -159,9 +159,12 @@
                                        
                                         <button data-bs-toggle="modal"
                                                         data-bs-target="#changePassword" class="btn btn-primary btn-raised-shadow btn-wave btn-sm">Change Password</button>
+                                                        
+                                            @if($permission['perm_ExpireServiceChng'] == 1)            
+                                                        
                                                         <button  data-bs-toggle="modal"
                                       data-bs-target="#changeService" class="btn btn-orange btn-raised-shadow btn-wave btn-sm">Change Service</button>
-                                      
+                                       @endif
                                       
                                       @if($permission['perm_ExpireEdit'] == 1)
                                       
@@ -199,11 +202,16 @@
                                                 <!--<a class="nav-link" data-bs-toggle="tab" role="tab"-->
                                                 <!--aria-current="page" href="#usage-vertical-link" aria-selected="false"><i-->
                                                 <!--        class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Usage Analytics</a>-->
+                                                
+                                                
+                                                @if($permission['perm_CardRecharge'] == 1)
                                                         
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                     aria-current="page" href="#recharge" aria-selected="true"><i
                                                         class="ri-home-smile-line me-2 align-middle d-inline-block"></i>Recharge</a>
-                                                        
+                                                @endif  
+                                                
+                                                @if($permission['perm_AddDays'] == 1)
                                                          @php
                                                                 $apiUrll = config('app.api_base_url');
                                                             @endphp
@@ -220,7 +228,7 @@
                                                                                            @endif 
                                                             @endif
                                                        
-                                                        
+                                                  @endif       
                                                         
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#ledger" id="ledger_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
@@ -355,6 +363,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            
+                                                            
+                                                            @if($permission['perm_updateSubscriber'] == 1)
+                                                            
                                                             <div class="card-footer text-end pt-0">
                                                                             <button type="submit" id="submitBtn" href="javascript:void(0);" class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;">
                                                                                 Update
@@ -364,6 +376,14 @@
                                                                                 Loading...
                                                                             </button>
                                                             </div>
+                                                            
+                                                            @else
+                                                            
+                                                            <button class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;" disabled>
+                                                                                Update
+                                                                            </button>
+                                                            
+                                                            @endif
                                                             </form>
                                                 </div>
                                                 <div class="tab-pane text-muted" id="addons"
