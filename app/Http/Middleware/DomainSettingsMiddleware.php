@@ -59,6 +59,25 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://api.glownet.net.pk/api']);
                 
                 
+        }elseif ($host === 'partner.fiber-beam.net') {
+            $settings = [
+                'title' => 'FiberBeam BroadBand | Billing System',
+                'logo' => '<div style="background-color:#00356c;margin-bottom:20px;"><img src="/build/assets/images/ispWorld.png" style="width: 220px;"/></div>',
+                'fav' => '/build/assets/images/ispWorld.png',
+                'description' => 'FiberBeam BroadBand | Billing System',
+                'primary' => '--primary-rgb: 5, 100, 200;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #0564C8;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#5151511f',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://api.fiber-beam.net/api']);
+                
+                
         }elseif ($host === 'billing.fastnet.com.pk') {
             $settings = [
                 'title' => 'FastNet | Billing System',
@@ -75,7 +94,7 @@ class DomainSettingsMiddleware
             
             
              // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
-                config(['app.api_base_url' => 'https://api.fastnet.com.pk/api']);
+                config(['app.api_base_url' => 'https://api.fiber-beam.net/api']);
                 
                 
         } elseif ($host === 'vision.smartispsolutions.net') {

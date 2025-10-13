@@ -92,6 +92,64 @@ class OnlinePaymentController extends Controller
     }
     
     
+    public function jazz_merchant_new(Request $request,$username,$password){
+        
+         $currentDateTime = Carbon::now();
+        $token = Session::get('token');
+        $fullamount = 0;
+
+        $roles_id = ucfirst(Session::get('roles_id'));
+        $user_id = Session::get('user_id');
+        $user_name = ucfirst(Session::get('user_name'));
+        
+        
+       $apiUrl2 = config('app.api_base_url') . '/subscribersinglejazz/' . $username;
+
+        $response2 = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->get($apiUrl2);
+        
+        if ($response2->successful()) {
+            $subscriber = $response2->json();
+        } else {
+            $subscriber = ['message' => 'Failed to fetch subscriber'];
+            
+         
+            
+        }
+        $apiUrl3 = config('app.api_base_url') . '/subcriber/invoiceListjazz/' . $username;
+            
+    
+    $response3 = Http::withHeaders([
+    'Accept' => 'application/json',
+        ])->post($apiUrl3);
+        
+        
+        $invoice = $response3->json();
+        
+        
+        
+     if (isset($subscriber['message']) && $subscriber['message'] == "Subscriber not found!") {
+    return view('radius/jazzcash_marchant/not_found');
+}
+
+
+
+        $pass = $subscriber[0]['password'];
+        
+        if($password == $pass){
+             return view('radius/jazzcash_marchant/info_page_new', compact('subscriber','invoice'));
+        }else{
+             return view('radius/jazzcash_marchant/not_found');
+        }
+
+        
+        
+       
+        
+    }
+    
+    
     
     public function portal(Request $request){
         

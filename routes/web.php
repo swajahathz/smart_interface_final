@@ -400,6 +400,7 @@ Route::get('/jazz', [OnlinePaymentController::class, 'jazzlist'])->name('jazzlis
 
 Route::get('/portal', [OnlinePaymentController::class, 'portal'])->name('portal');
 Route::get('/jazzcash/invoice/{username}/{password}', [OnlinePaymentController::class, 'jazzcash_merchant'])->name('jazzcash_merchant');
+Route::get('/jazz/inv/{username}/{password}', [OnlinePaymentController::class, 'jazz_merchant_new'])->name('jazz_merchant_new');
 Route::get('/jazzcashstatus/{status}', [OnlinePaymentController::class, 'jazzcash_merchant_status'])->name('jazzcash_merchant_status');
 Route::post('/jazzcash_status', [OnlinePaymentController::class, 'jazzcash_merchant_form'])->name('jazzcash_merchant_form');
 
