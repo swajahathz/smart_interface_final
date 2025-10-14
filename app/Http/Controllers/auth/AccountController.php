@@ -73,7 +73,9 @@ class AccountController extends Controller
              $manager = $dataa['manager'];
              $roles_id = Session::get('roles_id');
              
-            
+            if ($managername == $user_name) {
+                        return view('radius/notfound');
+                    }
         
              
              if (is_array($jsonData3) && isset($jsonData3['message']) && $jsonData3['message'] === 'Dplc not found!') {
@@ -109,7 +111,7 @@ class AccountController extends Controller
                     if ($manager['roles_id'] == 2 || $manager['roles_id'] == 3 || $manager['roles_id'] == 4) {
                         return view('radius/notfound');
                     }
-                return view('radius/manager/dealer/manager_info', compact('currentDateTime','user_name','user_id','roles_id','manager','token'));
+                return view('radius/notfound');
             }
              
          } else {

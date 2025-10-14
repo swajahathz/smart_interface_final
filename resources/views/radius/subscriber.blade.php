@@ -353,6 +353,14 @@ $("#searchBtn").on('click',function(){
                         $('.dt-button-collection').fadeOut(200); // dropdown close
                         $('div.dt-button-background').css('display', 'none');
                     }
+                },
+                {
+                    text: '10000 rows',
+                    action: function (e, dt, node, config) {
+                        dt.page.len(10000).draw();
+                        $('.dt-button-collection').fadeOut(200); // dropdown close
+                        $('div.dt-button-background').css('display', 'none');
+                    }
                 }
             ]
         }

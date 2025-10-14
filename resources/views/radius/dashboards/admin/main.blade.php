@@ -66,7 +66,7 @@
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <div>
                                                             <div class="fw-semibold fs-16 text-fixed-white mb-2">Your recharge target</div>
-                                                            <span class="d-block fs-11 text-fixed-white"><span class="op-7">You have so far charged</span> <span class="fw-semibold text-warning">48%</span> <span class="op-7">of your subscribers this month compared to your active subscribers.</span>.</span>
+                                                            <span class="d-block fs-11 text-fixed-white"><span class="op-7">You have so far charged</span> <span class="fw-semibold text-warning rechargePercent">0%</span> <span class="op-7">of your subscribers this month compared to your active subscribers.</span>.</span>
                                                         </div>
                                                         <div>
                                                             <div id="crm-main"></div>
@@ -535,6 +535,15 @@ $('#lastmonthtopup')
                         $(".disable_percnet").text(disable_percnet + "%");
                         
                         
+                        
+                        // SHOW Recharge Card %
+                   let total_active_users = response.active_users / 100;
+                    let total_card_recharge = parseInt("{{ $total_recharge['total_charged'] }}") || 0;
+
+                    let total_recharge_percentage = total_card_recharge / total_active_users;
+                    
+                    $(".rechargePercent").html(total_recharge_percentage.toFixed(2) + "%");
+
                        
                            
                         

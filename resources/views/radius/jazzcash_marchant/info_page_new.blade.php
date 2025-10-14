@@ -296,14 +296,14 @@ $("#jazzcashSubmit").on('click', function () {
   
     // console.log(pp_salt+"&"+pp_Amount+"&"+pp_BillReference+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo);
     
-    let hashString = pp_salt+"&"+pp_Amount+"&"+pp_BillReference+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo;
+    let hashString = pp_salt+"&"+pp_Amount+"&"+pp_TxnRefNo+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo;
     
        let hash = CryptoJS.HmacSHA256(hashString, pp_salt);
         let hashHex = CryptoJS.enc.Hex.stringify(hash).toUpperCase();
         
           const jazzData = {
         pp_Amount: pp_Amount,
-        pp_BillReference: pp_BillReference,
+        pp_BillReference: pp_TxnRefNo,
         pp_CNIC: jazzcnic,
         pp_Description: pp_Description,
         pp_Language: pp_Language,
@@ -324,16 +324,21 @@ $("#jazzcashSubmit").on('click', function () {
 
     console.log(jazzData);
         
-    console.log("Secure Hash:", hashHex);
+    console.log(pp_salt+"&"+pp_Amount+"&"+pp_TxnRefNo+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo);
     
-    fetch("https://radius.atozsofts.com/jazzcash_merchant_api/api.php", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(jazzData)
-})
-  .then(res => res.json())
-  .then(data => console.log("✅ JazzCash Response:", data))
-  .catch(err => console.error("❌ Error:", err));
+    $.ajax({
+  url: "https://jazzcashmerchantapi.smartispsolutions.net/api.php",
+  type: "POST",
+  data: JSON.stringify(jazzData),
+  contentType: "application/json",
+  dataType: "json",
+  success: function (data) {
+    console.log("✅ JazzCash Response:", data);
+  },
+  error: function (xhr, status, error) {
+    console.error("❌ Error:", error);
+  }
+});
     
     
     
