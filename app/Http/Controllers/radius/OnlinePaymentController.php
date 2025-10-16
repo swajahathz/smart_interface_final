@@ -193,4 +193,14 @@ class OnlinePaymentController extends Controller
     
         
     }
+    
+    public function jazzcash_merchant_status(Request $request, $status, $amount, $tid){
+        
+     
+
+
+     return view('radius/jazzcash_marchant/status2', compact('status','tid','amount'));
+    
+        
+    }
 }

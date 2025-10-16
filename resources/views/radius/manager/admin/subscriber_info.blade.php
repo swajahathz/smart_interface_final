@@ -190,7 +190,13 @@
                                       <button id="sync" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Sync</button>
                                       
                                       
-                             
+                                    @if(request()->getHost() == "portal.citylinkscommunications.com")
+                                        <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
+                                    @endif
+                                      
+                                      
+                                      <button data-username="{{ $subscriber[0]['username'] }}" id="closesession" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Close Session</button>
+                                    <span class="spinner-border spinner-border-sm align-middle closesession_loading" style="display:none;" role="status" aria-hidden="true"></span> 
                                       </div>
                                     </div>
                                     
@@ -1464,6 +1470,62 @@ $("#kick").on('click',function(e){
                 complete: function () {
                 // Hide the Loading button and show the Submit button again
                 $('.kick_loading').hide();
+                 }
+            });
+    
+});
+
+// Kick id
+$("#closesession").on('click',function(e){
+    e.preventDefault();
+    
+    let sessionUsername = $(this).attr("data-username");
+    $('.closesession_loading').show();
+    
+     // Send AJAX request
+            $.ajax({
+                url: baseUrl+'/sessionclosesingle/'+sessionUsername+'/1',  // Replace with your API endpoint
+                type: 'get',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    console.log(response.status);
+
+                    if (response.status === 1) {
+                        showToast("bg-success","Subscriber Session Closed.",response.message)
+                        // $('#subscriber_form')[0].reset();
+                        $('.online_status').hide();
+                        $('#closesession').hide();
+                         $('.offline_button').show();
+                         $("#realtime").hide();
+                        
+                        
+                        
+
+                    }
+                    else if (response.status === 0) {
+                        // ALREADY AVALIABLE
+                        showToast("bg-warning","Subscriber Not Found Refresh. ",response.message)
+
+                        // alert(response.message);
+                    } 
+                    else if (response.status === 501) {
+                        //RADIUS SERVER ERROR
+                        // showAlert(response.message,"danger");
+                        showToast("bg-danger","Server error. ",response.message)
+                    }
+                    
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    showAlert('Something Wrong!',"danger");
+                },
+                complete: function () {
+                // Hide the Loading button and show the Submit button again
+                $('.closesession_loading').hide();
                  }
             });
     

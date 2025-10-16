@@ -160,20 +160,31 @@ $Securehash = hash_hmac('sha256', $SortedArray, $HashKey);
         <input type="hidden" name="ppmpf_5" placeholder="ppmpf_5" value="<?php echo $ppmpf_5; ?>" />
         
         
-            <button class="btn btn-danger" type="submit">Pay Via JazzCash</button>
+            <button class="btn btn-danger" type="submit" id="payvia">Pay Via JazzCash</button>
             
            
         </div>
          
       </div>
       
-      <div class="card">
+      <div class="card" >
           
-          <div style="width:400px; margin:auto;">
+        <div style="text-align:center;">
+          <!-- Countdown display -->
+<p id="counterArea" style="display:none;">
+  Processing... please wait <span id="counter">30</span> seconds ⏳
+</p>
+
+<!-- Optional loader -->
+<div id="loader" style="display:none;">
+  <p>Loading...</p>
+</div>
+ </div>         
+          <div style="width:400px; margin:auto;display:none;" id="form_jazz">
         <label  style="margin-top:10px;">Mobile Account Number:</label>
-          <input id="jazzmobile" name="jazzmobile" type="number" value="03453760563" placeholder="Type JazzCash mobile Number"/>
+          <input id="jazzmobile" name="jazzmobile" type="number" placeholder="Type JazzCash mobile Number"/>
            <label style="margin-top:10px;">Last 6 Digit CNIC:</label>
-          <input id="jazzcnic" name="jazzcnic" type="number" value="891089" placeholder="Type last 6 Digit CNIC"/>
+          <input id="jazzcnic" name="jazzcnic" type="number" placeholder="Type last 6 Digit CNIC"/>
           <button id="jazzcashSubmit" class="btn btn-danger" style="margin-top:10px; margin-bottom:20px; width: 100%;">Submit</button>
           </div>
           
@@ -257,88 +268,78 @@ $Securehash = hash_hmac('sha256', $SortedArray, $HashKey);
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script>
+  
+$("#payvia").on('click',function(){
+   
+   
+   
+   $("#form_jazz").show();
+    
+});
+  
 $("#jazzcashSubmit").on('click', function () {
+    
+    $("#form_jazz").hide();
+    
+     // Show countdown + loader
+  let timeLeft = 30;
+  $("#counterArea").show();
+  $("#loader").show();
+  $("#counter").text(timeLeft);
+
+  // Start countdown timer
+  const countdown = setInterval(() => {
+    timeLeft--;
+    $("#counter").text(timeLeft);
+
+    if (timeLeft <= 0) {
+      clearInterval(countdown);
+      $("#loader").hide();
+      $("#counterArea").text("⏰ Time out! Please try again.");
+    }
+  }, 1000); // 1 second per tick
+  
+  
+  
+  
     let jazzmobile = $("#jazzmobile").val();
     let jazzcnic = $("#jazzcnic").val();
-
-    // Generate current date/time in yyyymmddhhmmss format
-    const now = new Date();
-    const formattedTime =
-        now.getFullYear().toString() +
-        String(now.getMonth() + 1).padStart(2, '0') +
-        String(now.getDate()).padStart(2, '0') +
-        String(now.getHours()).padStart(2, '0') +
-        String(now.getMinutes()).padStart(2, '0') +
-        String(now.getSeconds()).padStart(2, '0');
-
-    // Expiry time (e.g. +1 day)
-    const expiry = new Date(now);
-    expiry.setDate(expiry.getDate() + 1);
-    const formattedExpiry =
-        expiry.getFullYear().toString() +
-        String(expiry.getMonth() + 1).padStart(2, '0') +
-        String(expiry.getDate()).padStart(2, '0') +
-        String(expiry.getHours()).padStart(2, '0') +
-        String(expiry.getMinutes()).padStart(2, '0') +
-        String(expiry.getSeconds()).padStart(2, '0');
         
-    let pp_Amount = "100";
-    let pp_BillReference = "billRef3781";
-    let pp_Description = "Test";
-    let pp_Language = "EN";
-    let pp_MerchantID = "44555745";
-    let pp_Password = "8ww61201ze";
-    let pp_salt = "x8w03t2du2";
-    let pp_TxnCurrency = "PKR";
-    let pp_TxnRefNo = "<?php echo $tranId; ?>";
+    let amount = "<?php echo $pp_Amount; ?>";
 
+    let merchantID = "44555745";
+    let password = "8ww61201ze";
+    let salt = "x8w03t2du2";
+    let url = "https://radiusapi.atozsofts.com/api/cardrechargejazzcash/";
+    let user = "<?php echo $subscriber[0]['username']; ?>";
     // JSON data object
-  
-    // console.log(pp_salt+"&"+pp_Amount+"&"+pp_BillReference+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo);
-    
-    let hashString = pp_salt+"&"+pp_Amount+"&"+pp_TxnRefNo+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo;
-    
-       let hash = CryptoJS.HmacSHA256(hashString, pp_salt);
-        let hashHex = CryptoJS.enc.Hex.stringify(hash).toUpperCase();
-        
-          const jazzData = {
-        pp_Amount: pp_Amount,
-        pp_BillReference: pp_TxnRefNo,
-        pp_CNIC: jazzcnic,
-        pp_Description: pp_Description,
-        pp_Language: pp_Language,
-        pp_MerchantID: pp_MerchantID,
-        pp_MobileNumber: jazzmobile,
-        pp_Password: pp_Password,
-        pp_SecureHash: hashHex,
-        pp_TxnCurrency: pp_TxnCurrency,
-        pp_TxnDateTime: formattedTime,         // ✅ dynamic current time
-        pp_TxnExpiryDateTime: formattedExpiry, // ✅ dynamic expiry time
-        pp_TxnRefNo: pp_TxnRefNo,
-        ppmpf_1: "",
-        ppmpf_2: "",
-        ppmpf_3: "",
-        ppmpf_4: "",
-        ppmpf_5: ""
-    };
 
-    console.log(jazzData);
-        
-    console.log(pp_salt+"&"+pp_Amount+"&"+pp_TxnRefNo+"&"+jazzcnic+"&"+pp_Description+"&"+pp_Language+"&"+pp_MerchantID+"&"+jazzmobile+"&"+pp_Password+"&"+pp_TxnCurrency+"&"+formattedTime+"&"+formattedTime+"&"+pp_TxnRefNo);
     
     $.ajax({
-  url: "https://jazzcashmerchantapi.smartispsolutions.net/api.php",
-  type: "POST",
-  data: JSON.stringify(jazzData),
-  contentType: "application/json",
-  dataType: "json",
-  success: function (data) {
-    console.log("✅ JazzCash Response:", data);
-  },
-  error: function (xhr, status, error) {
-    console.error("❌ Error:", error);
-  }
-});
+              url: "https://jazzcashmerchantapi.smartispsolutions.net/api.php",
+              type: "POST",
+              data: {jazzmobile:jazzmobile,jazzcnic:jazzcnic,amount:amount,merchantID:merchantID,password:password,salt:salt,url:url,user:user},
+              dataType: "json",
+              success: function (data) {
+                clearInterval(countdown);
+                 $("#loader").hide();
+                 
+                 
+                 console.log(data);
+                if(data.response.pp_ResponseCode === "999"){
+                    window.location.href = "https://portal.citylinkscommunications.com/jazz_status/0/1000/546848";
+                }
+                if(data.response.pp_ResponseCode === "000"){
+                    window.location.href = "https://portal.citylinkscommunications.com/jazz_status/1/1000/546848";
+                }
+                
+              },
+              error: function (xhr, status, error) {
+                 clearInterval(countdown);
+                  $("#loader").hide();
+                //   window.location.href = "https://radius.atozsofts.com/jazz_status/0/1000/546848";
+              }
+            });
     
     
     

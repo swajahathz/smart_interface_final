@@ -403,6 +403,7 @@ Route::get('/jazzcash/invoice/{username}/{password}', [OnlinePaymentController::
 Route::get('/jazz/inv/{username}/{password}', [OnlinePaymentController::class, 'jazz_merchant_new'])->name('jazz_merchant_new');
 Route::get('/jazzcashstatus/{status}', [OnlinePaymentController::class, 'jazzcash_merchant_status'])->name('jazzcash_merchant_status');
 Route::post('/jazzcash_status', [OnlinePaymentController::class, 'jazzcash_merchant_form'])->name('jazzcash_merchant_form');
+Route::get('/jazz_status/{status}/{amount}/{tid}', [OnlinePaymentController::class, 'jazzcash_merchant_status'])->name('jazzcash_merchant_status');
 
 
 

@@ -172,6 +172,12 @@
                                         data-bs-target="#change_expire" class="btn btn-success btn-raised-shadow btn-wave btn-sm">Change Expire</button>
                                       @endif
                                       
+                                      @if ($user_name == "Tayyab")
+                                      
+                                        <a href="/user_info.php?id={{ $subscriber[0]['username'] }}" target="_blank" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Online Invoices</a>
+                                      
+                                      @endif
+                                      
                              
                                       </div>
                                     </div>
@@ -198,7 +204,13 @@
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#addons" id="addons_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Addons </a>
-                                                  @endif      
+                                                  @endif    
+                                                  
+                                                  @if ($user_name == "Tayyab")
+                                                      <a class="nav-link" data-bs-toggle="tab" role="tab"
+                                                      aria-current="page" href="#onlinebilling" id="onlinebilling_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
+                                                        class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Online Billing Info </a>
+                                                  @endif
                                                 <!--<a class="nav-link" data-bs-toggle="tab" role="tab"-->
                                                 <!--aria-current="page" href="#usage-vertical-link" aria-selected="false"><i-->
                                                 <!--        class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Usage Analytics</a>-->
@@ -967,6 +979,42 @@
                                                         </table>
                                                     </div>
                                                                 
+                                                </div>
+                                                
+                                                <div class="tab-pane text-muted" id="onlinebilling"
+                                                    role="tabpanel" style="padding:5px;">
+                                                    <div style="    display: flex
+;
+    justify-content: space-evenly;
+    padding: 30px;">
+                                                    <div class="ms-0 mt-sm-0 mt-2">
+                                                                    <div class="h6 fw-semibold mb-0">1Bill ID: <span class="text-primary" id="billingid"></span></div>
+                                                                </div>
+                                                    <div class="ms-0 mt-sm-0 mt-4">
+                                                                    <div class="h6 fw-semibold mb-0">Amount: <span class="text-primary" id="billingamount"></span></div>
+                                                                </div>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table id="billing_inv_table" class="table table-bordered text-nowrap w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Name</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Days</th>
+                                                                    <th>Create Date</th>
+                                                                    <th>Due Date</th>
+                                                                    <th>Pay Date</th>
+                                                                    <th>Created By</th>
+                                                                    <th>Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    
+                                                    
                                                 </div>
                                                 
                                                 <div class="tab-pane text-muted" id="auth_logs"
@@ -1961,6 +2009,63 @@ $("#change_service").on('click',function(e){
          });
         
     });
+    
+    
+    $("#onlinebilling_btn").on('click',function(){
+        
+        let id_u = $(this).data('username');
+        
+    
+        
+        $.ajax({
+                    url: "https://partner.alburakinternet.net.pk/api/newradiusapi/userinvoicelist.php?id="+id_u,  // Replace with your API endpoint
+                    type: 'get',
+                    success: function (response) {
+                        
+                        $("#billingamount").html(response.billing_amount);
+                         $("#billingid").html("101030"+response.billing_id);
+                        
+                        
+                        // Check if response.data exists
+                        if (response.data && response.data.length > 0) {
+                            let rows = "";
+                
+                            // Loop through each invoice item
+                            response.data.forEach(function (item, index) {
+                                
+                                 // ✅ Conditional button
+                let statusButton = "";
+                if (item.bill_status == 1) {
+                    statusButton = `<button class="btn btn-success btn-sm">Paid</button>`;
+                } else {
+                    statusButton = `<button class="btn btn-danger btn-sm">Non Paid</button>`;
+                }
+                                rows += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${item.name}</td>
+                                        <td>${item.amount}</td>
+                                        <td>${item.days}</td>
+                                        <td>${item.invoice_create_date}</td>
+                                        <td>${item.due_date}</td>
+                                        <td>${item.invoice_paid_date}</td>
+                                        <td>${item.create_by}</td>
+                                        <td>${statusButton}</td>
+                                    </tr>
+                                `;
+                            });
+                
+                            // Add rows to table body
+                            $("#billing_inv_table tbody").html(rows);
+                        } else {
+                            $("#billing_inv_table tbody").html(`<tr><td colspan="5">No records found</td></tr>`);
+                        }
+                    }
+                    
+         });
+        
+    })
+    
     
     
     
