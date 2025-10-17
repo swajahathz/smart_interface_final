@@ -377,6 +377,7 @@ Route::get('/setting', [SettingController::class, 'setting'])->name('setting')->
 
 
 Route::get('/import/checker', [ImportController::class, 'importchecker'])->name('importchecker')->middleware('auth_token');
+Route::get('/import/filechecker', [ImportController::class, 'importfilechecker'])->name('importfilechecker')->middleware('auth_token');
 Route::get('/export', [SubscriberController::class, 'exports'])->name('exports')->middleware('auth_token');
 
 
