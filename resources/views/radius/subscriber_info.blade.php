@@ -717,7 +717,7 @@
                                                             <div class="ms-auto mt-md-0 mt-2 d-flex">
                                                                 <div><label class="form-control">SELECT</label></div>
                                                                 <select name="days" id="days" class="form-control">
-                                                                    @for ($i = 1; $i <= 3; $i++)
+                                                                    @for ($i = 1; $i <= 30; $i++)
                                                                         <option value="{{ $i }}" {{ $i == 1 ? 'selected' : '' }}>
                                                                             {{ $i }} Day{{ $i > 1 ? 's' : '' }}
                                                                         </option>
