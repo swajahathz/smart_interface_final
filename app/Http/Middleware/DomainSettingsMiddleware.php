@@ -78,6 +78,25 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://api.fiber-beam.net/api']);
                 
                 
+        }elseif ($host === 'billing.abnetwork.pk') {
+            $settings = [
+                'title' => 'AB Network | Billing System',
+                'logo' => '<div style="background-color:white;"><img src="/build/assets/images/abnetwork.png" style="width: 80px;"/></div>',
+                'fav' => '/build/assets/images/abnetwork.png',
+                'description' => 'AB Network | Billing System',
+                'primary' => '--primary-rgb: 118, 0, 0;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #760000;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#5151511f',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://api.fiber-beam.net/api']);
+                
+                
         }elseif ($host === 'billing.fastnet.com.pk') {
             $settings = [
                 'title' => 'FastNet | Billing System',
@@ -319,6 +338,20 @@ class DomainSettingsMiddleware
                 'logo' => '<img src="/build/assets/images/Mynet.png" style="width: 160px;"/>',
                 'fav' => '/build/assets/images/mynet-fav.png',
                 'description' => 'MyNet BroadBand CRM',
+                'primary' => '--primary-rgb: 0, 126, 191;',
+                'sidebar' => '',
+            ];
+            
+            // config(['app.api_base_url' => 'https://apimynet.smartispsolutions.com/api']);
+            config(['app.api_base_url' => 'https://apimynet.atozsofts.com/api']);
+        }
+        
+        elseif ($host === 'partner.clickfiber.pk') {
+            $settings = [
+                'title' => 'ClickFiber BroadBand | Billing System',
+                'logo' => '<img src="/build/assets/images/Mynets.png" style="width: 160px;"/>',
+                'fav' => '/build/assets/images/mynet-favs.png',
+                'description' => 'ClickFiber BroadBand | Billing System',
                 'primary' => '--primary-rgb: 0, 126, 191;',
                 'sidebar' => '',
             ];

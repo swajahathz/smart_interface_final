@@ -1031,6 +1031,7 @@
                                                                     <th>Reason</th>
                                                                     <th>Nas</th>
                                                                     <th>Mac</th>
+                                                                    <th>Action</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -1523,20 +1524,39 @@ $('#subscriber_form').on('submit', function (e) {
 });
 
 
+$(document).on('click', '.logs_change_pass', function(e) {    
+    e.preventDefault();
+
+    var subscriber_id = "{{ $subscriber[0]['subscriber_id'] }}";
+    var pass = String($(this).data('pass')); // ✅ convert to string
+
+    changepass(subscriber_id,pass);
+}); 
+
+
 $("#change_password").on('click',function(e){
     e.preventDefault();
     
     var subscriber_id = $('#subscriber_id').val();
+    var pass = $('#passwordValue').val();
 
     $('#change_password').hide();
     $('.loadingBtn').show();
 
-    // Prepare form data
+
+    changepass(subscriber_id,pass);
+   
+
+});
+
+function changepass(subscriber_id,pass){
+    
+     // Prepare form data
     let formData = {
-              password: $('#passwordValue').val(),
+              password: pass,
            };
 
-    var pass = $('#passwordValue').val();
+ 
     $.ajax({
                 url: baseUrl+'/subscriberpasswordupdate/'+subscriber_id,  // Replace with your API endpoint
                 type: 'POST',
@@ -1553,6 +1573,8 @@ $("#change_password").on('click',function(e){
                         $('#changePassword').modal('hide');
                         $('#changepasswordvalue').html(pass);
                         showToast("bg-success","Password Updated.",response.message)
+                        
+                        load_auth_log(subscriber_id);
                         // $('#subscriber_form')[0].reset();
 
                     }
@@ -1585,8 +1607,8 @@ $("#change_password").on('click',function(e){
                 $('#change_password').show();
                  }
             });
-
-});
+    
+}
 
 
 $("#change_expireBtn").on('click',function(e){
@@ -2179,7 +2201,7 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
                         <script src="{{ asset('js/subscriber_speed_graph.js?v=1.0.16') }}"></script>
                     @endif
         
-        <script src="{{ asset('js/subscriber.js?v=1.0.0.3') }}"></script>
+        <script src="{{ asset('js/subscriber.js?v=1.0.0.5') }}"></script>
         <script src="{{ asset('js/function/showalert.js') }}"></script>
         <script src="{{ asset('js/function/toast.js') }}"></script>
         

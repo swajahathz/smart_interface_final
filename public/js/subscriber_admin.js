@@ -448,7 +448,21 @@ function load_auth_log(id){
                                 { "data": "reply" },
                                 { "data": "type" },
                                 { "data": "nas" },
-                                { "data": "mac" }
+                                { "data": "mac" },
+                                
+                                {
+                                    "data": "type",
+                                    "render": function (data, type, row) {
+                                      if (data === "Wrong Password.") {
+                                            return `<button data-pass="${row.pass}" data-subscriber="${row.username}" class="btn btn-danger btn-sm logs_change_pass">Set Password</button>`;
+                                        } else if (data === "Account Expired") {
+                                            return `<button class="btn btn-danger btn-sm openRechargeTab" data-bs-target="#recharge">Recharge Account</button>`;
+
+                                        } else {
+                                            return data; // show text normally if not "Wrong Password." or "Account Expired"
+                                        }
+                                    }
+                                }
                             ],
                             "columnDefs": [
                                 {
@@ -464,50 +478,5 @@ function load_auth_log(id){
                 });
               }
               
-function load_session(id){
-    // Destroy the existing DataTable instance (if exists)
-                if ($.fn.dataTable.isDataTable('#session_table')) {
-                    $('#session_table').DataTable().clear().destroy();
-                }
-                // basic datatable
-              $('#session_table').DataTable({
-                            language: {
-                                searchPlaceholder: 'Search...',
-                                sSearch: '',
-                            },
-                            "pageLength": 10,
-                            "ajax": {
-                                "url": baseUrl+"/sessionsingle/"+id, // Replace with your API URL
-                                "type": "GET",
-                                "dataSrc": "", // Adjust based on your API response format, e.g., "data" if necessary
-                                "beforeSend": function(xhr) {
-                                    xhr.setRequestHeader("Authorization", "Bearer "+encrypt); // Replace YOUR_TOKEN with the actual token
-                                }
-                            },
-                            "columns": [
-                                { "data": null },  // For serial number
-                                { "data": "acctstarttime" },
-                                { "data": "acctstoptime" },
-                                { "data": "duration" },
-                                { "data": "upload" },
-                                { "data": "download" },
-                                { "data": "framedipaddress" },
-                                { "data": "nasipaddress" },
-                                { "data": "callingstationid" }
-                            ],
-                            "columnDefs": [
-                                {
-                                    "targets": 0,  // Target the first column for serial number
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function(data, type, row, meta) {
-                                        return meta.row + 1; // Generate serial number based on row index
-                                    }
-                                }
-                            ],
-                            "order": [[0, 'asc']]
-                });
-              }
-              
-              
+
               

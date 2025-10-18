@@ -54,6 +54,7 @@
                                     BUG LOGS LIST
                                 </div>
                                 <div>
+                                      <button class="btn btn-danger btn-sm" id="refresh"> Refresh</button>
                                 <div class="modal fade" id="modaldemo8" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -149,6 +150,7 @@
                                                 <th>Reason</th>
                                                 <th>Mac</th>
                                                 <th>Authdate</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -194,229 +196,10 @@ let encrypt = $('#token').val();
 let baseUrl = "{{ config('app.api_base_url') }}";
 let user_id = "{{$user_id}}";
 
-$('#datatable-basic').on('click', '.update', function() {
-    $('#update_modal').modal('show');
-    $('#updateloadingBtn').show();
-    $('#updateBtn').hide();
 
-    
-
-    let id = $(this).data("id");
-
-            $.ajax({
-            url: '/update_nas_modal/'+id, // Your API endpoint
-            method: 'GET', // Use GET since the route is defined with Route::get
-        
-            success: function(response) {
-                $("#update_modal_body").html(response);
-            },
-            error: function() {
-                Swal.fire("Error!", "An unexpected error occurred.", "error");
-            },
-            complete: function () {
-                // Hide the Loading button and show the Submit button again
-
-                // $('#nas_form input, #nas_form button').prop('disabled', false);
-                $('#updateloadingBtn').hide();
-                $('#updateBtn').show();
-                 }
-        });
-});
-
-// DELETE FUNCTION
-$('#datatable-basic').on('click', '.alert-confirm', function() {
-   
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then(e => {
-            if (e.isConfirmed) {
-                // Perform AJAX request here
-
-                let id = $(this).data("id");
-                $.ajax({
-                    url: baseUrl+'/subscriberdelete/'+id, // replace with your API URL
-                    method: 'POST',
-                    data: {
-                        // Add any necessary data here
-                    },
-                    contentType: 'application/json',
-                    headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                    success: function(response) {
-                        if (response.status === 1) { // Check if status is 1
-                            Swal.fire("Deleted!", "Your data has been deleted successfully.", "success");
-                            load_datatable();
-                        } else {
-                            Swal.fire("Error!", "There was an issue deleting the data.", "error");
-                        }
-                    },
-                    error: function() {
-                        Swal.fire("Error!", "An unexpected error occurred.", "error");
-                    }
-                });
-            }
-        });
-    
-});
-
-$('#nas_form').on('submit', function (e) {
-            e.preventDefault();
-
-
-            // Disable all inputs and buttons
-          $('#nas_form input, #nas_form button').prop('disabled', true);
-            $('#submitBtn').hide();
-            $('#loadingBtn').show();
-
-          
-            // Prepare form data
-            let formData = {
-                name: $('#name').val(),
-                server_ip: $('#serverip').val(),
-                secret: $('#secret').val(),
-                description: $('#description').val(),
-            };
-
-            // Send AJAX request
-            $.ajax({
-                url: baseUrl+'/nasadd',  // Replace with your API endpoint
-                type: 'POST',
-                data: JSON.stringify(formData),
-                contentType: 'application/json',
-                headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                success: function (response) {
-                    console.log(response.status);
-
-                    if (response.status === 1) {
-                        showToast("bg-success","NAS Added.",response.message)
-                        $('#modaldemo8').modal('hide');
-                        load_datatable();
-                        $('#nas_form')[0].reset();
-                    } 
-                    else if (response.status === 2) {
-                        // ALREADY NAS AVALIABLE
-                        // showToast("bg-warning","NAS IP Already Found.",response.message);
-
-                        showAlert(response.message,"warning");
-
-                        // alert(response.message);
-                    } 
-                    else if (response.status === 501) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    else if (response.status === 500) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    else if (response.status === 404) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error(status);
-                    showAlert('Something Wrong!',"danger");
-                },
-                complete: function () {
-                // Hide the Loading button and show the Submit button again
-
-                $('#nas_form input, #nas_form button').prop('disabled', false);
-                $('#loadingBtn').hide();
-                $('#submitBtn').show();
-                 }
-            });
-});
-
-$('#update_nas_form').on('submit', function (e) {
-            e.preventDefault();
-
-
-            // Disable all inputs and buttons
-          $('#update_nas_form input, #update_nas_form button').prop('disabled', true);
-            $('#updateBtn').hide();
-            $('#updateloadingBtn').show();
-
-            // Prepare form data
-            let formData = {
-                name: $('#update_name').val(),
-                server_ip: $('#update_serverip').val(),
-                secret: $('#update_secret').val(),
-                description: $('#update_description').val(),
-            };
-
-            var id = $('#update_id').val();
-
-            // Send AJAX request
-            $.ajax({
-                url: baseUrl+'/nasupdate/'+id,  // Replace with your API endpoint
-                type: 'POST',
-                data: JSON.stringify(formData),
-                contentType: 'application/json',
-                headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                success: function (response) {
-                    console.log(response.status);
-
-                    if (response.status === 1) {
-                        showToast("bg-success","NAS Updated.",response.message)
-                        $('#update_modal').modal('hide');
-                        load_datatable();
-                        $('#nas_form')[0].reset();
-                    } 
-                    else if (response.status === 2) {
-                        // ALREADY NAS AVALIABLE
-                        // showToast("bg-warning","NAS IP Already Found.",response.message);
-
-                        showAlert(response.message,"warning");
-
-                        // alert(response.message);
-                    } 
-                    else if (response.status === 501) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    else if (response.status === 500) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    else if (response.status === 404) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error(status);
-                    showAlert('Something Wrong!',"danger");
-                },
-                complete: function () {
-                // Hide the Loading button and show the Submit button again
-
-                $('#update_nas_form input, #update_nas_form button').prop('disabled', false);
-                $('#updateloadingBtn').hide();
-                $('#updateBtn').show();
-                 }
-            });
-});
-
-
+    $("#refresh").on('click',function(){
+        load_datatable();
+    });
 
     load_datatable();
               function load_datatable(){
@@ -441,12 +224,32 @@ $('#update_nas_form').on('submit', function (e) {
                             },
                             "columns": [
                                 { "data": null },  // For serial number
-                                { "data": "username" },
+                                { "data": "username",
+                                
+                                    "render": function (data, type, row) {
+                                        return `<a href="subscriber_info/${row.username}" class"text-success">${row.username}</a>`;
+                                    }
+                                        
+                                    },
                                 { "data": "pass"},
                                 { "data": "reply"},
                                 { "data": null },
                                 { "data": "mac" },
-                                { "data": "authdate" }
+                                { "data": "authdate" },
+                                {
+                                    "data": "type",
+                                    "render": function (data, type, row) {
+                                      if (data === "Wrong Password.") {
+                                            return `<button data-pass="${row.pass}" data-subscriber="${row.username}" class="btn btn-danger btn-sm logs_change_pass">Set Password</button>`;
+                                        } else if (data === "Account Expired") {
+                                            return `<a href="subscriber_info/${row.username}" class="btn btn-danger btn-sm openRechargeTab" data-bs-target="#recharge">Recharge Account</a>`;
+
+                                        } else {
+                                            return data; // show text normally if not "Wrong Password." or "Account Expired"
+                                        }
+                                    }
+                                }
+                                
                             ],
                             "columnDefs": [
                                 {
@@ -458,39 +261,10 @@ $('#update_nas_form').on('submit', function (e) {
                                     }
                                 },
                                 {
-                                    "targets": 1,  // Last column for action buttons
-                                    "searchable": true,
-                                    "orderable": false,
-                                    "render": function(data, type, row, meta) {
-                                        const initials = (
-  (row.firstname?.charAt(0) || '') + 
-  (row.lastname?.charAt(0) || '')
-).toUpperCase();
-                                        const ed = row.user_detail.subscriber_enable === 1 ? 'bg-success-transparent' : 'bg-danger-transparent';
-                                        return `
-                                            <div class="d-flex">
-                                                            <div class="lh-1">
-                                                                <span class="avatar avatar-sm avatar-rounded ${ed} fw-semibold">
-                                                                        ${initials}
-                                                                    </span>
-                                                            </div>
-                                                            <div class="ms-2">
-                                                                <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}"> ${row.user_detail.firstname} ${row.user_detail.lastname}</a></p>
-                                                                <p class="fs-12 text-muted mb-0">${row.username}</p>
-                                                            </div>
-                                                        </div>
-                                        `;
-                                    }
-                                },
-                                {
                                     "targets": 4,  // Last column for action buttons
                                     "searchable": true,
                                     "orderable": true,
                                     "render": function(data, type, row, meta) {
-                                        const oClass = row.user_detail.subscriber_enable === 1 ? '<span class="badge bg-success-transparent">Enable</span>' : '<span class="badge bg-danger-transparent">Disable</span>';
-                                        // return `
-                                        //     <span class="badge ${badgeClass}" style="font-size:1em;">${row.expiration}</span>
-                                        // `;
                                         return `
                                            <div class="d-flex align-items-center gap-1">
                                                 ${row.type ? `<button type="button" class="btn btn-warning btn-sm btn-wave" style="font-size: .65rem;">${row.type}</button>` : ''}
@@ -507,7 +281,67 @@ $('#update_nas_form').on('submit', function (e) {
               }
               
            
-              
+        $(document).on('click', '.logs_change_pass', function() {
+    let subscriber = $(this).data('subscriber');
+    let pass = String($(this).data('pass'));
+    
+    changepass(subscriber,pass);
+});
+
+
+function changepass(subscriber_id,pass){
+    
+     // Prepare form data
+    let formData = {
+              password: pass,
+           };
+
+ 
+    $.ajax({
+                url: baseUrl+'/subscriberpasswordupdatebyname/'+subscriber_id,  // Replace with your API endpoint
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    console.log(response.status);
+
+                    if (response.status === 1) {
+                        showToast("bg-success","Password Updated.",response.message)
+                        
+                      load_datatable();
+                        // $('#subscriber_form')[0].reset();
+
+                    }
+                    else if (response.status === 501) {
+                        //RADIUS SERVER ERROR
+                        // showAlert(response.message,"danger");
+                        $('#changePassword').modal('hide');
+                        showToast("bg-danger","Server error. ",response.message)
+                    }
+                    else if (response.status === 500) {
+                        //RADIUS SERVER ERROR
+                        showAlert(response.message,"danger");
+                    }
+                    else if (response.status === 404) {
+                        //RADIUS SERVER ERROR
+                        showAlert(response.message,"danger");
+                    }
+                    
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    showAlert('Something Wrong!',"danger");
+                },
+                complete: function () {
+                 }
+            });
+    
+}
               
     
 </script>

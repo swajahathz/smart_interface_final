@@ -378,7 +378,21 @@ function load_auth_log(id){
                                 { "data": "reply" },
                                 { "data": "type" },
                                 { "data": "nas" },
-                                { "data": "mac" }
+                                { "data": "mac" },
+                                
+                                {
+                                    "data": "type",
+                                    "render": function (data, type, row) {
+                                      if (data === "Wrong Password.") {
+                                            return `<button data-pass="${row.pass}" data-subscriber="${row.username}" class="btn btn-danger btn-sm logs_change_pass">Set Password</button>`;
+                                        } else if (data === "Account Expired") {
+                                            return `<button class="btn btn-danger btn-sm openRechargeTab" data-bs-target="#recharge">Recharge Account</button>`;
+
+                                        } else {
+                                            return data; // show text normally if not "Wrong Password." or "Account Expired"
+                                        }
+                                    }
+                                }
                             ],
                             "columnDefs": [
                                 {

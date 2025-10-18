@@ -129,6 +129,9 @@ class AuthenticationController extends Controller
             if ($host === 'partner.mudasirisp.net') {
                 return view('radius/auth/minternet.signin');
             }
+             if ($host === 'billing.abnetwork.pk') {
+                return view('radius/auth/abnetwork.signin');
+            }
             
             // Default behavior
            $attempt_invalid = $request->cookie('attempt_invalid'); 

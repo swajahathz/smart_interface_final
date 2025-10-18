@@ -1009,6 +1009,7 @@
                                                                     <th>Reason</th>
                                                                     <th>Nas</th>
                                                                     <th>Mac</th>
+                                                                    <th>Action</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -1711,21 +1712,84 @@ $("#sync").on('click',function(){
     
 });
 
+function load_session(id){
+    // Destroy the existing DataTable instance (if exists)
+                if ($.fn.dataTable.isDataTable('#session_table')) {
+                    $('#session_table').DataTable().clear().destroy();
+                }
+                // basic datatable
+              $('#session_table').DataTable({
+                            language: {
+                                searchPlaceholder: 'Search...',
+                                sSearch: '',
+                            },
+                            "pageLength": 10,
+                            "ajax": {
+                                "url": baseUrl+"/sessionsingle/"+id, // Replace with your API URL
+                                "type": "GET",
+                                "dataSrc": "", // Adjust based on your API response format, e.g., "data" if necessary
+                                "beforeSend": function(xhr) {
+                                    xhr.setRequestHeader("Authorization", "Bearer "+encrypt); // Replace YOUR_TOKEN with the actual token
+                                }
+                            },
+                            "columns": [
+                                { "data": null },  // For serial number
+                                { "data": "acctstarttime" },
+                                { "data": "acctstoptime" },
+                                { "data": "duration" },
+                                { "data": "upload" },
+                                { "data": "download" },
+                                { "data": "framedipaddress" },
+                                { "data": "nasipaddress" },
+                                { "data": "callingstationid" }
+                            ],
+                            "columnDefs": [
+                                {
+                                    "targets": 0,  // Target the first column for serial number
+                                    "searchable": false,
+                                    "orderable": false,
+                                    "render": function(data, type, row, meta) {
+                                        return meta.row + 1; // Generate serial number based on row index
+                                    }
+                                }
+                            ],
+                            "order": [[0, 'asc']]
+                });
+              }
+              
+$(document).on('click', '.logs_change_pass', function(e) {    
+    e.preventDefault();
+
+    var subscriber_id = "{{ $subscriber[0]['subscriber_id'] }}";
+    var pass = String($(this).data('pass')); // ✅ convert to string
+
+    changepass(subscriber_id,pass);
+}); 
+
 
 $("#change_password").on('click',function(e){
     e.preventDefault();
     
     var subscriber_id = $('#subscriber_id').val();
+    var pass = $('#passwordValue').val();
 
     $('#change_password').hide();
     $('.loadingBtn').show();
 
-    // Prepare form data
+
+    changepass(subscriber_id,pass);
+   
+
+});
+
+function changepass(subscriber_id,pass){
+    
+     // Prepare form data
     let formData = {
-              password: $('#passwordValue').val(),
+              password: pass,
            };
 
-    var pass = $('#passwordValue').val();
+ 
     $.ajax({
                 url: baseUrl+'/subscriberpasswordupdate/'+subscriber_id,  // Replace with your API endpoint
                 type: 'POST',
@@ -1742,6 +1806,8 @@ $("#change_password").on('click',function(e){
                         $('#changePassword').modal('hide');
                         $('#changepasswordvalue').html(pass);
                         showToast("bg-success","Password Updated.",response.message)
+                        
+                        load_auth_log(subscriber_id);
                         // $('#subscriber_form')[0].reset();
 
                     }
@@ -1774,8 +1840,8 @@ $("#change_password").on('click',function(e){
                 $('#change_password').show();
                  }
             });
-
-});
+    
+}
 
 
 $("#change_expireBtn").on('click',function(e){
@@ -2290,7 +2356,21 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
         
     });
     
-    
+    $(document).on('click', '.openRechargeTab', function (e) {
+    e.preventDefault();
+
+    var target = $(this).data('bs-target') || $(this).attr('href');
+
+    // Find the original tab trigger (using href)
+    var tabTrigger = document.querySelector(`[href="${target}"][data-bs-toggle="tab"]`);
+
+    if (tabTrigger) {
+        var tab = new bootstrap.Tab(tabTrigger);
+        tab.show();
+    } else {
+        console.error("Tab trigger not found for:", target);
+    }
+});
     
     
         </script>
@@ -2355,7 +2435,7 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
                         <script src="{{ asset('js/subscriber_speed_graph.js?v=1.0.16') }}"></script>
                     @endif
         
-        <script src="{{ asset('js/subscriber_admin.js?v=1.0.0.7') }}"></script>
+        <script src="{{ asset('js/subscriber_admin.js?v=1.0.0.10') }}"></script>
         <script src="{{ asset('js/function/showalert.js') }}"></script>
         <script src="{{ asset('js/function/toast.js') }}"></script>
         

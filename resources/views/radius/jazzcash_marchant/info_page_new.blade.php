@@ -16,7 +16,7 @@ define('BASE_URL','https://gnsol.in/jazz/');
 $tranId = substr(time() . mt_rand(1000, 9999), -8);
 
 //============================Get Form Values=========================================================
-$packagePrice = $subscriber[0]['extra_charges'];
+$packagePrice = $subscriber_info[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'];
 //============================Get EForm Values=========================================================
 
 
@@ -133,7 +133,7 @@ $Securehash = hash_hmac('sha256', $SortedArray, $HashKey);
 </div>
         </div>
         <div>
-            <h2>{{$subscriber[0]['extra_charges']}}</h2>
+            <h2>{{$subscriber_info[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges']}}</h2>
    
         <input type="hidden" name="pp_Version" value="<?php echo $Version; ?>" />
         <input type="hidden" name="pp_TxnType" placeholder="TxnType" value="<?php echo $TxnType; ?>" />

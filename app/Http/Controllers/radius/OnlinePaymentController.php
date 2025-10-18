@@ -138,7 +138,16 @@ class OnlinePaymentController extends Controller
         $pass = $subscriber[0]['password'];
         
         if($password == $pass){
-             return view('radius/jazzcash_marchant/info_page_new', compact('subscriber','invoice'));
+            
+                $apiUrl2 = config('app.api_base_url') . '/subscribersingle/'.$username;
+                 $response2 = Http::withHeaders([
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+                ])->get($apiUrl2);
+        
+        $subscriber_info = $response2->json();
+        
+             return view('radius/jazzcash_marchant/info_page_new', compact('subscriber','subscriber_info','invoice'));
         }else{
              return view('radius/jazzcash_marchant/not_found');
         }
