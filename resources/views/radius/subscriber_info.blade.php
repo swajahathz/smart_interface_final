@@ -178,6 +178,10 @@
                                       
                                       @endif
                                       
+                                      @if($roles_id == 3)
+                                        <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
+                                    @endif
+                                      
                              
                                       </div>
                                     </div>

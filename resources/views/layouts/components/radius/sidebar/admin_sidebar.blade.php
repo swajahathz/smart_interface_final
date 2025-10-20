@@ -79,7 +79,7 @@
                                 </ul>
                             </li>
                              <li class="slide">
-                                <a href="{{url('import/checker')}}" class="side-menu__item">
+                                <a href="{{url('import/filechecker')}}" class="side-menu__item">
                                 <i class='bx bx-server side-menu__icon'></i>
                                     <span class="side-menu__label">Import Subscriber</span>
                                 </a>

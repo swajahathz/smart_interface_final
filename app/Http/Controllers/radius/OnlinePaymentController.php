@@ -139,10 +139,9 @@ class OnlinePaymentController extends Controller
         
         if($password == $pass){
             
-                $apiUrl2 = config('app.api_base_url') . '/subscribersingle/'.$username;
+                $apiUrl2 = config('app.api_base_url') . '/subscribersingleonline/'.$username.'/176';
                  $response2 = Http::withHeaders([
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
                 ])->get($apiUrl2);
         
         $subscriber_info = $response2->json();
