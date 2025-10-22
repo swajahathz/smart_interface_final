@@ -1,17 +1,27 @@
 
-            <footer class="footer mt-auto py-3 bg-white text-center">
-                <div class="container">
-                    <span class="text-muted"> Copyright © <span id="year"></span>
+            <footer class="footer mt-auto py-3 bg-white">
+                <div class="container d-flex"  style="justify-content:space-between;">
+                    <div>
+                        <span class="text-muted"> v1.3.1
+                        </span>
+                    </div>
                    @php
                         $apiUrll = config('app.api_base_url');
                     @endphp
                     
                     @if ($apiUrll === 'https://dummyradius-api.alburakinternet.net.pk/api' || $apiUrll === 'https://smartradapi.alburakinternet.net.pk/api')
+                     <div>
+                        <span class="text-muted"> Copyright © <span id="year"></span>
                         <a href="https://sblinknetwork.com" target="_blank" class="text-dark fw-semibold">S.B Link</a>.
+                    </div>
                     @else
+                    <div>
+                        <span class="text-muted"> Created By 
                         <a href="https://www.facebook.com/profile.php?id=61574720728847" target="_blank" class="text-dark fw-semibold">SmartRad</a>.
+                        </span>
+                    </div>
                     @endif
-                    </span>
+                    
                 </div>
             </footer>
              <!-- JQUERY JS -->

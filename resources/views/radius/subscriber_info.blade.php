@@ -177,9 +177,10 @@
                                         <a href="/user_info.php?id={{ $subscriber[0]['username'] }}" target="_blank" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Online Invoices</a>
                                       
                                       @endif
-                                      
-                                      @if($roles_id == 3)
-                                        <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
+                                      @if(request()->getHost() == "portal.citylinkscommunications.com")
+                                              @if($roles_id == 3)
+                                                <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
+                                            @endif
                                     @endif
                                       
                              
@@ -310,6 +311,24 @@
                                                                                 <input type="text" class="form-control" id="mac" value="{{ $subscriber[0]['macss'] }}" style="background-color:#1e3fb32e;" readonly>
                                                                                 <div class="input-group-text">Mac Address</div>
                                                                         </div>
+                                                                    </div>
+                                                                      <div class="col-xl-6">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                        <div class="input-group">
+                                                                                <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
+                                                                                <input type="text" class="form-control" value=" {{ \Carbon\Carbon::parse($subscriber[0]['created_at'])->format('d M Y, h:i A') }}
+ " style="background-color:#1e3fb32e;" readonly>
+                                                                                <div class="input-group-text">Created On</div>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="col-xl-6">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                        <div class="input-group">
+                                                                                <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
+                                                                                <input type="text" class="form-control" value=" {{ $subscriber[0]['owner']['managername'] }}
+ " style="background-color:#1e3fb32e;" readonly>
+                                                                                <div class="input-group-text">Owner</div>
+                                                                            </div>
                                                                     </div>
                                                                     
                                                                     <div class="col-xl-6">

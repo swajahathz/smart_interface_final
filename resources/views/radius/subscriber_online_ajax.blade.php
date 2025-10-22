@@ -110,6 +110,7 @@ div.dt-button-collection .dt-button:not(.dt-btn-split-drop) {
                                                 <th>ADDRESS</th>
                                                 <th>EXPIRATION</th>
                                                 <th>IP ADDRESS</th>
+                                                <th>VLAN</th>
                                                 <th>MAC</th>
                                                 <th>LOGIN TIME</th>
                                                 <th>UP TIME</th>
@@ -352,6 +353,18 @@ function load_datatable(manager_id,all,status){
         render: function(data, type, row) {
         return data ? data : "Nil";
     }},
+       {
+    data: "nasportid",
+    render: function(data, type, row) {
+        if (!data) {
+            return "Nil";
+        } else if (data.length > 20) {
+            return "Nil";
+        } else {
+            return data;
+        }
+    }
+},
         { data: "callingstationid",
         render: function(data, type, row) {
         return data ? data : "Nil";

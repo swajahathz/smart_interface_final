@@ -59,7 +59,28 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://api.glownet.net.pk/api']);
                 
                 
-        }elseif ($host === 'partner.fiber-beam.net') {
+        }
+         elseif ($host === 'isp.prime.net.pk') {
+            $settings = [
+                'title' => 'Prime Network',
+                'logo' => '<div style="background-color:white;"><img src="/build/assets/images/prime.jpg" style="width: 60px;"/></div>',
+                'fav' => '/build/assets/images/prime.jpg',
+                'description' => 'Prime Network | Billing system',
+                'primary' => '--primary-rgb: 29, 16, 82;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #1d1052;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#5151511f',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://primeapi.smartispsolutions.net/api']);
+                
+                
+        }
+        elseif ($host === 'partner.fiber-beam.net') {
             $settings = [
                 'title' => 'FiberBeam BroadBand | Billing System',
                 'logo' => '<div style="background-color:#00356c;margin-bottom:20px;"><img src="/build/assets/images/ispWorld.png" style="width: 220px;"/></div>',
@@ -122,6 +143,25 @@ class DomainSettingsMiddleware
                 'logo' => '<img src="/build/assets/images/glownets.png" style="width: 140px;"/>',
                 'fav' => '/build/assets/images/glownet_fav.png',
                 'description' => 'Vision BroadBand',
+                'primary' => '--primary-rgb: 81, 81, 81;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #444444;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#5151511f',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://visionapi.smartispsolutions.net/api']);
+                
+                
+        }elseif ($host === 'panel.cits.net.pk') {
+            $settings = [
+                'title' => 'CITS Network',
+                'logo' => '<img src="/build/assets/images/glownets.png" style="width: 140px;"/>',
+                'fav' => '/build/assets/images/glownet_fav.png',
+                'description' => 'CITS Network | Billing system',
                 'primary' => '--primary-rgb: 81, 81, 81;',
                 'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
             --menu-bg: #444444;
@@ -227,7 +267,7 @@ class DomainSettingsMiddleware
             
             
              // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
-                config(['app.api_base_url' => 'https://rdsapi.atozsofts.com/api']);
+                config(['app.api_base_url' => 'https://rdsapi.smartispsolutions.net/api']);
                 
                 
         }elseif ($host === 'al-awad.atozsofts.com') {
@@ -346,12 +386,12 @@ class DomainSettingsMiddleware
             config(['app.api_base_url' => 'https://apimynet.atozsofts.com/api']);
         }
         
-        elseif ($host === 'partner.clickfiber.pk') {
+        elseif ($host === 'partner.mylink.com.pk') {
             $settings = [
-                'title' => 'ClickFiber BroadBand | Billing System',
+                'title' => 'MyLink BroadBand | Billing System',
                 'logo' => '<img src="/build/assets/images/Mynets.png" style="width: 160px;"/>',
                 'fav' => '/build/assets/images/mynet-favs.png',
-                'description' => 'ClickFiber BroadBand | Billing System',
+                'description' => 'MyLink BroadBand | Billing System',
                 'primary' => '--primary-rgb: 0, 126, 191;',
                 'sidebar' => '',
             ];

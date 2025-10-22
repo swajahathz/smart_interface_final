@@ -305,6 +305,24 @@
                                                                                 <div class="input-group-text">Mac Address</div>
                                                                             </div>
                                                                     </div>
+                                                                    <div class="col-xl-6">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                        <div class="input-group">
+                                                                                <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
+                                                                                <input type="text" class="form-control" value=" {{ \Carbon\Carbon::parse($subscriber[0]['created_at'])->format('d M Y, h:i A') }}
+ " style="background-color:#1e3fb32e;" readonly>
+                                                                                <div class="input-group-text">Created On</div>
+                                                                            </div>
+                                                                    </div>
+                                                                    <div class="col-xl-6">
+                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
+                                                                        <div class="input-group">
+                                                                                <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
+                                                                                <input type="text" class="form-control" value=" {{ $subscriber[0]['owner']['managername'] }}
+ " style="background-color:#1e3fb32e;" readonly>
+                                                                                <div class="input-group-text">Owner</div>
+                                                                            </div>
+                                                                    </div>
                                                                     
                                                                     <div class="col-xl-6">
                                                                         <!-- <label for="mobile" class="form-label">Mobile</label> -->

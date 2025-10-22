@@ -263,7 +263,7 @@ $("#searchBtn").on('click',function(){
                                     p
                                 >
                             `, // 'B' is for Buttons
-                                    buttons: [
+                                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print',
                                         {
                                             text: 'Bulk Charge',
                                             className: 'btn btn-primary', // optional styling class
