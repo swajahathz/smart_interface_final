@@ -211,7 +211,7 @@
                                                         class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Addons </a>
                                                   @endif    
                                                   
-                                                  @if ($user_name == "Tayyab")
+                                                  @if ($subscriber[0]['franchiseId'] == 234)
                                                       <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                       aria-current="page" href="#onlinebilling" id="onlinebilling_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Online Billing Info </a>

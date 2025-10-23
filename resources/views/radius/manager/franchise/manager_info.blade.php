@@ -155,7 +155,13 @@
                                         
                                         <div style="white-space: nowrap; 
     overflow-x: auto;">
-                                        <button class="btn btn-primary btn-sm"><i class='bx bx-refresh fs-15'></i></button> 
+                                        <button class="btn btn-primary btn-sm" onclick="location.reload();">
+  <i class='bx bx-refresh fs-15'></i>
+</button>
+
+@if($user_name == "mylink")
+<button id="syncall" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Sync all <span class="spinner-border spinner-border-sm align-middle sync_loading" style="display:none;" role="status" aria-hidden="true"></span> </button>
+@endif
                                         <!--<button class="btn btn-primary btn-sm" type="button" data-bs-toggle="offcanvas"-->
                                         <!--data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Realtime Subscriber</button>-->
                                        
@@ -1706,6 +1712,38 @@ $("#commission_update_form").on('submit',function(e){
             $("#adminPackages").append($(this));
         });
     });
+    
+       $("#syncall").on('click',function(){
+                
+                
+            $(".sync_loading").show();
+            showToast("bg-success","Subscriber Synced.","Subscriber sync successfully")
+            $(".sync_loading").hide();
+   
+        let userid = '{{ $manager['user_id'] }}';
+   
+       $.ajax({
+                url: baseUrl+'/subscribersyncbulk/'+userid,  // Replace with your API endpoint
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    
+                    if (response.status === 1) {
+                        // $(".sync_loading").hide();
+                        showToast("bg-success","Subscriber Synced.",response.message)
+                        // $('#subscriber_form')[0].reset();
+
+                    }
+                    
+                }
+       });
+   
+    
+});
 </script>
 
          <script src="{{ asset('js/subscriber_speed_graph.js') }}"></script>
