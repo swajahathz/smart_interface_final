@@ -332,7 +332,7 @@
                                                                             $apiUrll = config('app.api_base_url');
                                                                         @endphp
                                                                         
-                                                                        @if ($apiUrll === 'https://rdsapi.atozsofts.com/api')
+                                                                        @if ($apiUrll === 'https://rdsapi.smartispsolutions.net/api')
                                                                         
                                                                            
                                                                             <div class="col-xl-6">
