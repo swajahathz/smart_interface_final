@@ -497,6 +497,9 @@ class SubscriberController extends Controller
             if($roles_id == 2){
                return view('radius/manager/admin/subscriber_info', compact('usage','fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token')); 
             }
+            if($roles_id == 3){
+               return view('radius/manager/franchise/subscriber_info', compact('usage','fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token')); 
+            }
             
              // Pass the data to the view
              return view('radius/subscriber_info', compact('usage','fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token'));

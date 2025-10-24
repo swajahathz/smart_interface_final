@@ -75,8 +75,6 @@
                                                               @else
                                                                   <p>Status information is not available.</p>
                                                               @endif
-                                                              
-                                                              
                                                             </div>
                                                             
                                                             <div><a href="javascript:void(0);"  class="badge rounded-pill bg-danger offline_button" style="display:none;">Offline</a></div>
@@ -118,45 +116,29 @@
                                             </div>
                                             
                                             <div class="d-flex">
-                                                 <div class="card custom-card overflow-hidden">
-                                                    <div class="card-body" style="padding: .6rem;">
-                                                         <div class="flex-grow-1 ms-2 me-2">
-                                                                <p class="mb-0"><b>Allowed</b></p>
-                                                                <h4 style="color: #686868;
-                                                                font-weight: 600;
-                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;">
-                                                                                                                        0 GB                                </h4>
-                                                         </div>
-                                                     </div>
-                                                </div>
-                                                 <div class="card custom-card overflow-hidden">
-                                                    <div class="card-body" style="padding: .6rem;">
-                                                         <div class="flex-grow-1 ms-2 me-2">
-                                                                <p class="mb-0 text-success"><b>Used</b></p>
-                                                                <h4 style="color: #686868;
-                                                                font-weight: 600;
-                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;">
-                                                                   
-                                                                                                                        {{ round($usage['usage'] / 1024, 2) }} GB                                </h4>
-                                                         </div>
-                                                     </div>
-                                                </div>
-                                                 <div class="card custom-card overflow-hidden">
-                                                    <div class="card-body" style="padding: .6rem;">
-                                                         <div class="flex-grow-1 ms-2 me-2">
-                                                                <p class="mb-0 text-danger" style="white-space: nowrap;"><b>Remaining</b></p>
-                                                                <h4 style="color: #686868;
-                                                                font-weight: 600;
-                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;">
-                                                                                                                        0 GB                                </h4>
-                                                         </div>
-                                                     </div>
-                                                </div>
-                                                
+                                                <div class="flex-grow-1 ms-2 me-2">
+                                                        <p class="mb-0"><b>Invoice Amount</b></p>
+                                                        <h4 style="color: #686868;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #b5b4b4;">
+                                                            0                                </h4>
+                                                    </div>
                                                     
-                                                   
+                                                    <div class="flex-grow-1 ms-2 me-2">
+                                                        <p class="mb-0"><b>Total Paid</b></p>
+                                                        <h4 style="color: #686868;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #b5b4b4;">
+                                                            0                                </h4>
+                                                    </div>
                                                     
-                                                    
+                                                    <div class="flex-grow-1 ms-2 me-2">
+                                                        <p class="mb-0 text-danger"><b>Due Amount</b></p>
+                                                        <h4 class="text-danger" style="
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #b5b4b4;">
+                                                            0                                </h4>
+                                                    </div>
                                                     
                                                    
                                             </div>
@@ -177,9 +159,12 @@
                                        
                                         <button data-bs-toggle="modal"
                                                         data-bs-target="#changePassword" class="btn btn-primary btn-raised-shadow btn-wave btn-sm">Change Password</button>
+                                                        
+                                            @if($permission['perm_ExpireServiceChng'] == 1)            
+                                                        
                                                         <button  data-bs-toggle="modal"
                                       data-bs-target="#changeService" class="btn btn-orange btn-raised-shadow btn-wave btn-sm">Change Service</button>
-                                      
+                                       @endif
                                       
                                       @if($permission['perm_ExpireEdit'] == 1)
                                       
@@ -187,19 +172,20 @@
                                         data-bs-target="#change_expire" class="btn btn-success btn-raised-shadow btn-wave btn-sm">Change Expire</button>
                                       @endif
                                       
+                                      @if ($user_name == "Tayyab")
                                       <button  data-bs-toggle="modal"
                                         data-bs-target="#change_owner" class="btn btn-success btn-raised-shadow btn-wave btn-sm" id="changeOwnerBtn">Change Owner</button>
                                       
-                                      <button id="sync" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Sync</button>
+                                        <a href="/user_info.php?id={{ $subscriber[0]['username'] }}" target="_blank" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Online Invoices</a>
                                       
-                                      
-                                    @if(request()->getHost() == "portal.citylinkscommunications.com")
-                                        <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
+                                      @endif
+                                      @if(request()->getHost() == "portal.citylinkscommunications.com")
+                                              @if($roles_id == 3)
+                                                <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
+                                            @endif
                                     @endif
                                       
-                                      
-                                      <button data-username="{{ $subscriber[0]['username'] }}" id="closesession" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Close Session</button>
-                                    <span class="spinner-border spinner-border-sm align-middle closesession_loading" style="display:none;" role="status" aria-hidden="true"></span> 
+                             
                                       </div>
                                     </div>
                                     
@@ -225,22 +211,43 @@
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#addons" id="addons_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Addons </a>
-                                                        
-                                                          <a class="nav-link" data-bs-toggle="tab" role="tab"
-                                                aria-current="page" href="#extras" id="extras_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
-                                                        class="ri-contacts-book-2-line me-2 align-middle d-inline-block"></i>Extras</a>
-                                                  @endif      
+                                                  @endif    
+                                                  
+                                                  @if ($subscriber[0]['franchiseId'] == 234)
+                                                      <a class="nav-link" data-bs-toggle="tab" role="tab"
+                                                      aria-current="page" href="#onlinebilling" id="onlinebilling_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
+                                                        class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Online Billing Info </a>
+                                                  @endif
                                                 <!--<a class="nav-link" data-bs-toggle="tab" role="tab"-->
                                                 <!--aria-current="page" href="#usage-vertical-link" aria-selected="false"><i-->
                                                 <!--        class="ri-archive-drawer-line me-2 align-middle d-inline-block"></i>Usage Analytics</a>-->
+                                                
+                                                
+                                                @if($permission['perm_CardRecharge'] == 1)
                                                         
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                     aria-current="page" href="#recharge" aria-selected="true"><i
                                                         class="ri-home-smile-line me-2 align-middle d-inline-block"></i>Recharge</a>
-                                                        
-                                                <a class="nav-link" data-bs-toggle="tab" role="tab"
-                                                    aria-current="page" href="#adddays" aria-selected="true"><i
-                                                        class="ri-home-smile-line me-2 align-middle d-inline-block"></i>Add Days</a>
+                                                @endif  
+                                                
+                                                @if($permission['perm_AddDays'] == 1)
+                                                         @php
+                                                                $apiUrll = config('app.api_base_url');
+                                                            @endphp
+                                                            
+                                                            @if ($apiUrll === 'https://smartradapi.alburakinternet.net.pk/api')
+                                                              @if($subscriber[0]['status'] == 'active')
+                                                                                           
+                                                                                                    @if($subscriber[0]['add_days_limit'] == 1)
+                                                                                                              <a class="nav-link" data-bs-toggle="tab" role="tab"
+                                                                                            aria-current="page" href="#adddays" aria-selected="true"><i
+                                                                                                class="ri-home-smile-line me-2 align-middle d-inline-block"></i>Add Days</a>
+                                                                                                
+                                                                                                 @endif
+                                                                                           @endif 
+                                                            @endif
+                                                       
+                                                  @endif       
                                                         
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#ledger" id="ledger_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
@@ -250,7 +257,6 @@
                                                 aria-current="page" href="#invoice" id="invoice_btn"  data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
                                                         class="ri-bank-line me-2 align-middle d-inline-block"></i>Invoices</a>
                                                         
-                                                      
                                                         
                                                         <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#session" id="session_btn" data-username="{{ $subscriber[0]['username'] }}" aria-selected="false"><i
@@ -306,9 +312,9 @@
                                                                                 <div class="btn btn-danger-light btn-sm" data-username="{{ $subscriber[0]['username'] }}" id="clear_mac">Clear Mac</div>
                                                                                 <input type="text" class="form-control" id="mac" value="{{ $subscriber[0]['macss'] }}" style="background-color:#1e3fb32e;" readonly>
                                                                                 <div class="input-group-text">Mac Address</div>
-                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-xl-6">
+                                                                      <div class="col-xl-6">
                                                                         <!-- <label for="mobile" class="form-label">Mobile</label> -->
                                                                         <div class="input-group">
                                                                                 <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
@@ -394,6 +400,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            
+                                                            
+                                                            @if($permission['perm_updateSubscriber'] == 1)
+                                                            
                                                             <div class="card-footer text-end pt-0">
                                                                             <button type="submit" id="submitBtn" href="javascript:void(0);" class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;">
                                                                                 Update
@@ -403,6 +413,14 @@
                                                                                 Loading...
                                                                             </button>
                                                             </div>
+                                                            
+                                                            @else
+                                                            
+                                                            <button class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;" disabled>
+                                                                                Update
+                                                                            </button>
+                                                            
+                                                            @endif
                                                             </form>
                                                 </div>
                                                 <div class="tab-pane text-muted" id="addons"
@@ -501,16 +519,75 @@
                                                         
                                                     </div>
                                                     <div class="col-xl-12 recharge_card">
-                                                        <div class="card custom-card">
+                                                    <div class="card custom-card">
+                                                        <!-- <div class="card-header d-md-flex d-block">
+                                                            <div class="h5 mb-0 d-sm-flex d-bllock align-items-center">
+                                                                <div class="avatar avatar-sm">
+                                                                    <img src="{{asset('build/assets/images/brand-logos/toggle-logo.png')}}" alt="">
+                                                                </div>
+                                                                <div class="ms-sm-2 ms-0 mt-sm-0 mt-2">
+                                                                    <div class="h6 fw-semibold mb-0">SHOPPING INVOICE : <span class="text-primary">#8140-2099</span></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ms-auto mt-md-0 mt-2">
+                                                                <button class="btn btn-sm btn-secondary me-1" onclick="javascript:window.print();">Print<i class="ri-printer-line ms-1 align-middle d-inline-block"></i></button>
+                                                                <button class="btn btn-sm btn-primary">Save As PDF<i class="ri-file-pdf-line ms-1 align-middle d-inline-block"></i></button>
+                                                            </div>
+                                                        </div> -->
                                                         <div class="card-body">
                                                             <div class="row gy-3">
+                                                                <!-- <div class="col-xl-12">
+                                                                    <div class="row">
+                                                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                                                            <p class="text-muted mb-2">
+                                                                                Billing From :
+                                                                            </p>
+                                                                            <p class="fw-bold mb-1">
+                                                                                SPRUKO TECHNOLOGIES
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                Mig-1-11,Manroe street
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                Georgetown,Washington D.C,USA,200071
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                sprukotrust.ynex@gmail.com
+                                                                            </p>
+                                                                            <p class="mb-1 text-muted">
+                                                                                (555) 555-1234
+                                                                            </p>
+                                                                            <p class="text-muted">For more information check for <a href="javascript:void(0);" class="text-primary fw-semibold"><u>GSTIN</u></a> Details.</p>
+                                                                        </div>
+                                                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 ms-auto mt-sm-0 mt-3">
+                                                                            <p class="text-muted mb-2">
+                                                                                Billing To :
+                                                                            </p>
+                                                                            <p class="fw-bold mb-1">
+                                                                                Json Taylor
+                                                                            </p>
+                                                                            <p class="text-muted mb-1">
+                                                                                Lig-22-1,20 Covington Place
+                                                                            </p>
+                                                                            <p class="text-muted mb-1">
+                                                                                New Castle,de, United States,19320
+                                                                            </p>
+                                                                            <p class="text-muted mb-1">
+                                                                                jsontaylor2134@gmail.com
+                                                                            </p>
+                                                                            <p class="text-muted">
+                                                                                +1 202-918-2132
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div> -->
                                                                 <div class="col-xl-3">
                                                                     <p class="fw-semibold text-muted mb-1">Transaction ID :</p>
                                                                     <p class="fs-15 mb-1">#@php
-                                                                            $tranID = bin2hex(random_bytes(6));
-                                                                        @endphp
-                                                                        
-                                                                        {{ $tranID }}</p>
+    $tranID = bin2hex(random_bytes(6));
+@endphp
+
+{{ $tranID }}</p>
                                                                 </div>
                                                                 <div class="col-xl-3">
                                                                     <p class="fw-semibold text-muted mb-1">Renew Date :</p>
@@ -548,11 +625,7 @@
                                                                                         </div>
                                                                                     </td>
                                                                                     <td class="product-quantity-container">
-                                                                                        @if ($recharge_type == 4)
-                                                                                            {{ $daysAdded }}
-                                                                                        @else
-                                                                                            1
-                                                                                        @endif
+                                                                                        1
                                                                                     </td>
                                                                                     <td>@if ($recharge_type == 0)
                                                                                             {{ $subscriber[0]['card_amount'] }}
@@ -562,13 +635,6 @@
                                                                                         @endif
                                                                                         @if ($recharge_type == 2)
                                                                                         {{ number_format($subscriber[0]['card_amount'] / 30 * $daysAdded, 2) }}
-                                                                                        @endif
-                                                                                        @if ($recharge_type == 4)
-                                                                                            @if ($fullamount == 0)
-                                                                                                {{ number_format($subscriber[0]['card_amount'] / 30 * $daysAdded, 2) }}
-                                                                                            @else
-                                                                                                 {{ $subscriber[0]['card_amount'] }}
-                                                                                            @endif
                                                                                     @endif
                                                                                     </td>
                                                                                 </tr>
@@ -590,9 +656,6 @@
                                                                                         <td>
                                                                                            @if ($recharge_type == 2)
                                                                                                 {{ number_format(($subscriber[0]['addonsPrice'] / 30) * $daysAdded, 2) }}
-                                                                                                @endif
-                                                                                        @if ($recharge_type == 4)
-                                                                                        {{ number_format($subscriber[0]['addonsPrice'] / 30 * $daysAdded, 2) }}
                                                                                             @else
                                                                                                 {{ $subscriber[0]['addonsPrice'] }}
                                                                                             @endif
@@ -604,55 +667,6 @@
                                                                                     <td colspan="2">
                                                                                         <table class="table table-sm text-nowrap mb-0 table-borderless">
                                                                                             <tbody>
-                                                                                                @if ($subscriber[0]['discount'] > 0)
-                                                                                                    <tr>
-                                                                                                        <th scope="row">
-                                                                                                            <p class="mb-0 fs-14">Discount :</p>
-                                                                                                        </th>
-                                                                                                        <td>
-                                                                                                            <p class="mb-0 fw-semibold fs-16 text-danger">
-                                                                                                                
-                                                                                                              -  @if ($recharge_type == 2)
-                                                                                                                        {{ number_format(($subscriber[0]['discount'] / 30) * $daysAdded) }}
-                                                                                                                         @elseif ($recharge_type == 4)
-                                                                                                                                 @if ($fullamount == 0)
-                                                                                                                                {{ number_format($subscriber[0]['discount'] / 30 * $daysAdded) }}
-                                                                                                                            @else
-                                                                                                                                 {{ $subscriber[0]['discount']}}
-                                                                                                                            @endif
-                                                                                                            
-                                                                                                                    @else
-                                                                                                                        {{ $subscriber[0]['discount']}}
-                                                                                                                    @endif
-                                                                                                                </p>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                @endif
-                                                                                                
-                                                                                                @if ($subscriber[0]['extra_charges'] > 0)
-                                                                                                    <tr>
-                                                                                                        <th scope="row">
-                                                                                                            <p class="mb-0 fs-14">Other Charges :</p>
-                                                                                                        </th>
-                                                                                                        <td>
-                                                                                                            <p class="mb-0 fw-semibold fs-16 text-success">
-                                                                                                                
-                                                                                                                @if ($recharge_type == 2)
-                                                                                                                        {{ number_format(($subscriber[0]['extra_charges'] / 30) * $daysAdded) }}
-                                                                                                                         @elseif($recharge_type == 4)
-                                                                                                                                 @if ($fullamount == 0)
-                                                                                                                                {{ number_format($subscriber[0]['extra_charges'] / 30 * $daysAdded) }}
-                                                                                                                            @else
-                                                                                                                                 {{ $subscriber[0]['extra_charges']}}
-                                                                                                                            @endif
-                                                                                                            
-                                                                                                                    @else
-                                                                                                                        {{ $subscriber[0]['extra_charges']}}
-                                                                                                                    @endif
-                                                                                                                </p>
-                                                                                                        </td>
-                                                                                                    </tr>
-                                                                                                @endif
                                                                                                 <tr>
                                                                                                     <th scope="row">
                                                                                                         <p class="mb-0 fs-14">Total :</p>
@@ -660,29 +674,11 @@
                                                                                                     <td>
                                                                                                         <p class="mb-0 fw-semibold fs-16 text-success">
                                                                                                             
-                                                                                                            
-                                                                                                            
-                                                                                                            
-                                                                                                            
                                                                                                             @if ($recharge_type == 2)
-    {{ number_format((($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges']) / 30) * $daysAdded, 2) }}
-
-@elseif ($recharge_type == 4)
-    @if ($fullamount == 0)
-        {{ number_format((($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges']) / 30) * $daysAdded, 2) }}
-    @else
-        {{ number_format($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'], 2) }}
-    @endif
-
-@else
-    {{ number_format($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'], 2) }}
-@endif
-
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
-                                                                                                                     
-                                                                                                           
+                                                                                                    {{ number_format(($subscriber[0]['totalPrice'] / 30) * $daysAdded, 2) }}
+                                                                                                @else
+                                                                                                    {{ $subscriber[0]['totalPrice']}}.00
+                                                                                                @endif
                                                                                                             </p>
                                                                                                     </td>
                                                                                                 </tr>
@@ -703,10 +699,10 @@
                                                             </div>
                                                         </div>
                                                         <div class="card-footer text-end">
-                                                            <button class="btn btn-success recharge" data-username="{{ $subscriber[0]['username'] }}" data-tranId="{{$tranID}}">Recharge Submit</button>
+                                                            <button class="btn btn-success recharge" data-mobile="{{ $subscriber[0]['mobile'] }}" data-username="{{ $subscriber[0]['username'] }}" data-tranId="{{$tranID}}">Recharge Submit</button>
                                                         </div>
                                                     </div>
-                                                     </div>
+                                                </div>
                                                     
                                                     
                                                 </div>
@@ -908,7 +904,7 @@
                                                                                                     </th>
                                                                                                     <td>
                                                                                                         <p class="mb-0 fw-semibold fs-16 text-success" id="perdaytotalvalue">
-                                                                                                            {{ number_format(($subscriber[0]['totalPrice'] - $subscriber[0]['discount'] + $subscriber[0]['extra_charges'] / 30), 2) }}
+                                                                                                            0
                                                                                                             </p>
                                                                                                     </td>
                                                                                                 </tr>
@@ -965,7 +961,6 @@
                                                 
                                                 <div class="tab-pane text-muted" id="invoice"
                                                     role="tabpanel" style="padding:5px;">
-                                                    <div class="refund_invoice"></div>
                                                     
                                                     <div class="table-responsive">
                                                         <table id="invoice_table" class="table table-bordered text-nowrap w-100">
@@ -973,12 +968,7 @@
                                                                 <tr>
                                                                     <th>#</th>
                                                                     <th>TranID</th>
-                                                                    <th>InvType</th>
-                                                                    <th>Days</th>
-                                                                    <th>Renew Date</th>
-                                                                    <th>Last Expiration</th>
-                                                                    <th>New Expiration</th>
-                                                                    <th>Validity</th>
+                                                                    <th>Date</th>
                                                                     <th>Total</th>
                                                                     <th>Action</th>
                                                                 </tr>
@@ -1014,6 +1004,42 @@
                                                         </table>
                                                     </div>
                                                                 
+                                                </div>
+                                                
+                                                <div class="tab-pane text-muted" id="onlinebilling"
+                                                    role="tabpanel" style="padding:5px;">
+                                                    <div style="    display: flex
+;
+    justify-content: space-evenly;
+    padding: 30px;">
+                                                    <div class="ms-0 mt-sm-0 mt-2">
+                                                                    <div class="h6 fw-semibold mb-0">1Bill ID: <span class="text-primary" id="billingid"></span></div>
+                                                                </div>
+                                                    <div class="ms-0 mt-sm-0 mt-4">
+                                                                    <div class="h6 fw-semibold mb-0">Amount: <span class="text-primary" id="billingamount"></span></div>
+                                                                </div>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table id="billing_inv_table" class="table table-bordered text-nowrap w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Name</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Days</th>
+                                                                    <th>Create Date</th>
+                                                                    <th>Due Date</th>
+                                                                    <th>Pay Date</th>
+                                                                    <th>Created By</th>
+                                                                    <th>Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    
+                                                    
                                                 </div>
                                                 
                                                 <div class="tab-pane text-muted" id="auth_logs"
@@ -1062,47 +1088,7 @@
                                                     
                                                     
                                                 </div>
-                                                
-                                                 <div class="tab-pane text-muted" id="extras"
-                                                    role="tabpanel" style="padding:0;">
-                                            
-                                                    <form id="extras_form" method="POST">
-                                                            <div class="card-body" style="padding:10px;">
-                                                            <div class="alert-container"></div>
-                                                                <div class="row gy-4 mb-4">
-                                                                    
-                                                                    <div class="col-xl-6">
-                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
-                                                                        <div class="input-group">
-                                                                                <!-- <div class="input-group-text"><i class="ri-smartphone-line"></i></div> -->
-                                                                                <input type="number" class="form-control" id="discount" value="{{ $subscriber[0]['discount'] }}" >
-                                                                                <div class="input-group-text">Discount</div>
-                                                                            </div>
-                                                                    </div>
-                                                                    
-                                                                    <div class="col-xl-6">
-                                                                        <!-- <label for="mobile" class="form-label">Mobile</label> -->
-                                                                        <div class="input-group">
-                                                                              <input type="number" class="form-control" id="extra_charges" value="{{ $subscriber[0]['extra_charges'] }}" >
-                                                                                <div class="input-group-text">Extra Charges</div>
-                                                                            </div>
-                                                                    </div>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-footer text-end pt-0">
-                                                                            <button type="submit" id="extrassubmitBtn" href="javascript:void(0);" class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;">
-                                                                                Update
-                                                                            </button>
-                                                                            <button class="btn btn-primary-light loadingBtn" style="display:none;" type="button" disabled="" style="width:100%;">
-                                                                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
-                                                                                Loading...
-                                                                            </button>
-                                                            </div>
-                                                            </form>
-                                                </div>
                                             </div>
-                                           
                                         </div>
                                     </div>
                                 </div>
@@ -1168,8 +1154,7 @@
                                                         </div>
                                                 </div>
                                                 
-                                                
-                    <div class="modal fade" id="change_owner" tabindex="-1"
+                     <div class="modal fade" id="change_owner" tabindex="-1"
                                                         aria-labelledby="changePasswordLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-sm">
                                                             <div class="modal-content">
@@ -1196,9 +1181,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                </div>
-                                                
-                                                
+                                                </div>                          
                                                 
                      <div class="modal fade" id="change_expire" tabindex="-1"
                                                         aria-labelledby="changePasswordLabel" aria-hidden="true">
@@ -1386,21 +1369,7 @@
             let username = "{{$subscriber[0]['username_radacct']}}";
             let u = "{{$subscriber[0]['username']}}";
             let host = "{{ request()->getHost() }}";
-            
-            
-            
-            $(document).on("click", ".refund", function() {
-                let tranId = $(this).attr("data-tranId");
-                
-                $.ajax({
-                            url: '/refund_modal/'+tranId,  // Replace with your API endpoint
-                            type: 'get',
-                            success: function (response) {
-                                $(".refund_invoice").html(response);
-                            }
-                            
-                });
-            })
+
 
 
 $("#enable_subscriber").on('change', function () {
@@ -1527,62 +1496,6 @@ $("#kick").on('click',function(e){
     
 });
 
-// Kick id
-$("#closesession").on('click',function(e){
-    e.preventDefault();
-    
-    let sessionUsername = $(this).attr("data-username");
-    $('.closesession_loading').show();
-    
-     // Send AJAX request
-            $.ajax({
-                url: baseUrl+'/sessionclosesingle/'+sessionUsername+'/1',  // Replace with your API endpoint
-                type: 'get',
-                headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                success: function (response) {
-                    console.log(response.status);
-
-                    if (response.status === 1) {
-                        showToast("bg-success","Subscriber Session Closed.",response.message)
-                        // $('#subscriber_form')[0].reset();
-                        $('.online_status').hide();
-                        $('#closesession').hide();
-                         $('.offline_button').show();
-                         $("#realtime").hide();
-                        
-                        
-                        
-
-                    }
-                    else if (response.status === 0) {
-                        // ALREADY AVALIABLE
-                        showToast("bg-warning","Subscriber Not Found Refresh. ",response.message)
-
-                        // alert(response.message);
-                    } 
-                    else if (response.status === 501) {
-                        //RADIUS SERVER ERROR
-                        // showAlert(response.message,"danger");
-                        showToast("bg-danger","Server error. ",response.message)
-                    }
-                    
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error(status);
-                    showAlert('Something Wrong!',"danger");
-                },
-                complete: function () {
-                // Hide the Loading button and show the Submit button again
-                $('.closesession_loading').hide();
-                 }
-            });
-    
-});
-
             // INSERT DATA
 $('#subscriber_form').on('submit', function (e) {
             e.preventDefault();
@@ -1663,151 +1576,6 @@ $('#subscriber_form').on('submit', function (e) {
 });
 
 
-            // INSERT DATA
-$('#extras_form').on('submit', function (e) {
-            e.preventDefault();
-
-
-            // Disable all inputs and buttons
-          $('#extras_form input, #extras_form button').prop('disabled', true);
-            
-
-          
-            // Prepare form data
-            let formData = {
-               
-                discount: $('#discount').val(),
-                extra_charges: $('#extra_charges').val(),
-            };
-
-            var subscriber_id = $('#subscriber_id').val();
-
-            // Send AJAX request
-            $.ajax({
-                url: baseUrl+'/subscriberextrasupdate/'+subscriber_id,  // Replace with your API endpoint
-                type: 'POST',
-                data: JSON.stringify(formData),
-                contentType: 'application/json',
-                headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                success: function (response) {
-                    console.log(response.status);
-
-                    if (response.status === 1) {
-                        showToast("bg-success","Subscriber Updated.",response.message)
-                        // $('#subscriber_form')[0].reset();
-
-                    }
-                    else if (response.status === 2) {
-                        // ALREADY AVALIABLE
-                        showToast("bg-warning","Already Available. ",response.message)
-
-                        // alert(response.message);
-                    } 
-                    else if (response.status === 501) {
-                        //RADIUS SERVER ERROR
-                        // showAlert(response.message,"danger");
-                        showToast("bg-danger","Server error. ",response.message)
-                    }
-                    else if (response.status === 500) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    else if (response.status === 404) {
-                        //RADIUS SERVER ERROR
-                        showAlert(response.message,"danger");
-                    }
-                    
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error(status);
-                    showAlert('Something Wrong!',"danger");
-                },
-                complete: function () {
-                // Hide the Loading button and show the Submit button again
-
-                $('#extras_form input, #extras_form button').prop('disabled', false);
-                $('.loadingBtn').hide();
-                $('#extrassubmitBtn').show();
-                 }
-            });
-});
-
-
-$("#sync").on('click',function(){
-   
-   let userid = '{{ $subscriber[0]['username'] }}';
-   
-       $.ajax({
-                url: baseUrl+'/subscribersync/'+userid,  // Replace with your API endpoint
-                type: 'POST',
-                contentType: 'application/json',
-                headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                success: function (response) {
-                    
-                    if (response.status === 1) {
-                        showToast("bg-success","Subscriber Synced.",response.message)
-                        // $('#subscriber_form')[0].reset();
-
-                    }
-                    
-                }
-       });
-   
-    
-});
-
-function load_session(id){
-    // Destroy the existing DataTable instance (if exists)
-                if ($.fn.dataTable.isDataTable('#session_table')) {
-                    $('#session_table').DataTable().clear().destroy();
-                }
-                // basic datatable
-              $('#session_table').DataTable({
-                            language: {
-                                searchPlaceholder: 'Search...',
-                                sSearch: '',
-                            },
-                            "pageLength": 10,
-                            "ajax": {
-                                "url": baseUrl+"/sessionsingle/"+id, // Replace with your API URL
-                                "type": "GET",
-                                "dataSrc": "", // Adjust based on your API response format, e.g., "data" if necessary
-                                "beforeSend": function(xhr) {
-                                    xhr.setRequestHeader("Authorization", "Bearer "+encrypt); // Replace YOUR_TOKEN with the actual token
-                                }
-                            },
-                            "columns": [
-                                { "data": null },  // For serial number
-                                { "data": "acctstarttime" },
-                                { "data": "acctstoptime" },
-                                { "data": "duration" },
-                                { "data": "upload" },
-                                { "data": "download" },
-                                { "data": "framedipaddress" },
-                                { "data": "nasipaddress" },
-                                { "data": "callingstationid" }
-                            ],
-                            "columnDefs": [
-                                {
-                                    "targets": 0,  // Target the first column for serial number
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function(data, type, row, meta) {
-                                        return meta.row + 1; // Generate serial number based on row index
-                                    }
-                                }
-                            ],
-                            "order": [[0, 'asc']]
-                });
-              }
-              
 $(document).on('click', '.logs_change_pass', function(e) {    
     e.preventDefault();
 
@@ -1893,40 +1661,6 @@ function changepass(subscriber_id,pass){
             });
     
 }
-
-
-$("#changeOwnerBtn").on('click',function(){
-     $.ajax({
-                url: baseUrl+'/manager/hierarchy',  // Replace with your API endpoint
-                type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                    'Accept': 'application/json'
-                },
-                success: function (response) {
-                    console.log(response);
-                    
-                    let currentowner = "{{$subscriber[0]['owner']['managername']}}";
-                    let currentownerId = "{{$subscriber[0]['owner_id']}}";
-                    
-                  let ownerSelect = $('#ownername');
-                    ownerSelect.empty(); // Remove old options
-                    ownerSelect.append('<option value="'+currentownerId+'">'+currentowner+'</option>');
-            
-                    $.each(response, function (index, item) {
-                        ownerSelect.append('<option value="' + item.user_id + '">' + item.managername + ' | ' + item.actype +'</option>');
-                    });
-                    
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error(status);
-                    showAlert('Something Wrong!',"danger");
-                },
-                complete: function () {
-                 }
-            });
-});
 
 
 $("#change_expireBtn").on('click',function(e){
@@ -2112,6 +1846,7 @@ $("#change_service").on('click',function(e){
     $(".recharge").on('click',function(e){
         e.preventDefault();
 
+        let rechrageMobile = $(this).attr("data-mobile");
         let rechrageUsername = $(this).attr("data-username"); 
         let rechargeTranId = $(this).attr("data-tranId");
         
@@ -2120,9 +1855,6 @@ $("#change_service").on('click',function(e){
 
         $('.recharge_card').hide();
         $('.tran_card').css('display', 'flex');
-        
-      
-        
 
         $.ajax({
                     url: baseUrl+'/cardrecharge/'+rechrageUsername+'/'+rechargeTranId,  // Replace with your API endpoint
@@ -2146,7 +1878,7 @@ $("#change_service").on('click',function(e){
                             var audio = new Audio('/sound/success.mp3'); // Change to .mp3 if needed
                             audio.play();
                             
-                              if(expireCheck === "expired"){
+                            if(expireCheck === "expired"){
                                     if(onlineCheck === "1"){
                                         let kickUsername1 = "{{ $subscriber[0]['username'] }}";
                                         let kickNas = "{{ $subscriber[0]['nas'] }}";
@@ -2199,6 +1931,22 @@ $("#change_service").on('click',function(e){
                                                 });
                                     }
                                 }
+                            
+                            
+                            // if(baseUrl === "https://apimynet.atozsofts.com/api"){
+                            //                 $.ajax({
+                            //                 url: '/whatsapp_api/api.php?to='+rechrageMobile,  // Replace with your API endpoint
+                            //                 type: 'GET',
+                            //                 success: function (response) {
+                            //                     if(response.status === 'true'){
+                            //                         console.log("Whatsapp Successfully");
+                            //                     }else{
+                            //                         console.log(response.status);
+                            //                     }
+                            //                 }
+                                                
+                            //                 });
+                            //             }
 
                         }
                         else if (response.status === 501) {
@@ -2234,7 +1982,7 @@ $("#change_service").on('click',function(e){
                 });
     })
     
-     $(".addDaysBtn").on('click',function(e){
+      $(".addDaysBtn").on('click',function(e){
         e.preventDefault();
 
         let rechrageUsername = $(this).attr("data-username"); 
@@ -2299,8 +2047,6 @@ $("#change_service").on('click',function(e){
                         }
                 });
     })
-    
-    
    
     function formatBytes(bytes) {
                 const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -2317,12 +2063,119 @@ $("#change_service").on('click',function(e){
     document.getElementById('usageText2').innerText = 'USAGE ' + formatBytes(bytes2);
     
     
+      $("#clear_mac").on('click',function(){
+        
+        var u = $(this).data('username');
+         $.ajax({
+                    url: baseUrl+'/subscribermacdelete/'+u,  // Replace with your API endpoint
+                    type: 'get',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                        'Accept': 'application/json'
+                    },
+                    success: function (response) {
+                        if(response.status === 1){
+                            $("#mac").val("Mac Cleared");
+                        }
+                    }
+                    
+         });
+        
+    });
+    $("#changeOwnerBtn").on('click',function(){
+     $.ajax({
+                url: baseUrl+'/manager/hierarchy',  // Replace with your API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    console.log(response);
+                    
+                    let currentowner = "{{$subscriber[0]['owner']['managername']}}";
+                    let currentownerId = "{{$subscriber[0]['owner_id']}}";
+                    
+                  let ownerSelect = $('#ownername');
+                    ownerSelect.empty(); // Remove old options
+                    ownerSelect.append('<option value="'+currentownerId+'">'+currentowner+'</option>');
+            
+                    $.each(response, function (index, item) {
+                        ownerSelect.append('<option value="' + item.user_id + '">' + item.managername + ' | ' + item.actype +'</option>');
+                    });
+                    
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    showAlert('Something Wrong!',"danger");
+                },
+                complete: function () {
+                 }
+            });
+});
+    
+    $("#onlinebilling_btn").on('click',function(){
+        
+        let id_u = $(this).data('username');
+        
+    
+        
+        $.ajax({
+                    url: "https://partner.alburakinternet.net.pk/api/newradiusapi/userinvoicelist.php?id="+id_u,  // Replace with your API endpoint
+                    type: 'get',
+                    success: function (response) {
+                        
+                        $("#billingamount").html(response.billing_amount);
+                         $("#billingid").html("101030"+response.billing_id);
+                        
+                        
+                        // Check if response.data exists
+                        if (response.data && response.data.length > 0) {
+                            let rows = "";
+                
+                            // Loop through each invoice item
+                            response.data.forEach(function (item, index) {
+                                
+                                 // ✅ Conditional button
+                let statusButton = "";
+                if (item.bill_status == 1) {
+                    statusButton = `<button class="btn btn-success btn-sm">Paid</button>`;
+                } else {
+                    statusButton = `<button class="btn btn-danger btn-sm">Non Paid</button>`;
+                }
+                                rows += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${item.name}</td>
+                                        <td>${item.amount}</td>
+                                        <td>${item.days}</td>
+                                        <td>${item.invoice_create_date}</td>
+                                        <td>${item.due_date}</td>
+                                        <td>${item.invoice_paid_date}</td>
+                                        <td>${item.create_by}</td>
+                                        <td>${statusButton}</td>
+                                    </tr>
+                                `;
+                            });
+                
+                            // Add rows to table body
+                            $("#billing_inv_table tbody").html(rows);
+                        } else {
+                            $("#billing_inv_table tbody").html(`<tr><td colspan="5">No records found</td></tr>`);
+                        }
+                    }
+                    
+         });
+        
+    })
     
     
     
     
     
-  $(document).ready(function () {
+      $(document).ready(function () {
         let cardAmount = {{ $subscriber[0]['card_amount'] }};
         let addonAmount = {{ $subscriber[0]['addonsPrice'] }};
         let totalAmount = {{ $subscriber[0]['totalPrice'] }};
@@ -2379,7 +2232,7 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
         });
     });
     
-      $(document).ready(function () {
+          $(document).ready(function () {
         function parseDate(str) {
             // Force parse "YYYY-MM-DD HH:mm:ss" as local
             let parts = str.split(/[- :]/);
@@ -2420,45 +2273,8 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
         $("#days").trigger('change');
     });
     
-    $("#clear_mac").on('click',function(){
-        
-        var u = $(this).data('username');
-         $.ajax({
-                    url: baseUrl+'/subscribermacdelete/'+u,  // Replace with your API endpoint
-                    type: 'get',
-                    contentType: 'application/json',
-                    headers: {
-                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                        'Accept': 'application/json'
-                    },
-                    success: function (response) {
-                        if(response.status === 1){
-                            $("#mac").val("Mac Cleared");
-                        }
-                    }
-                    
-         });
-        
-    });
     
-    $(document).on('click', '.openRechargeTab', function (e) {
-    e.preventDefault();
-
-    var target = $(this).data('bs-target') || $(this).attr('href');
-
-    // Find the original tab trigger (using href)
-    var tabTrigger = document.querySelector(`[href="${target}"][data-bs-toggle="tab"]`);
-
-    if (tabTrigger) {
-        var tab = new bootstrap.Tab(tabTrigger);
-        tab.show();
-    } else {
-        console.error("Tab trigger not found for:", target);
-    }
-});
-    
-    
-    $("#changeOwnerSubmit").on('click',function(){
+     $("#changeOwnerSubmit").on('click',function(){
        let sub_id = $("#sub_id").val();
        let owner_id = $("#ownername").val();
         $.ajax({
@@ -2483,70 +2299,19 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
          });
         
     });
-    
         </script>
-        
-        <script>
-// const basePathKey = 'subscriber_info_tab';
-// const currentTabId = Math.random().toString(36).substr(2, 9);
-// const currentUrl = window.location.pathname;
-
-// // BroadcastChannel create karo
-// const channel = new BroadcastChannel('subscriber_info_channel');
-
-// // function: claim tab
-// function claimTab() {
-//     const stored = JSON.parse(localStorage.getItem(basePathKey) || '{}');
-
-//     if (stored.tabId && stored.tabId !== currentTabId) {
-//         // dusri tab already owner → usse notify karo ki nayi URL load karni hai
-//         channel.postMessage({ type: 'load-new-url', url: currentUrl });
-//         // aur current tab close ya redirect
-//         alert("Multi user tab not allowed.")
-//         window.close(); // ya window ko redirect kar do
-//         return false;
-//     }
-
-//     // ye tab ab owner
-//     localStorage.setItem(basePathKey, JSON.stringify({ tabId: currentTabId, timestamp: Date.now(), url: currentUrl }));
-//     return true;
-// }
-
-// // receive messages from other tabs
-// channel.onmessage = (ev) => {
-//     const data = ev.data;
-//     if (data.type === 'load-new-url') {
-//         if (window.location.pathname !== data.url) {
-//             // existing tab ko update karo
-//             window.location.href = data.url; // ya AJAX load kar do content
-//         }
-//     }
-// }
-
-// // release lock on close/refresh
-// window.addEventListener('beforeunload', () => {
-//     const stored = JSON.parse(localStorage.getItem(basePathKey) || '{}');
-//     if (stored.tabId === currentTabId) {
-//         localStorage.removeItem(basePathKey);
-//     }
-// });
-
-// // run claim
-// claimTab();
-</script>
-
         
  @php
                         $apiUrll = config('app.api_base_url');
                     @endphp
                     
                     @if ($apiUrll === 'https://smartradapi.alburakinternet.net.pk/api')
-                       <script src="{{ asset('js/subscriber_speed_graph_bra2s.js?v=1.0.18') }}"></script>
+                       <script src="{{ asset('js/subscriber_speed_graph_bras.js?v=1.0.11') }}"></script>
                     @else
                         <script src="{{ asset('js/subscriber_speed_graph.js?v=1.0.16') }}"></script>
                     @endif
         
-        <script src="{{ asset('js/subscriber_admin.js?v=1.0.0.10') }}"></script>
+        <script src="{{ asset('js/subscriber.js?v=1.0.0.5') }}"></script>
         <script src="{{ asset('js/function/showalert.js') }}"></script>
         <script src="{{ asset('js/function/toast.js') }}"></script>
         
