@@ -142,7 +142,7 @@
                         $apiUrll = config('app.api_base_url');
                     @endphp
                     
-                    @if ($apiUrll === 'https://rdsapi.atozsofts.com/api')
+                    @if ($apiUrll === 'https://rdsapi.smartispsolutions.net/api')
                             <li class="slide">
                                 <a href="{{url('recharge/invoices/admin')}}" class="side-menu__item">
                                 <i class='bx bxs-report side-menu__icon'></i>
