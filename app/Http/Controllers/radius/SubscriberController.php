@@ -245,6 +245,9 @@ class SubscriberController extends Controller
         return view('radius/subscriber', compact('service','manager','user_name','roles_id','token'));
     }
     
+    
+    
+    // FINAL ONLINE AJAX
     public function subscriber_online(){
         $token = Session::get('token');
         $roles_id = ucfirst(Session::get('roles_id'));
@@ -272,6 +275,11 @@ class SubscriberController extends Controller
             }
                
            }
+           
+        if($roles_id == 2){
+            return view('radius/manager/admin/subscriber_online_ajax', compact('manager','user_id','user_name','roles_id','token'));
+        }   
+        
         return view('radius/subscriber_online_ajax', compact('manager','user_id','user_name','roles_id','token'));
     }
     
@@ -345,7 +353,6 @@ class SubscriberController extends Controller
         $apiUrl = config('app.api_base_url') . '/assignservice/'.$user_id.'/'.$roles_id.'';
         $apiUrl2 = config('app.api_base_url') . '/subscribersingle/'.$username;
         $apiUrl3 = config('app.api_base_url') . '/manager/permission/'.$user_name;
-        $apiUrl4 = config('app.api_base_url') . '/usagesingletotal/'.$username;
 
          // Make a request to the API with headers
          $response = Http::withHeaders([
@@ -364,17 +371,12 @@ class SubscriberController extends Controller
             'Authorization' => 'Bearer ' . $token,
         ])->get($apiUrl3);
         
-        $response4 = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $token,
-        ])->get($apiUrl4);
-
+      
          // Check if the response is successful
          if ($response->successful()) {
              $service = $response->json();
              $subscriber = $response2->json();
              $permission = $response3->json();
-             $usage = $response4->json();
              
              
             $srv = config('app.api_base_url') . '/servicesingle/' .  $subscriber[0]['srvid']['srvid'];
@@ -477,16 +479,22 @@ class SubscriberController extends Controller
             }
             if($recharge_type == 2){
                 if ($lastExpiration->isPast()) {
+                    
+                
                 $new_expiration = $now->addMonth()->format('d M Y H:i');
                 
-                $n = $now->copy()->addMonth();
+                
+                $now = Carbon::now();
+                
+                // $n = $now->copy()->addMonth();
+                $n = $now->copy()->addMonth()->format('d M Y 12:00');
                 $daysAdded = $now->diffInDays($n);
                 } else {
                     // $new_expiration = $lastExpiration->addMonth()->format('d M Y H:i');
                     
                     
                     $new_expiration = $lastExpiration->copy()->addMonth()->format('d M Y 12:00');
-                                $daysAdded = $lastExpiration->diffInDays($new_expiration);
+                    $daysAdded = $lastExpiration->diffInDays($new_expiration);
                     
                     // $n = $lastExpiration->copy()->addMonth();
                     // $daysAdded = $lastExpiration->diffInDays($n);
@@ -495,14 +503,14 @@ class SubscriberController extends Controller
 
 
             if($roles_id == 2){
-               return view('radius/manager/admin/subscriber_info', compact('usage','fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token')); 
+               return view('radius/manager/admin/subscriber_info', compact('fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token')); 
             }
             if($roles_id == 3){
-               return view('radius/manager/franchise/subscriber_info', compact('usage','fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token')); 
+               return view('radius/manager/franchise/subscriber_info', compact('fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token')); 
             }
             
              // Pass the data to the view
-             return view('radius/subscriber_info', compact('usage','fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token'));
+             return view('radius/subscriber_info', compact('fullamount','recharge_type','daysAdded','permission','roles_id','user_name','service','subscriber','username','currentDateTime','new_expiration','token'));
          } else {
              return redirect()->back()->withErrors('Failed to fetch.');
          }

@@ -124,7 +124,7 @@
                                                                 <p class="mb-0"><b>Allowed</b></p>
                                                                 <h4 style="color: #686868;
                                                                 font-weight: 600;
-                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;">
+                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;" id="allowed_usage">
                                                                                                                         0 GB                                </h4>
                                                          </div>
                                                      </div>
@@ -135,9 +135,9 @@
                                                                 <p class="mb-0 text-success"><b>Used</b></p>
                                                                 <h4 style="color: #686868;
                                                                 font-weight: 600;
-                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;">
+                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;" id="used_usage">
                                                                    
-                                                                                                                        {{ round($usage['usage'] / 1024, 2) }} GB                                </h4>
+                                                                                                                        0 GB                                </h4>
                                                          </div>
                                                      </div>
                                                 </div>
@@ -147,7 +147,7 @@
                                                                 <p class="mb-0 text-danger" style="white-space: nowrap;"><b>Remaining</b></p>
                                                                 <h4 style="color: #686868;
                                                                 font-weight: 600;
-                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;">
+                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;" id="remaining_usage">
                                                                                                                         0 GB                                </h4>
                                                          </div>
                                                      </div>
@@ -510,7 +510,7 @@
                                                                             $tranID = bin2hex(random_bytes(6));
                                                                         @endphp
                                                                         
-                                                                        {{ $tranID }}</p>
+                                                                        {{ $tranID }}{{$daysAdded}}</p>
                                                                 </div>
                                                                 <div class="col-xl-3">
                                                                     <p class="fw-semibold text-muted mb-1">Renew Date :</p>
@@ -2483,6 +2483,36 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
          });
         
     });
+    
+    let usage_u = "{{ $subscriber[0]['username'] }}";
+    
+    $.ajax({
+                    url: baseUrl+'/usagesingle/'+usage_u,  // Replace with your API endpoint
+                    type: 'get',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                        'Accept': 'application/json'
+                    },
+                    success: function (response) {
+                        
+                        console.log(response.allowed);
+                        
+                      let allowed = Math.floor((response.allowed || 0) / 1024);
+let usage = Math.floor((response.usage || 0) / 1024);
+let remaining = Math.floor((response.remaining || 0) / 1024);
+                       
+                            
+                          $("#allowed_usage").text(allowed+" GB");
+                            $("#used_usage").text(usage+ " GB");
+                            $("#remaining_usage").text(remaining+" GB");
+                          
+                        
+                    }
+                    
+         });
+        
+
     
         </script>
         
