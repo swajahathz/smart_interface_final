@@ -223,12 +223,13 @@ div.dt-button-collection .dt-button:not(.dt-btn-split-drop) {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Username</th>
-                                                <th>LOGIN TIME</th>
-                                                <th>UP TIME</th>
+                                                <th>SUBSCRIBER</th>
+                                                <th id="logintime_txt">LOGIN TIME</th>
+                                                <th id="uptime_txt">UP TIME</th>
                                                 <th>USAGE</th>
                                                 <th>EXPIRATION</th>
-                                                <th>IP ADDRESS</th>
+                                                <th>IPv4</th>
+                                                <th>IPv6</th>
                                                 <th>VLAN</th>
                                                 <th>MAC</th>
                                                 
@@ -313,6 +314,14 @@ $("#searchBtn").on('click',function(){
         status = 'online';
     }else{
         status = 'offline';
+    }
+    
+    if(status == "offline"){
+         $("#logintime_txt").text("LAST LOGIN");
+        $("#uptime_txt").text("DOWN TIME");
+    }else{
+         $("#logintime_txt").text("LOGIN TIME");
+       $("#uptime_txt").text("UP TIME");
     }
 
     
@@ -488,14 +497,16 @@ function load_datatable(manager_id,all,status){
 
             return displayText.trim();
         }
+        
+       const b = status === "offline" ? "danger" : "success";
 
-        return `
-            <button type="button" class="btn btn-success-light btn-sm btn-wave" style="font-size: .65rem;">
-                ${updateTimeDifference(row.acctstarttime)}
-            </button>
-        `;
-    }
-},
+            return `
+                <button type="button" class="btn btn-${b}-light btn-sm btn-wave" style="font-size: .65rem;">
+                    ${updateTimeDifference(row.acctstarttime)}
+                </button>
+            `;
+                }
+            },
         { data: "acctinputoctets",
              "render": function(data, type, row, meta) {
                                          function formatBytes(bytes) {
@@ -548,7 +559,32 @@ function load_datatable(manager_id,all,status){
         { data: "framedipaddress",
         render: function(data, type, row) {
         return data ? data : "Nil";
-    }},
+    }},{
+    data: "framedipv6address",
+    render: function (data, type, row) {
+        // Combine IPv6 info
+        let ipv6Info = [
+            row.framedipv6address,
+            row.framedipv6prefix,
+            row.delegatedipv6prefix
+        ].filter(Boolean).join(" "); // removes null/empty values
+
+        // If all are null/empty, show "Not Assigned"
+        if (!ipv6Info) {
+            ipv6Info = "Not Assigned";
+        }
+
+        return `
+            <button type="button" class="btn btn-success-light btn-sm btn-wave" style="font-size: .65rem;">
+                ${ipv6Info}
+            </button>
+        `;
+    }
+}
+
+         
+        
+    ,
        {
     data: "nasportid",
     render: function(data, type, row) {
@@ -699,15 +735,23 @@ function circle(percent,color,id){
                     
    $(".total_online_tab").on('click',function(){
        load_datatable(user_id,0,'online');
+       $("#logintime_txt").text("LOGIN TIME");
+       $("#uptime_txt").text("UP TIME");
    });
     $(".total_offline_tab").on('click',function(){
        load_datatable(user_id,0,'offline');
+       $("#logintime_txt").text("LAST LOGIN");
+       $("#uptime_txt").text("DOWN TIME");
    });
     $(".total_active_tab").on('click',function(){
        load_datatable(user_id,0,'online_active');
+       $("#logintime_txt").text("LOGIN TIME");
+       $("#uptime_txt").text("UP TIME");
    });
     $(".total_expire_tab").on('click',function(){
        load_datatable(user_id,0,'online_expire');
+       $("#logintime_txt").text("LOGIN TIME");
+       $("#uptime_txt").text("UP TIME");
    });
 
 // var chart2 = new ApexCharts(document.querySelector("#total-active-circle"), options);

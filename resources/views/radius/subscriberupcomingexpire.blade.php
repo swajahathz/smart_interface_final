@@ -134,7 +134,7 @@
                                     <div id="resultTable" class="mb-3"></div>
                                     <table id="datatable-basic" class="table table-bordered text-nowrap w-100">
                                         <thead>
-                                            <tr>
+                                            <tr><th><input type="checkbox" id="checkAl"></th>
                                                  <th>#</th>
                                                 <th>User</th>
                                                 <th>Address</th>
@@ -144,7 +144,7 @@
                                                 <th>Amount</th>
                                                 <th>Need Topup</th>
                                                 <th>Action</th>
-                                                <th><input type="checkbox" id="checkAl"></th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -297,6 +297,7 @@ $("#searchBtn").on('click',function(){
                                     }
                                 },
                                 columns: [
+                                    { "data": null },
                                     { "data": null },  // For serial number
                                 { "data": "username","searchable": true },
                                 { "data": "address","searchable": true },
@@ -305,12 +306,23 @@ $("#searchBtn").on('click',function(){
                                 { "data": null },
                                 { "data": "totalPrice" },
                                 { "data": "total_card_amount" },
-                                { "data": null },
                                 { "data": null }
+                                
                                 ],
                                 columnDefs: [
+                                    
+                                {
+                                    "targets": 0,  // Last column for action buttons
+                                    "searchable": false,
+                                    "orderable": false,
+                                    "render": function(data, type, row, meta) {
+                                        return `
+                                             <input type="checkbox" id="checkItem" name="check[]" value="${row.username}">
+                                        `;
+                                    }
+                                },
                                     {
-                                        targets: 0,
+                                        targets: 1,
                                         searchable: false,
                                         orderable: false,
                                         render: function(data, type, row, meta) {
@@ -318,7 +330,7 @@ $("#searchBtn").on('click',function(){
                                         }
                                     },
                                 {
-                                    "targets": 5,  // Last column for action buttons
+                                    "targets": 6,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": true,
                                     "render": function(data, type, row, meta) {
@@ -348,7 +360,7 @@ $("#searchBtn").on('click',function(){
                                     }
                                 },
                                 {
-                                    "targets": 4,  // Last column for action buttons
+                                    "targets": 5,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
@@ -358,7 +370,7 @@ $("#searchBtn").on('click',function(){
                                     }
                                 },
                                 {
-                                    "targets": 2,  // Last column for action buttons
+                                    "targets": 3,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
@@ -373,7 +385,7 @@ $("#searchBtn").on('click',function(){
     }
                                 },
                                 {
-                                    "targets": 1,  // Last column for action buttons
+                                    "targets": 2,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
@@ -398,7 +410,7 @@ $("#searchBtn").on('click',function(){
                                     }
                                 },
                                     {
-                                        targets: 1,
+                                        targets: 2,
                                         searchable: true,
                                         orderable: false,
                                         render: function(data, type, row, meta) {
@@ -423,7 +435,7 @@ $("#searchBtn").on('click',function(){
                                         }
                                     },
                                 {
-                                    "targets": 8,  // Last column for action buttons
+                                    "targets": -1,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
@@ -431,16 +443,6 @@ $("#searchBtn").on('click',function(){
                                              <div class="btn-list">
                                                             <a href="/subscriber_info/${row.username}" class="btn btn-sm btn-warning-light btn-icon"><i class="ri-eye-line"></i></a>
                                                         </div>
-                                        `;
-                                    }
-                                },
-                                {
-                                    "targets": -1,  // Last column for action buttons
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function(data, type, row, meta) {
-                                        return `
-                                             <input type="checkbox" id="checkItem" name="check[]" value="${row.username}">
                                         `;
                                     }
                                 }

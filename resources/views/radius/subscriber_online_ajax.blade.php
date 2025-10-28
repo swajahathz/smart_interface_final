@@ -106,15 +106,16 @@ div.dt-button-collection .dt-button:not(.dt-btn-split-drop) {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Username</th>
-                                                <th>ADDRESS</th>
+                                                <th>SUBSCRIBER</th>
+                                                <th id="logintime_txt">LOGIN TIME</th>
+                                                <th id="uptime_txt">UP TIME</th>
+                                                <th>USAGE</th>
+                                                
                                                 <th>EXPIRATION</th>
                                                 <th>IP ADDRESS</th>
                                                 <th>VLAN</th>
                                                 <th>MAC</th>
-                                                <th>LOGIN TIME</th>
-                                                <th>UP TIME</th>
-                                                <th>USAGE</th>
+                                                <th>ADDRESS</th>
                                                 <th>ACTION</th>
                                             </tr>
                                         </thead>
@@ -191,6 +192,14 @@ $("#searchBtn").on('click',function(){
         status = 'online';
     }else{
         status = 'offline';
+    }
+    
+      if(status == "offline"){
+         $("#logintime_txt").text("LAST LOGIN");
+        $("#uptime_txt").text("DOWN TIME");
+    }else{
+         $("#logintime_txt").text("LOGIN TIME");
+       $("#uptime_txt").text("UP TIME");
     }
 
     
@@ -320,7 +329,82 @@ function load_datatable(manager_id,all,status){
             
             
         },
-        { data: "address"},
+        { data: "acctstarttime",
+        render: function(data, type, row) {
+        return data ? data : "Nil";
+    }},
+         { 
+    data: null,
+    render: function(data, type, row, meta) {
+        function updateTimeDifference(acctstarttime) {
+            if (!acctstarttime) {
+                return "Nil"; // null ya blank ke liye
+            }
+
+            const time = new Date(acctstarttime);
+            if (isNaN(time.getTime())) {
+                return "Invalid"; // agar date format galat hai
+            }
+
+            const currentTime = new Date();
+            let difference = currentTime - time;
+
+            // Agar future ka time hai (galti se)
+            if (difference < 0) {
+                return "0s";
+            }
+
+            // Difference in milliseconds → breakdown
+            let seconds = Math.floor(difference / 1000);
+            let minutes = Math.floor(seconds / 60);
+            let hours = Math.floor(minutes / 60);
+            let days = Math.floor(hours / 24);
+
+            // Remaining parts
+            seconds = seconds % 60;
+            minutes = minutes % 60;
+            hours = hours % 24;
+
+            // Output
+            let displayText = "";
+            if (days > 0) displayText += `${days}d `;
+            if (hours > 0 || days > 0) displayText += `${hours}h `;
+            if (minutes > 0 || hours > 0 || days > 0) displayText += `${minutes}m `;
+            displayText += `${seconds}s`;
+
+            return displayText.trim();
+        }
+
+        const b = status === "offline" ? "danger" : "success";
+
+            return `
+                <button type="button" class="btn btn-${b}-light btn-sm btn-wave" style="font-size: .65rem;">
+                    ${updateTimeDifference(row.acctstarttime)}
+                </button>
+            `;
+    }
+},
+        { data: "acctinputoctets",
+             "render": function(data, type, row, meta) {
+                                         function formatBytes(bytes) {
+                                              if (!bytes) {
+                return "Nil"; // null ya blank ke liye
+            }
+                                            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+                                            if (bytes === 0 || bytes === null) return '0 B';
+                                            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+                                            const result = (bytes / Math.pow(1024, i)).toFixed(2); // 2 decimal places
+                                            return `${result} ${sizes[i]}`;
+                                        }
+                                        return `
+                                           <div class="d-flex align-items-center gap-1">
+                                                            
+                                                                 <button type="button" class="btn btn-warning-light btn-sm btn-wave" style="font-size: .65rem;"><i class="bx bx-down-arrow-alt fs-10"></i> ${formatBytes(row.acctoutputoctets)} | ${formatBytes(row.acctinputoctets)} <i class="bx bx-up-arrow-alt fs-10"></i></button>
+                                                        </div>
+                                        `;
+                                    }
+        },
+        
         { data: "expiration",
           orderable: false, // yeh add kar do
             "render": function(data, type, row, meta) {
@@ -369,79 +453,7 @@ function load_datatable(manager_id,all,status){
         render: function(data, type, row) {
         return data ? data : "Nil";
     }},
-        { data: "acctstarttime",
-        render: function(data, type, row) {
-        return data ? data : "Nil";
-    }},
-         { 
-    data: null,
-    render: function(data, type, row, meta) {
-        function updateTimeDifference(acctstarttime) {
-            if (!acctstarttime) {
-                return "Nil"; // null ya blank ke liye
-            }
-
-            const time = new Date(acctstarttime);
-            if (isNaN(time.getTime())) {
-                return "Invalid"; // agar date format galat hai
-            }
-
-            const currentTime = new Date();
-            let difference = currentTime - time;
-
-            // Agar future ka time hai (galti se)
-            if (difference < 0) {
-                return "0s";
-            }
-
-            // Difference in milliseconds → breakdown
-            let seconds = Math.floor(difference / 1000);
-            let minutes = Math.floor(seconds / 60);
-            let hours = Math.floor(minutes / 60);
-            let days = Math.floor(hours / 24);
-
-            // Remaining parts
-            seconds = seconds % 60;
-            minutes = minutes % 60;
-            hours = hours % 24;
-
-            // Output
-            let displayText = "";
-            if (days > 0) displayText += `${days}d `;
-            if (hours > 0 || days > 0) displayText += `${hours}h `;
-            if (minutes > 0 || hours > 0 || days > 0) displayText += `${minutes}m `;
-            displayText += `${seconds}s`;
-
-            return displayText.trim();
-        }
-
-        return `
-            <button type="button" class="btn btn-success btn-sm btn-wave" style="font-size: .65rem;">
-                ${updateTimeDifference(row.acctstarttime)}
-            </button>
-        `;
-    }
-},
-        { data: "acctinputoctets",
-             "render": function(data, type, row, meta) {
-                                         function formatBytes(bytes) {
-                                              if (!bytes) {
-                return "Nil"; // null ya blank ke liye
-            }
-                                            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-                                            if (bytes === 0 || bytes === null) return '0 B';
-                                            const i = Math.floor(Math.log(bytes) / Math.log(1024));
-                                            const result = (bytes / Math.pow(1024, i)).toFixed(2); // 2 decimal places
-                                            return `${result} ${sizes[i]}`;
-                                        }
-                                        return `
-                                           <div class="d-flex align-items-center gap-1">
-                                                            
-                                                                 <button type="button" class="btn btn-warning btn-sm btn-wave" style="font-size: .65rem;"><i class="bx bx-down-arrow-alt fs-10"></i> ${formatBytes(row.acctoutputoctets)} | ${formatBytes(row.acctinputoctets)} <i class="bx bx-up-arrow-alt fs-10"></i></button>
-                                                        </div>
-                                        `;
-                                    }
-        },
+    { data: "address"},
       
         {
             data: null,
