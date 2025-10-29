@@ -204,7 +204,7 @@
                         $apiUrll = config('app.api_base_url');
                     @endphp
                     
-                    @if ($apiUrll === 'https://rdsapi.atozsofts.com/api')
+                    @if ($apiUrll === 'https://rdsapi.smartispsolutions.net/api')
                         <li class="slide">
                                 <a href="{{url('city')}}" class="side-menu__item">
                                 <i class='bx bx-purchase-tag side-menu__icon'></i>
