@@ -147,4 +147,53 @@ class ServiceController extends Controller
              return redirect()->back()->withErrors('Failed to fetch nas.');
          }
     }
+    
+    
+     public function dataplan_list(){
+
+        $token = Session::get('token');
+        $roles_id = Session::get('roles_id');
+        $user_name = Session::get('user_name');
+        
+        return view('radius/dataplan', compact('roles_id','user_name','token'));
+    }
+    
+    public function update_qouta_plan_modal($id){
+
+
+        // return view('ajax.modals.update_nas');
+        $token = Session::get('token');
+        
+        $apiUrl = config('app.api_base_url') . '/qoutaservicesingle/' . $id;
+
+
+         // Make a request to the API with headers
+         $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->get($apiUrl);
+
+       
+        
+        
+
+         // Check if the response is successful
+         if ($response->successful()) {
+             $service = $response->json();
+             
+             
+   
+                $qouta_id = $service[0]['qouta_id'];
+             $name = $service[0]['name'];
+             $value = $service[0]['value'] / 1024;
+             $price = $service[0]['price'];
+             
+        
+             
+             // Pass the data to the view
+             return view('ajax.modals.update_dataplan_model', compact('qouta_id','name','value','price','token'));
+         } else {
+             return redirect()->back()->withErrors('Failed to fetch nas.');
+         }
+    }
 }

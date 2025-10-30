@@ -198,6 +198,12 @@
                                     <span class="side-menu__label">Service</span>
                                 </a>
                             </li>
+                            <li class="slide">
+                                <a href="{{url('data-plan')}}" class="side-menu__item">
+                                <i class='bx bx-purchase-tag side-menu__icon'></i>
+                                    <span class="side-menu__label">Data Plans</span>
+                                </a>
+                            </li>
                             
                                     
  @php

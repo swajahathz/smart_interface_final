@@ -760,6 +760,8 @@ $('#update_service_form').on('submit', function (e) {
             $('#updateBtn').hide();
             $('#updateloadingBtn').show();
 
+
+            let qouta_limit = $('#update_qouta_limit').val() * 1024;
             // Prepare form data
             let formData = {
                 srvname: $('#update_srvname').val(),
@@ -774,7 +776,7 @@ $('#update_service_form').on('submit', function (e) {
                 advTax: $('#update_adv').val(),
                 recharge_type: $('#update_recharge_type').val(),
                 qty: $('#update_qty').val(),
-               qouta_limit: $('#update_qouta_limit').val(),
+               qouta_limit: qouta_limit,
                 qouta_enable: $('input[name="qouta_enable"]:checked').val(),
             };
 

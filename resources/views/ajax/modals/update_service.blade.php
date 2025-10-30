@@ -130,7 +130,7 @@
                                                     
                                                             <div class="mb-2">
                                                                 <label for="recipient-name"
-                                                                    class="col-form-label">Qouta Limit </label>
+                                                                    class="col-form-label">Qouta Limit In GB</label>
                                                                 <input type="radio" name="qouta_enable" value="1"
     @if($qouta_enable == 1)
         checked
@@ -142,7 +142,7 @@
         checked
     @endif
 /> Disable
-                                                                <input type="number" name="qouta_limit" id="update_qouta_limit" class="form-control form-control-sm" placeholder="Type limit in MB" value="{{ $qouta_limit }}">
+                                                                <input type="number" name="qouta_limit" id="update_qouta_limit" class="form-control form-control-sm" placeholder="Type limit in GB" value="{{ floor($qouta_limit / 1024) }}">
                                                                
                                                             </div>
                                                             

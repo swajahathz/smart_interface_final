@@ -271,6 +271,21 @@ function load_invoice(id){
                                 searchPlaceholder: 'Search...',
                                 sSearch: '',
                             },
+                            "drawCallback": function (settings) {
+        var api = this.api();
+
+        // poore table ke rows
+        var allRows = api.rows().nodes();
+        var lastIndex = allRows.length - 1;
+
+        // sab buttons disable karo
+        $(allRows).find("button.refund").prop("disabled", true);
+
+        // sirf poore table ka last button enable karo
+        if (lastIndex >= 0) {
+            $(allRows).eq(lastIndex).find("button.refund").prop("disabled", false);
+        }
+    },
                             "pageLength": 10,
                             "ajax": {
                                 "url": baseUrl+"/subcriber/invoiceList/"+id, // Replace with your API URL
@@ -282,9 +297,99 @@ function load_invoice(id){
                             },
                             "columns": [
                                 { "data": null },  // For serial number
-                                { "data": "tranID" },
-                                { "data": "renewDate" },
-                                { "data": "ownerPrice" },
+                                { "data": "tranID",
+                                    "render": function(data, type, row) {
+                        
+                                            return `<div class="billing-invoice-details" style="width: auto;"> <span class="mb-0 fs-11">TranId # <span class="mb-0 fs-11 text-success">${row.tranID}</span></span> <span class="small text-muted fs-11 d-block">${row.renewDate}</span> </div>`;
+                                        }
+                                    
+                                },
+                                { "data": "invType",
+                                    "render": function(data, type, row) {
+                        
+                                            return `<div class="billing-invoice-details" style="width: auto;"> <span class="mb-0 fs-11">${row.qty} Day </span><button class="btn btn-success-light btn-sm me-2" style="font-size: 9px;
+    padding: 2px;">${row.srvname}</button>
+                                            <span class="small text-muted fs-11 d-block">${row.invType}<i class="bi bi-patch-check-fill text-success ms-2"></i> </span></div>`;
+                                        }},
+                              
+                                { "data": "lastExpirationDate",
+                                    "render": function(data, type, row) {
+                        
+                                            return `<div class="billing-invoice-details"> <span class="mb-0 fs-11">Expiration Update: </span> <br> <span class="mb-0 fs-11"><span class="mb-0 fs-11 text-danger">${row.lastExpirationDate}</span> To <span class="mb-0 fs-11 text-success">${row.newExpirationDate}</span></span> </div>`;
+                                        }
+                                        },
+                                        
+                                        {
+                                            
+                                            "data": "lastExpirationDate",
+                                    "render": function(data, type, row) {
+                                        
+                                        let totalMB = row.allowed + row.extra;
+                                        let allowed = parseFloat((totalMB / 1024).toFixed(1));
+                                        let usage = parseFloat((row.usage / 1024).toFixed(1));
+                                        let remaining = parseFloat((row.remaining / 1024).toFixed(1));
+                                        
+                                        let usagePercent = Math.floor((usage / allowed) * 100);
+                                        let remainingPercent = Math.floor((remaining / allowed) * 100);
+                                        
+                                        
+                        
+                                            return `<div class="d-flex"><div style="margin-right: 10px;
+    text-align: center;">
+                                            <span class="mb-0 fs-11 text-success">${allowed} GB</span><br>
+                                            <div class="progress progress-xs progress-animate nft-collector-progress"> <div class="progress-bar bg-success-gradient" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div><br>
+                                           
+                                            </div>
+                                             <span class="small text-muted fs-11 d-block">Allocated</span>
+                                            </div>
+                                            
+                                            <div style="margin-right: 10px;
+    text-align: center;">
+                                            <span class="mb-0 fs-11 text-danger">${usage} GB</span><br>
+                                            <div class="progress progress-xs progress-animate nft-collector-progress"> <div class="progress-bar bg-danger-gradient" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: ${usagePercent}%"></div><br>
+                                           
+                                            </div>
+                                             <span class="small text-muted fs-11 d-block">Consumed</span>
+                                            </div>
+                                            
+                                            <div style="
+    text-align: center;">
+                                            <span class="mb-0 fs-11 text-warning">${remaining} GB</span><br>
+                                            <div class="progress progress-xs progress-animate nft-collector-progress"> <div class="progress-bar bg-warning-gradient" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: ${remainingPercent}%"></div><br>
+                                           
+                                            </div>
+                                             <span class="small text-muted fs-11 d-block">Unused</span>
+                                            </div></div>`;
+                                        }
+                                            
+                                        },
+                              
+                                //  { 
+                                //     "data": "newExpirationDate",
+                                //     "render": function(data, type, row) {
+                                //         if (!data) return "N/A";
+                        
+                                //         let expirationDate = new Date(data);
+                                //         let currentDate = new Date();
+                        
+                                //         if (expirationDate < currentDate) {
+                                //             return '<span class="text-danger">Expire</span>';
+                                //         } else {
+                                //             let diffMs = expirationDate - currentDate;
+                                //             let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                                //             let diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                //             let diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                        
+                                //             return `<span class="text-success">Valid for ${diffDays}d ${diffHrs}h</span>`;
+                                //         }
+                                //     }
+                                // },
+                                { "data": "ownerPrice",
+                                    "render": function(data, type, row) {
+                        
+                                            return `<div class="billing-invoice-details" style="width: auto;"> <span class="mb-0 fs-11">Transaction Amount</span> <br><span class="badge bg-success text-fixed-white me-2">${row.ownerPrice}</span></div>`;
+                                        }
+                                },
                                 { "data": null }
                             ],
                             "columnDefs": [
@@ -301,9 +406,35 @@ function load_invoice(id){
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
-                                        return `
-                                            <a href="/print/${row.tranID}" target="_blank" class="btn btn-warning btn-sm btn-wave print">Print Invoice</a>
-                                        `;
+                                        
+                                      var tranId = row.tranID;
+                                var rowId = meta.row;
+
+//                                     if (rowId === 0) {
+//                                         // first row ka button disable nahi karna
+//                                     } else {
+//                                         // previous row ka button disable karna
+//                                         let prevBtn = document.getElementById(String(rowId - 1));
+//                                         if (prevBtn) {
+//                                             prevBtn.disabled = true;
+//                                         }
+// }
+                                       
+                                      
+                        
+                                        let expirationDate = new Date(row.newExpirationDate);
+                                             let currentDate = new Date();
+                        
+                                        if (expirationDate < currentDate) {
+                                                // expired invoice -> refund button disable, sirf print allow
+                                                        return `<button class="btn btn-warning btn-sm btn-wave" disabled>Used</button>
+                                                                <a href="/print/${tranId}" target="_blank" class="btn btn-warning btn-sm btn-wave print">Print</a>`;
+                                                    } else {
+                                                        // valid invoice -> refund + print dono allow
+                                                        return `<a href="/print/${tranId}" target="_blank" class="btn btn-warning btn-sm btn-wave print">Print</a>`;
+                                                    }
+                                        
+                                      
                                     }
                                 }
                             ],

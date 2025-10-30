@@ -115,30 +115,46 @@
                                                 
                                             </div>
                                             
-                                            <div class="d-flex">
-                                                <div class="flex-grow-1 ms-2 me-2">
-                                                        <p class="mb-0"><b>Invoice Amount</b></p>
-                                                        <h4 style="color: #686868;
-    font-weight: 600;
-    text-shadow: 1px 1px 1px #b5b4b4;">
-                                                            0                                </h4>
-                                                    </div>
+                                          <div class="d-flex">
+                                                 <div class="card custom-card overflow-hidden">
+                                                    <div class="card-body" style="padding: .6rem;">
+                                                         <div class="flex-grow-1 ms-2 me-2">
+                                                                <p class="mb-0"><b>Allowed</b></p>
+                                                                <h4 style="color: #686868;
+                                                                font-weight: 600;
+                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;" id="allowed_usage">
+                                                                                                                        0 GB                                </h4>
+                                                         </div>
+                                                     </div>
+                                                </div>
+                                                 <div class="card custom-card overflow-hidden">
+                                                    <div class="card-body" style="padding: .6rem;">
+                                                         <div class="flex-grow-1 ms-2 me-2">
+                                                                <p class="mb-0 text-success"><b>Used</b></p>
+                                                                <h4 style="color: #686868;
+                                                                font-weight: 600;
+                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;" id="used_usage">
+                                                                   
+                                                                                                                        0 GB                                </h4>
+                                                         </div>
+                                                     </div>
+                                                </div>
+                                                 <div class="card custom-card overflow-hidden">
+                                                    <div class="card-body" style="padding: .6rem;">
+                                                         <div class="flex-grow-1 ms-2 me-2">
+                                                                <p class="mb-0 text-danger" style="white-space: nowrap;"><b>Remaining</b></p>
+                                                                <h4 style="color: #686868;
+                                                                font-weight: 600;
+                                                                text-shadow: 1px 1px 1px #b5b4b4;font-size: large;white-space: nowrap;" id="remaining_usage">
+                                                                                                                        0 GB                                </h4>
+                                                         </div>
+                                                     </div>
+                                                </div>
+                                                
                                                     
-                                                    <div class="flex-grow-1 ms-2 me-2">
-                                                        <p class="mb-0"><b>Total Paid</b></p>
-                                                        <h4 style="color: #686868;
-    font-weight: 600;
-    text-shadow: 1px 1px 1px #b5b4b4;">
-                                                            0                                </h4>
-                                                    </div>
+                                                   
                                                     
-                                                    <div class="flex-grow-1 ms-2 me-2">
-                                                        <p class="mb-0 text-danger"><b>Due Amount</b></p>
-                                                        <h4 class="text-danger" style="
-    font-weight: 600;
-    text-shadow: 1px 1px 1px #b5b4b4;">
-                                                            0                                </h4>
-                                                    </div>
+                                                    
                                                     
                                                    
                                             </div>
@@ -960,13 +976,16 @@
                                                 <div class="tab-pane text-muted" id="invoice"
                                                     role="tabpanel" style="padding:5px;">
                                                     
-                                                    <div class="table-responsive">
+                                                      <div class="table-responsive">
                                                         <table id="invoice_table" class="table table-bordered text-nowrap w-100">
                                                             <thead>
-                                                                <tr>
+                                                                  <tr>
                                                                     <th>#</th>
                                                                     <th>TranID</th>
-                                                                    <th>Date</th>
+                                                                    <th>InvType</th>
+                                                                    <th>Expiration</th>
+                                                                    <th>Data</th>
+                                                                    <!--<th>Validity</th>-->
                                                                     <th>Total</th>
                                                                     <th>Action</th>
                                                                 </tr>
@@ -975,7 +994,6 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    
                                                     
                                                 </div>
                                                 
@@ -2212,6 +2230,34 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
         // Default run
         $("#days").trigger('change');
     });
+    
+        let usage_u = "{{ $subscriber[0]['username'] }}";
+    
+    $.ajax({
+                    url: baseUrl+'/usagesingle/'+usage_u,  // Replace with your API endpoint
+                    type: 'get',
+                    contentType: 'application/json',
+                    headers: {
+                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                        'Accept': 'application/json'
+                    },
+                    success: function (response) {
+                        
+                        console.log(response.allowed);
+                        
+                      let allowed = parseFloat(((response.allowed || 0) / 1024).toFixed(1));
+                        let usage = parseFloat(((response.usage || 0) / 1024).toFixed(1));
+                        let remaining = parseFloat(((response.remaining || 0) / 1024).toFixed(1));
+                       
+                            
+                          $("#allowed_usage").text(allowed+" GB");
+                            $("#used_usage").text(usage+ " GB");
+                            $("#remaining_usage").text(remaining+" GB");
+                          
+                        
+                    }
+                    
+         });
         </script>
         
  @php
@@ -2224,7 +2270,7 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
                         <script src="{{ asset('js/subscriber_speed_graph.js?v=1.0.16') }}"></script>
                     @endif
         
-        <script src="{{ asset('js/subscriber.js?v=1.0.0.5') }}"></script>
+        <script src="{{ asset('js/subscriber.js?v=1.0.0.6') }}"></script>
         <script src="{{ asset('js/function/showalert.js') }}"></script>
         <script src="{{ asset('js/function/toast.js') }}"></script>
         

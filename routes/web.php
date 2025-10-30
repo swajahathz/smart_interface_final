@@ -355,6 +355,7 @@ Route::get('/policy/grouplist/{id}', [PolicyController::class, 'group_list'])->n
 
 // SERVICE
 Route::get('/service', [ServiceController::class, 'service_list'])->name('service')->middleware('auth_token');
+Route::get('/data-plan', [ServiceController::class, 'dataplan_list'])->name('dataplan_list')->middleware('auth_token');
 
 // MODAL AJAX
 Route::get('/update_nas_modal/{id}', [NasController::class, 'update_nas_modal'])->name('update_nas_modal')->middleware('auth_token');
@@ -362,6 +363,7 @@ Route::get('/update_pool_modal/{id}', [PoolController::class, 'update_pool_modal
 Route::get('/update_policy_modal/{id}', [PolicyController::class, 'update_policy_modal'])->name('update_policy_modal')->middleware('auth_token');
 Route::get('/update_policy_group_modal/{id}', [PolicyController::class, 'update_policy_group_modal'])->name('update_policy_group_modal')->middleware('auth_token');
 Route::get('/update_service_modal/{id}', [ServiceController::class, 'update_service_modal'])->name('update_service_modal')->middleware('auth_token');
+Route::get('/update_qouta_plan_modal/{id}', [ServiceController::class, 'update_qouta_plan_modal'])->name('update_qouta_plan_modal')->middleware('auth_token');
 Route::get('/refund_modal/{tranId}', [RechargeController::class, 'refund_modal'])->name('refund_modal');
 
 

@@ -974,11 +974,9 @@
                                                                     <th>#</th>
                                                                     <th>TranID</th>
                                                                     <th>InvType</th>
-                                                                    <th>Days</th>
-                                                                    <th>Renew Date</th>
-                                                                    <th>Last Expiration</th>
-                                                                    <th>New Expiration</th>
-                                                                    <th>Validity</th>
+                                                                    <th>Expiration</th>
+                                                                    <th>Data</th>
+                                                                    <!--<th>Validity</th>-->
                                                                     <th>Total</th>
                                                                     <th>Action</th>
                                                                 </tr>
@@ -2498,9 +2496,9 @@ let add = (parseFloat(totalamountvalue)  - parseFloat(discountamountvalue) + par
                         
                         console.log(response.allowed);
                         
-                      let allowed = Math.floor((response.allowed || 0) / 1024);
-let usage = Math.floor((response.usage || 0) / 1024);
-let remaining = Math.floor((response.remaining || 0) / 1024);
+                      let allowed = parseFloat(((response.allowed || 0) / 1024).toFixed(1));
+let usage = parseFloat(((response.usage || 0) / 1024).toFixed(1));
+let remaining = parseFloat(((response.remaining || 0) / 1024).toFixed(1));
                        
                             
                           $("#allowed_usage").text(allowed+" GB");
