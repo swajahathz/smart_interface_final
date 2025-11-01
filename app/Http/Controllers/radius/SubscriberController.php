@@ -486,8 +486,8 @@ class SubscriberController extends Controller
                 
                 $now = Carbon::now();
                 
-                // $n = $now->copy()->addMonth();
-                $n = $now->copy()->addMonth()->format('d M Y 12:00');
+                
+                $n = $now->copy()->addMonth();
                 $daysAdded = $now->diffInDays($n);
                 } else {
                     // $new_expiration = $lastExpiration->addMonth()->format('d M Y H:i');
