@@ -59,6 +59,25 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://api.glownet.net.pk/api']);
                 
                 
+        }elseif ($host === 'partner.broadfibernetwork.com') {
+            $settings = [
+                'title' => 'BroadFiber Network | Billing System',
+                'logo' => '<img src="/build/assets/images/broadfiber.png" style="width: 140px;"/>',
+                'fav' => '/build/assets/images/broadfiber.png',
+                'description' => 'BroadFiber Network',
+                'primary' => '--primary-rgb: 81, 81, 81;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #444444;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#5151511f',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://radiusapi.atozsofts.com/api']);
+                
+                
         }
          elseif ($host === 'isp.prime.net.pk') {
             $settings = [

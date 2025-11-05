@@ -220,6 +220,11 @@
                                                 aria-current="page" href="#managerledger" id="managerledger_btn"  data-username="{{ $manager['user_id'] }}" aria-selected="false"><i
                                                         class="ri-bank-line me-2 align-middle d-inline-block"></i>Manager Ledger</a> 
                                                         
+                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
+                                                aria-current="page" href="#vlan_tab" id="vlan_btn"  data-username="{{ $manager['user_id'] }}" aria-selected="false"><i
+                                                        class="ri-bank-line me-2 align-middle d-inline-block"></i>VLAN Restriction</a>       
+                                                
+                                                        
                                                 <a class="nav-link" data-bs-toggle="tab" role="tab"
                                                 aria-current="page" href="#permission" id="permission_btn"  data-username="{{ $manager['user_id'] }}" aria-selected="false"><i
                                                         class="ri-bank-line me-2 align-middle d-inline-block"></i>Permissions</a>
@@ -383,12 +388,7 @@
                                                                             </div>
                                                                         @endif
                                                                    
-                                                                   <div class="col-xl-12">
-                                                                                <div class="input-group">
-                                                                                    <input type="text" class="form-control" id="vlan" value="{{ $manager['vlan'] }}" placeholder="Leave blank for disable.  Example 401, 402, 403">
-                                                                                    <div class="input-group-text">VLAN ALLOWED</div>
-                                                                                     </div>
-                                                                            </div>
+                                                                  
                                                                     <div class="col-xl-12">
                                                                         <label for="job-description" class="form-label">Description :</label>
                                                                         <textarea class="form-control" id="remarks" rows="2">{{ $manager['remarks'] }}</textarea>
@@ -1016,6 +1016,36 @@
                                                     
                                                 </div>
                                                 
+                                                 <div class="tab-pane text-muted" id="vlan_tab"
+                                                    role="tabpanel" style="border: 0;">
+                                                    <form id="subscriber_vlan_form" method="POST">
+                                                            <div class="card-body" style="padding:0;">
+                                                            <div class="alert-container"></div>
+                                                                <div class="row gy-4 mb-4">
+                                                              
+                                                                   
+                                                                   <div class="col-xl-12">
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" id="vlan" value="{{ $manager['vlan'] }}" placeholder="Leave blank for disable.  Example 401, 402, 403">
+                                                                                    <div class="input-group-text">VLAN ALLOWED</div>
+                                                                                     </div>
+                                                                            </div>
+                                                                  
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-footer text-end pt-0">
+                                                                            <button type="submit" id="submitvlanBtn" href="javascript:void(0);" class="btn btn-primary btn-wave waves-effect waves-light" style="width:100%;">
+                                                                                Update
+                                                                            </button>
+                                                                            <button class="btn btn-primary-light loadingBtn" style="display:none;" type="button" disabled="" style="width:100%;">
+                                                                                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
+                                                                                Loading...
+                                                                            </button>
+                                                            </div>
+                                                            </form>
+                                                </div>
+                                                
                                                 <div class="tab-pane text-muted" id="permission"
                                                     role="tabpanel" style="padding:5px;">
                                                     
@@ -1481,7 +1511,6 @@ $('#service_table').on('click', '.alert-confirm', function() {
                 dplc_id: $('#dplc_id').val(),
                 aggr_id: $('#aggr_id').val(),
                 ref_id: $('#ref_id').val(),
-                vlan: $('#vlan').val(),
             };
             
             
@@ -1539,6 +1568,82 @@ $('#service_table').on('click', '.alert-confirm', function() {
                 $('#subscriber_form input, #subscriber_form button').prop('disabled', false);
                 $('.loadingBtn').hide();
                 $('#submitBtn').show();
+                 }
+            });
+});
+
+
+ $('#subscriber_vlan_form').on('submit', function (e) {
+                    e.preventDefault();
+
+
+            // Disable all inputs and buttons
+          $('#subscriber_vlan_form input, #subscriber_vlan_form button').prop('disabled', true);
+            $('#submitvlanBtn').hide();
+            $('.loadingBtn').show();
+
+          
+            // Prepare form data
+            let formData = {
+            
+                vlan: $('#vlan').val(),
+            };
+            
+            
+         
+
+            var manager_id = $('#user_id').val();
+
+            // Send AJAX request
+            $.ajax({
+                url: baseUrl+'/managervlanupdate/'+manager_id,  // Replace with your API endpoint
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                headers: {
+                    'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    console.log(response.status);
+
+                    if (response.status === 1) {
+                        showToast("bg-success","Manager VLAN Updated.",response.message)
+                        // $('#subscriber_form')[0].reset();
+
+                    }
+                    else if (response.status === 2) {
+                        // ALREADY AVALIABLE
+                        showToast("bg-warning","Already Available. ",response.message)
+
+                        // alert(response.message);
+                    } 
+                    else if (response.status === 501) {
+                        //RADIUS SERVER ERROR
+                        // showAlert(response.message,"danger");
+                        showToast("bg-danger","Server error. ",response.message)
+                    }
+                    else if (response.status === 500) {
+                        //RADIUS SERVER ERROR
+                        showAlert(response.message,"danger");
+                    }
+                    else if (response.status === 404) {
+                        //RADIUS SERVER ERROR
+                        showAlert(response.message,"danger");
+                    }
+                    
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                    showAlert('Something Wrong!',"danger");
+                },
+                complete: function () {
+                // Hide the Loading button and show the Submit button again
+
+                $('#subscriber_vlan_form input, #subscriber_vlan_form button').prop('disabled', false);
+                $('.loadingBtn').hide();
+                $('#submitvlanBtn').show();
                  }
             });
 });

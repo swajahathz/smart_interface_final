@@ -135,6 +135,9 @@ class AuthenticationController extends Controller
             if ($host === 'isp.prime.net.pk') {
                 return view('radius/auth/prime.signin');
             }
+            if ($host === 'partner.broadfibernetwork.com') {
+                return view('radius/auth/broadfiber.signin');
+            }
             
             // Default behavior
            $attempt_invalid = $request->cookie('attempt_invalid'); 
