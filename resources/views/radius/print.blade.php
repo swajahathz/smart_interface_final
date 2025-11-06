@@ -53,6 +53,10 @@
                                     
                                     @if ($apiUrll === 'https://apimynet.atozsofts.com/api')
                                     
+                                        @if ($user_name == "mynetbb")
+                                            {!! $domainSettings['logo'] !!}
+                                        @else
+                                        @endif
                                     @else
                                       {!! $domainSettings['logo'] !!}
                                     @endif
@@ -68,6 +72,16 @@
                                                         Billing From :
                                                     </p>
                                                      @if ($apiUrll === 'https://apimynet.atozsofts.com/api')
+                                                     
+                                                      @if ($user_name == "mynetbb")
+                                                             <p class="fw-bold mb-1">
+                                                            {{ $admin_info['com_name'] }}
+                                                            </p>
+                                                            <p class="mb-1 text-muted">
+                                                                {{ $admin_info['com_address'] }}
+                                                            </p>
+                                                        @else
+                                                        @endif
                                     
                                                     @else
                                                       <p class="fw-bold mb-1">
