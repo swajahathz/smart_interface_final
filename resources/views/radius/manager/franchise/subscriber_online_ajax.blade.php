@@ -222,8 +222,6 @@ div.dt-button-collection .dt-button:not(.dt-btn-split-drop) {
                                                 <th>USAGE</th>
                                                 <th>EXPIRATION</th>
                                                 <th>IPv4</th>
-                                                <th>IPv6</th>
-                                                <th>VLAN</th>
                                                 <th>MAC</th>
                                                 
                                                 <th>ADDRESS</th>
@@ -552,44 +550,7 @@ function load_datatable(manager_id,all,status){
         { data: "framedipaddress",
         render: function(data, type, row) {
         return data ? data : "Nil";
-    }},{
-    data: "framedipv6address",
-    render: function (data, type, row) {
-        // Combine IPv6 info
-        let ipv6Info = [
-            row.framedipv6address,
-            row.framedipv6prefix,
-            row.delegatedipv6prefix
-        ].filter(Boolean).join(" "); // removes null/empty values
-
-        // If all are null/empty, show "Not Assigned"
-        if (!ipv6Info) {
-            ipv6Info = "Not Assigned";
-        }
-
-        return `
-            <button type="button" class="btn btn-success-light btn-sm btn-wave" style="font-size: .65rem;">
-                ${ipv6Info}
-            </button>
-        `;
-    }
-}
-
-         
-        
-    ,
-       {
-    data: "nasportid",
-    render: function(data, type, row) {
-        if (!data) {
-            return "Nil";
-        } else if (data.length > 20) {
-            return "Nil";
-        } else {
-            return data;
-        }
-    }
-},
+    }},
         { data: "callingstationid",
         render: function(data, type, row) {
         return data ? data : "Nil";
