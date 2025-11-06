@@ -253,34 +253,16 @@ class SubscriberController extends Controller
         $roles_id = ucfirst(Session::get('roles_id'));
         $user_name = ucfirst(Session::get('user_name'));
         $user_id = Session::get('user_id');
-        
-           $apiUrl2 = config('app.api_base_url') . '/manager/hierarchy';
-
-         // Make a request to the API with headers
-         $response2 = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $token,
-        ])->get($apiUrl2);
-        
-
-           
-           if ($response2->successful()) {
-             $jsonData2 = $response2->json();
-             
-             // Check if it's not just an error message
-            if (is_array($jsonData2) && isset($jsonData2['message']) && $jsonData2['message'] === 'Manager not found!') {
-                $manager = null; // explicitly set null
-            } elseif (is_array($jsonData2)) {
-                $manager = $jsonData2;
-            }
-               
-           }
+  
            
         if($roles_id == 2){
-            return view('radius/manager/admin/subscriber_online_ajax', compact('manager','user_id','user_name','roles_id','token'));
-        }   
+            return view('radius/manager/admin/subscriber_online_ajax', compact('user_id','user_name','roles_id','token'));
+        }  
+         if($roles_id == 3){
+            return view('radius/manager/franchise/subscriber_online_ajax', compact('user_id','user_name','roles_id','token'));
+        } 
         
-        return view('radius/subscriber_online_ajax', compact('manager','user_id','user_name','roles_id','token'));
+        return view('radius/manager/franchise/subscriber_online_ajax', compact('user_id','user_name','roles_id','token'));
     }
     
     public function subscriber_active(){

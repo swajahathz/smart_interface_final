@@ -46,22 +46,38 @@
 <div class="card custom-card" id="invoice_area" style="width:70%;margin:auto;">
     
                                 <div class="card-header d-md-flex d-block">
-                                    {!! $domainSettings['logo'] !!}
+                                    
+                                    @php
+                                        $apiUrll = config('app.api_base_url');
+                                    @endphp
+                                    
+                                    @if ($apiUrll === 'https://apimynet.atozsofts.com/api')
+                                    
+                                    @else
+                                      {!! $domainSettings['logo'] !!}
+                                    @endif
+                                    
                                 </div>
                                 <div class="card-body">
                                     <div class="row gy-3">
                                         <div class="col-xl-12">
                                             <div class="row">
                                                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                                                   
                                                     <p class="text-muted mb-2">
                                                         Billing From :
                                                     </p>
-                                                    <p class="fw-bold mb-1">
+                                                     @if ($apiUrll === 'https://apimynet.atozsofts.com/api')
+                                    
+                                                    @else
+                                                      <p class="fw-bold mb-1">
                                                         {{ $admin_info['com_name'] }}
-                                                    </p>
-                                                    <p class="mb-1 text-muted">
-                                                        {{ $admin_info['com_address'] }}
-                                                    </p>
+                                                        </p>
+                                                        <p class="mb-1 text-muted">
+                                                            {{ $admin_info['com_address'] }}
+                                                        </p>
+                                                    @endif
+                                                    
                                                     <p class="mb-1 text-muted">
                                                         {{ $admin_info['com_email'] }}
                                                     </p>

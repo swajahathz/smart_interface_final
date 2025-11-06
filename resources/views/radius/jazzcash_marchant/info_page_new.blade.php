@@ -183,8 +183,6 @@ $Securehash = hash_hmac('sha256', $SortedArray, $HashKey);
           <div style="width:400px; margin:auto;display:none;" id="form_jazz">
         <label  style="margin-top:10px;">Mobile Account Number:</label>
           <input id="jazzmobile" name="jazzmobile" type="number" placeholder="Type JazzCash mobile Number"/>
-           <label style="margin-top:10px;">Last 6 Digit CNIC:</label>
-          <input id="jazzcnic" name="jazzcnic" type="number" placeholder="Type last 6 Digit CNIC"/>
           <button id="jazzcashSubmit" class="btn btn-danger" style="margin-top:10px; margin-bottom:20px; width: 100%;">Submit</button>
           </div>
           
@@ -282,7 +280,7 @@ $("#jazzcashSubmit").on('click', function () {
     $("#form_jazz").hide();
     
      // Show countdown + loader
-  let timeLeft = 30;
+  let timeLeft = 60;
   $("#counterArea").show();
   $("#loader").show();
   $("#counter").text(timeLeft);
@@ -303,7 +301,6 @@ $("#jazzcashSubmit").on('click', function () {
   
   
     let jazzmobile = $("#jazzmobile").val();
-    let jazzcnic = $("#jazzcnic").val();
         
     let amount = "<?php echo $pp_Amount; ?>";
 
@@ -318,7 +315,7 @@ $("#jazzcashSubmit").on('click', function () {
     $.ajax({
               url: "https://jazzcashmerchantapi.smartispsolutions.net/api.php",
               type: "POST",
-              data: {jazzmobile:jazzmobile,jazzcnic:jazzcnic,amount:amount,merchantID:merchantID,password:password,salt:salt,url:url,user:user},
+              data: {jazzmobile:jazzmobile,amount:amount,merchantID:merchantID,password:password,salt:salt,url:url,user:user},
               dataType: "json",
               success: function (data) {
                 clearInterval(countdown);
