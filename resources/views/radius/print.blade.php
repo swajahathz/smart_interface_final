@@ -53,14 +53,13 @@
                                     
                                     @if ($apiUrll === 'https://apimynet.atozsofts.com/api')
                                     
-                                        @if ($user_name == "mynetbb")
+                                        @if ($subscriber_info[0]['owner_id'] == 142)
                                             {!! $domainSettings['logo'] !!}
                                         @else
                                         @endif
                                     @else
                                       {!! $domainSettings['logo'] !!}
                                     @endif
-                                    
                                 </div>
                                 <div class="card-body">
                                     <div class="row gy-3">
@@ -73,7 +72,7 @@
                                                     </p>
                                                      @if ($apiUrll === 'https://apimynet.atozsofts.com/api')
                                                      
-                                                      @if ($user_name == "mynetbb")
+                                                      @if ($subscriber_info[0]['owner_id'] == 142)
                                                              <p class="fw-bold mb-1">
                                                             {{ $admin_info['com_name'] }}
                                                             </p>

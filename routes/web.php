@@ -331,6 +331,8 @@ Route::get('/subscribers', [SubscriberController::class, 'subscribers'])->name('
 Route::get('/subscriber_add', [SubscriberController::class, 'subscriber_add_page'])->name('subscriber_add')->middleware('auth_token');
 Route::get('/subscriber_info/{username}', [SubscriberController::class, 'subscriber_info_page'])->name('subscriber_info')->middleware('auth_token');
 
+
+Route::get('/subscriber/static/list', [SubscriberController::class, 'subscriber_static'])->name('subscriber_static')->middleware('auth_token');
 Route::get('/subscriber/active/list', [SubscriberController::class, 'subscriber_active'])->name('subscriber_active')->middleware('auth_token');
 Route::get('/subscriber/expire/list', [SubscriberController::class, 'subscriber_expire'])->name('subscriber_expire')->middleware('auth_token');
 Route::get('/subscriber/upcomingexpire/list', [SubscriberController::class, 'subscriber_upcoming_expire'])->name('subscriber_upcoming_expire')->middleware('auth_token');

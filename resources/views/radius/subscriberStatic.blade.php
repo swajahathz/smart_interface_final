@@ -31,12 +31,12 @@
 
                     <!-- Page Header -->
                     <div class="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                        <h1 class="page-title fw-semibold fs-18 mb-0">RECHARGE INVOICES</h1>
+                        <h1 class="page-title fw-semibold fs-18 mb-0"> STATIC SUBSCRIBER</h1>
                         <div class="ms-md-1 ms-0">
                             <nav>
                                 <ol class="breadcrumb mb-0">
                                     <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Recharge Invoices</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Static Subscriber</li>
                                 </ol>
                             </nav>
                         </div>
@@ -47,44 +47,36 @@
                 <!-- Start::row-1 -->
                 <div class="row">
                     
-                    @php
-                        use Carbon\Carbon;
-                    
-                        $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
-                        $endDate = Carbon::now()->format('Y-m-d');
-                    @endphp
-                    
                     <div class="col-xl-12">
                         <div class="card custom-card">
-                            <div class="card-header" style="justify-content: center;">
-                                <div class="card-titles d-flex">
-                                    <div><label class="form-control">Start Date</label></div>
-                                    <div style="margin-right:1rem;"><input type="date" id="sd" class="form-control" value="{{ $startDate }}" /></div>
-                                    <div><label class="form-control">End Date</label></div>
-                                    <div  style="margin-right:1rem;"><input type="date" id="ed" value="{{ $endDate }}" class="form-control"/></div>
-                                    <div><button id="searchBtn" class="btn btn-md btn-primary">Search</button></div>
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="card-title">
+                                    ALL STATIC SUBSCRIBER LIST
                                 </div>
-                                
-                                
+                                <div>
+                               
+
+
+
+
+                              
+                            
                             </div>
-                            <div class="card-body" id="report_table" style="display:none;">
+                            </div>
+                            <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="datatable-basic" class="table table-bordered text-nowrap w-100">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Renew Date</th>
-                                                <th>TranID</th>
-                                                <th>Subscriber</th>
-                                                <th>Last Exp.</th>
-                                                <th>New Exp.</th>
-                                                <th>Type</th>
-                                                <th>Service</th>
-                                                <th>Duration</th>
+                                                <th>Username</th>
+                                                <th>IP Address</th>
                                                 <th>Price</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                   
                                         </tbody>
                                     </table>
                                 </div>
@@ -122,56 +114,28 @@
         
 
 <script>
-let encrypt = "{{$token}}";
+let encrypt = "{{ $token }}";
 let baseUrl = "{{ config('app.api_base_url') }}";
-let id = "{{ $user_id }}";
 
 
 
-$("#searchBtn").on('click',function(){
-    
-    let sd = $("#sd").val();
-    let ed = $("#ed").val();
-    let type = $("#type").val();
-    
-    $("#report_table").show();
-    
-    load_datatable(id,sd,ed,type);
-    
-});
 
 
-    
-    
-    
-    
-              function load_datatable(id,sd,ed,type){
-    // Destroy the existing DataTable instance (if exists)
+    load_datatable();
+              function load_datatable(){
+// Destroy the existing DataTable instance (if exists)
                 if ($.fn.dataTable.isDataTable('#datatable-basic')) {
                     $('#datatable-basic').DataTable().clear().destroy();
                 }
                 // basic datatable
               $('#datatable-basic').DataTable({
-                                                     dom: `
-                                <'d-flex justify-content-between align-items-center mb-3'
-                                    <'d-flex align-items-center gap-2'lB>
-                                    f
-                                >
-                                rt
-                                <'d-flex justify-content-between align-items-center mt-2'
-                                    i
-                                    p
-                                >
-                            `, // 'l' is for entries (length menu)
-                                buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis'],
-                                                        language: {
-                                                            searchPlaceholder: 'Search...',
-                                                            sSearch: '',
-                                                        },
-                            lengthMenu: [[25, 50, 500, 1000], [25, 50, 500, 1000]],
-                            pageLength: 25, // optional: sets default to 100 rows
+                            language: {
+                                searchPlaceholder: 'Search...',
+                                sSearch: '',
+                            },
+                            "pageLength": 10,
                             "ajax": {
-                                "url": baseUrl+"/rechargeinvoice/"+id+"/"+sd+"/"+ed, // Replace with your API URL
+                                "url": baseUrl+"/subscriberstatic", // Replace with your API URL
                                 "type": "GET",
                                 "dataSrc": "", // Adjust based on your API response format, e.g., "data" if necessary
                                 "beforeSend": function(xhr) {
@@ -180,15 +144,10 @@ $("#searchBtn").on('click',function(){
                             },
                             "columns": [
                                 { "data": null },  // For serial number
-                                { "data": "datetime" },
-                                { "data": "tranID" },
                                 { "data": "username" },
-                                { "data": "lastExpirationDate" },
-                                { "data": "newExpirationDate" },
-                                { "data": "Invtype" },
-                                { "data": "srvname" },
-                                { "data": "recharge_type" },
-                                { "data": "ownerPrice" },
+                                { "data": "value" },
+                                { "data": "price"},
+                                { "data": null }
                             ],
                             "columnDefs": [
                                 {
@@ -198,72 +157,36 @@ $("#searchBtn").on('click',function(){
                                     "render": function(data, type, row, meta) {
                                         return meta.row + 1; // Generate serial number based on row index
                                     }
-                                },
-                                {
-                                    "targets": 2,  // Last column for action buttons
-                                    "searchable": true,
+                                },{
+                                    
+                                     "targets": 1,  // Last column for action buttons
+                                    "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
                                         return `
-                                            <button type="button" class="btn btn-primary-light btn-sm btn-wave update">${row.tranID}</button>
+                                             <div class="ms-2">
+                                                              
+                                                                <p class="fs-12 text-muted mb-0"><a href="/subscriber_info/${row.username}"> ${row.username}</a></p>
+                                                            </div>
                                         `;
                                     }
                                 },
                                 {
-                                    "targets": 3,  // Last column for action buttons
+                                    "targets": -1,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
-                                        const initials = (row.username.charAt(0)).toUpperCase();
                                         return `
-                                            
-                                            
-                                            <div class="d-flex">
-                                         
-                                                            <div class="ms-2">
-                                                            <a href="/subscriber_info/${row.username}" class="text-primary fw-semibold">${row.username}</a>
-                                                            </div>
+                                             <div class="btn-list">
+                                                            <a href="/subscriber_info/${row.username}" class="btn btn-sm btn-warning-light btn-icon"><i class="ri-eye-line"></i></a>
                                                         </div>
                                         `;
                                     }
-                                },
-                                {
-                                    "targets": 6,  // Last column for action buttons
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function(data, type, row, meta) {
-                                        return `
-                                            <button type="button" class="btn btn-success-light btn-sm btn-wave update">${row.invType}</button>
-                                        `;
-                                    }
-                                },
-                                {
-                                     
-    
-    
-                                    "targets": 8,  // Last column for action buttons
-                                    "searchable": false,
-                                    "orderable": false,
-                                    "render": function(data, type, row, meta) {
-                                         let rechargeLabel = '';
-    if (row.recharge_type == 0) {
-        rechargeLabel = 'Days';
-    } else if (row.recharge_type == 1) {
-        rechargeLabel = 'Days';
-    } else if (row.recharge_type == 2) {
-        rechargeLabel = 'Days';
-    }
-                                        return `
-                                        <div class="btn-group"><button class="btn btn-success btn-sm" style="font-size: .65rem;">${rechargeLabel}</button><button class="btn btn-success-light btn-sm" style="font-size: .65rem;">${row.qty}</button></div>
-                                        `;
-                                    }
                                 }
-                                
                             ],
                             "order": [[0, 'asc']]
                 });
               }
-
 
     
 </script>

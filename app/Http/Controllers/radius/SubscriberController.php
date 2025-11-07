@@ -279,6 +279,13 @@ class SubscriberController extends Controller
         return view('radius/subscriberExpire', compact('user_name','roles_id','token'));
     }
     
+      public function subscriber_static(){
+        $token = Session::get('token');
+        $roles_id = ucfirst(Session::get('roles_id'));
+        $user_name = ucfirst(Session::get('user_name'));
+        return view('radius/subscriberStatic', compact('user_name','roles_id','token'));
+    }
+    
     public function subscriber_upcoming_expire(){
         $token = Session::get('token');
         $roles_id = ucfirst(Session::get('roles_id'));

@@ -68,6 +68,9 @@
                                         <a href="{{url('subscriber_add')}}" class="side-menu__item">Add Subscriber</a>
                                     </li>
                                     <li class="slide">
+                                        <a href="{{url('subscriber/static/list')}}" class="side-menu__item">Static IP</a>
+                                    </li>
+                                    <li class="slide">
                                         <a href="{{url('subscriber/active/list')}}" class="side-menu__item">Active</a>
                                     </li>
                                     <li class="slide">
