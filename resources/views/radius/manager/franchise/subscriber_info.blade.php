@@ -1388,10 +1388,13 @@
             let username = "{{$subscriber[0]['username_radacct']}}";
             let u = "{{$subscriber[0]['username']}}";
             let host = "{{ request()->getHost() }}";
+              let expireCheck = "{{$subscriber[0]['status']}}";
+        let onlineCheck = "{{$subscriber[0]['onlinestatus']}}";
 
 
 
 $("#enable_subscriber").on('change', function () {
+    kick();
                 // Get the current state of the checkbox
                 $('.loadingBtn').show();
                 var subscriber_id = $('#subscriber_id').val();
@@ -1708,6 +1711,7 @@ $("#change_expireBtn").on('click',function(e){
                     console.log(response.status);
 
                     if (response.status === 1) {
+                        kick();
                         $('#change_expire').modal('hide');
                         showToast("bg-success","Expire Date Updated.",response.message)
                         // $('#subscriber_form')[0].reset();
@@ -1771,6 +1775,8 @@ $("#change_service").on('click',function(e){
                     console.log(response.status);
 
                     if (response.status === 1) {
+                        
+                        kick();
 
                         $("#srvname").html(response.srvname);
                         $('#changeService').modal('hide');
@@ -1869,8 +1875,7 @@ $("#change_service").on('click',function(e){
         let rechrageUsername = $(this).attr("data-username"); 
         let rechargeTranId = $(this).attr("data-tranId");
         
-        let expireCheck = "{{$subscriber[0]['status']}}";
-        let onlineCheck = "{{$subscriber[0]['onlinestatus']}}";
+      
 
         $('.recharge_card').hide();
         $('.tran_card').css('display', 'flex');
@@ -1898,57 +1903,7 @@ $("#change_service").on('click',function(e){
                             audio.play();
                             
                             if(expireCheck === "expired"){
-                                    if(onlineCheck === "1"){
-                                        let kickUsername1 = "{{ $subscriber[0]['username'] }}";
-                                        let kickNas = "{{ $subscriber[0]['nas'] }}";
-                                        
-                                        $('.kick_loading').show();
-    
-                                         // Send AJAX request
-                                                $.ajax({
-                                                    url: baseUrl+'/subscriber/kick/'+kickUsername1+'/'+kickNas,  // Replace with your API endpoint
-                                                    type: 'POST',
-                                                    headers: {
-                                                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
-                                                        'Accept': 'application/json'
-                                                    },
-                                                    success: function (response) {
-                                                        console.log(response.status);
-                                    
-                                                        if (response.status === 1) {
-                                                            showToast("bg-success","Subscriber Disconnected.",response.message)
-                                                            // $('#subscriber_form')[0].reset();
-                                                            $('.online_status').hide();
-                                                             $('.offline_button').show();
-                                                            
-                                                            
-                                                            
-                                    
-                                                        }
-                                                        else if (response.status === 0) {
-                                                            // ALREADY AVALIABLE
-                                                            showToast("bg-warning","Subscriber Not Online. ",response.message)
-                                    
-                                                            // alert(response.message);
-                                                        } 
-                                                        else if (response.status === 501) {
-                                                            //RADIUS SERVER ERROR
-                                                            // showAlert(response.message,"danger");
-                                                            showToast("bg-danger","Server error. ",response.message)
-                                                        }
-                                                        
-                                                        
-                                                    },
-                                                    error: function (xhr, status, error) {
-                                                        console.error(status);
-                                                        showAlert('Something Wrong!',"danger");
-                                                    },
-                                                    complete: function () {
-                                                    // Hide the Loading button and show the Submit button again
-                                                    $('.kick_loading').hide();
-                                                     }
-                                                });
-                                    }
+                                   kick();
                                 }
                             
                             
@@ -2346,6 +2301,61 @@ let remaining = parseFloat(((response.remaining || 0) / 1024).toFixed(1));
                     }
                     
          });
+         
+         
+function kick(){
+     if(onlineCheck === "1"){
+                                        let kickUsername1 = "{{ $subscriber[0]['username'] }}";
+                                        let kickNas = "{{ $subscriber[0]['nas'] }}";
+                                        
+                                        $('.kick_loading').show();
+    
+                                         // Send AJAX request
+                                                $.ajax({
+                                                    url: baseUrl+'/subscriber/kick/'+kickUsername1+'/'+kickNas,  // Replace with your API endpoint
+                                                    type: 'POST',
+                                                    headers: {
+                                                        'Authorization': 'Bearer '+ encrypt, // Include token if needed
+                                                        'Accept': 'application/json'
+                                                    },
+                                                    success: function (response) {
+                                                        console.log(response.status);
+                                    
+                                                        if (response.status === 1) {
+                                                            showToast("bg-success","Subscriber Disconnected.",response.message)
+                                                            // $('#subscriber_form')[0].reset();
+                                                            $('.online_status').hide();
+                                                             $('.offline_button').show();
+                                                            
+                                                            
+                                                            
+                                    
+                                                        }
+                                                        else if (response.status === 0) {
+                                                            // ALREADY AVALIABLE
+                                                            showToast("bg-warning","Subscriber Not Online. ",response.message)
+                                    
+                                                            // alert(response.message);
+                                                        } 
+                                                        else if (response.status === 501) {
+                                                            //RADIUS SERVER ERROR
+                                                            // showAlert(response.message,"danger");
+                                                            showToast("bg-danger","Server error. ",response.message)
+                                                        }
+                                                        
+                                                        
+                                                    },
+                                                    error: function (xhr, status, error) {
+                                                        console.error(status);
+                                                        showAlert('Something Wrong!',"danger");
+                                                    },
+                                                    complete: function () {
+                                                    // Hide the Loading button and show the Submit button again
+                                                    $('.kick_loading').hide();
+                                                     }
+                                                });
+                                    }
+}
         </script>
         
  @php

@@ -396,11 +396,7 @@ $("#searchBtn").on('click',function(){
                                         const ed = row.subscriber_enable === 1 ? 'bg-success-transparent' : 'bg-danger-transparent';
                                         return `
                                             <div class="d-flex">
-                                                            <div class="lh-1">
-                                                                <span class="avatar avatar-sm avatar-rounded ${ed} fw-semibold">
-                                                                        ${initials}
-                                                                    </span>
-                                                            </div>
+                                                        
                                                             <div class="ms-2">
                                                                 <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}"> ${row.firstname} ${row.lastname}</a></p>
                                                                 <p class="fs-12 text-muted mb-0">${row.username}</p>
@@ -421,9 +417,7 @@ $("#searchBtn").on('click',function(){
                                             const ed = row.subscriber_enable === 1 ? 'bg-success-transparent' : 'bg-danger-transparent';
                                             return `
                                                 <div class="d-flex">
-                                                    <div class="lh-1">
-                                                        <span class="avatar avatar-sm avatar-rounded ${ed} fw-semibold">${initials}</span>
-                                                    </div>
+                                                 
                                                     <div class="ms-2">
                                                         <p class="fw-semibold mb-0 d-flex align-items-center">
                                                             <a href="/subscriber_info/${row.username}">${row.firstname} ${row.lastname}</a>

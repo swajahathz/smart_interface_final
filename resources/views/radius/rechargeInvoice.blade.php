@@ -221,7 +221,8 @@ $("#searchBtn").on('click',function(){
                                             <div class="d-flex">
                                          
                                                             <div class="ms-2">
-                                                            <a href="/subscriber_info/${row.username}" class="text-primary fw-semibold">${row.username}</a>
+                                                            <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}">  ${(row.firstname ?? '')} ${(row.subscriber?.lastname ?? '')}</a></p>
+                                                            <a href="/subscriber_info/${row.username}" class="text-primary fw-semibold">${row.subscriber.username}</a>
                                                             </div>
                                                         </div>
                                         `;
