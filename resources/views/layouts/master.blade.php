@@ -164,23 +164,31 @@
 $('#searchModal').on('shown.bs.modal', function () {
     $('#dashboard-search').trigger('focus');
   });
-
-            $("#dashboard-search").on('keyup',function(){
-                
-                $("#dashboard_search_according").show();
+  
+  
+$(document).on('click', '.list-group-item', function() {
+    $("#results").hide();
+      
+      
+      let u = $(this).data('username');
+      
+      $("#dashboard-search").val(u);
+      
+         $("#dashboard_search_according").show();
                 $("#dashboard_search_spinner").show();
                 $("#dashboard_subscriber_found").hide();
                 
                 var query = $("#dashboard-search").val();
                 
                  $.ajax({
-                        url: baseUrls+"/dashboard_search/"+query+"/10",
+                        url: baseUrls+"/dashboard_search/"+u+"/10",
                         type: "POST",
                         headers: {
                             "Authorization": "Bearer " + encrypt_t, // token header me send karna
                             "Accept": "application/json"
                         },
                         success: function (response) {
+                            console.log(response);
                             const roleMap = {
                                         2: "Admin",
                                         3: "Franchise",
@@ -190,11 +198,20 @@ $('#searchModal').on('shown.bs.modal', function () {
                                     };
                             
                              let html = "";
+                             let NOW = new Date(); // current date/time
                                     $.each(response.results, function (index, item) {
                                         let roleName = roleMap[item.owner?.roles_id] ?? "-";
+                                        
+                                           // parse expiration date from string to Date
+                                        let expirationDate = new Date(item.expiration);
+                                    
+                                        let color = "#6fff6f1c"; // default color
+                                        if (expirationDate < NOW) {
+                                            color = "#ff000014"; // expired
+                                        }
                                         html += `
                                             <tr>
-                                                <td>
+                                                <td style="background-color:${color};">
                                                     <div class="d-flex">
                                                         <div class="lh-1">
                                                             <span class="avatar avatar-sm avatar-rounded bg-${item.online_status == 1 ? 'success' : 'danger'}-transparent fw-semibold">
@@ -229,7 +246,111 @@ $('#searchModal').on('shown.bs.modal', function () {
                             console.error("Error:", xhr.responseText);
                         }
                     });
-                });
+      
+  })
+
+            // $("#dashboard-search").on('keyup',function(){
+                
+            //     $("#dashboard_search_according").show();
+            //     $("#dashboard_search_spinner").show();
+            //     $("#dashboard_subscriber_found").hide();
+                
+            //     var query = $("#dashboard-search").val();
+                
+            //      $.ajax({
+            //             url: baseUrls+"/dashboard_search/"+query+"/10",
+            //             type: "POST",
+            //             headers: {
+            //                 "Authorization": "Bearer " + encrypt_t, // token header me send karna
+            //                 "Accept": "application/json"
+            //             },
+            //             success: function (response) {
+            //                 const roleMap = {
+            //                             2: "Admin",
+            //                             3: "Franchise",
+            //                             4: "Dealer",
+            //                             5: "Sub Dealer",
+            //                             6: "Junior Dealer"
+            //                         };
+                            
+            //                  let html = "";
+            //                         $.each(response.results, function (index, item) {
+            //                             let roleName = roleMap[item.owner?.roles_id] ?? "-";
+            //                             html += `
+            //                                 <tr>
+            //                                     <td>
+            //                                         <div class="d-flex">
+            //                                             <div class="lh-1">
+            //                                                 <span class="avatar avatar-sm avatar-rounded bg-${item.online_status == 1 ? 'success' : 'danger'}-transparent fw-semibold">
+            //                                                     ${item.online_status == 1 ? 'Online' : 'Offline'}
+            //                                                 </span>
+            //                                             </div>
+            //                                             <div class="ms-2">
+            //                                                 <p class="fw-semibold mb-0 d-flex align-items-center">
+            //                                                     <a href="/subscriber_info/${item.username}">${item.firstname ?? ""} ${item.lastname ?? ""}</a>
+            //                                                 </p>
+            //                                                 <p class="fs-12 text-muted mb-0">${item.username ?? ""}</p>
+            //                                             </div>
+            //                                         </div>
+            //                                     </td>
+            //                                     <td>${item.mobile ?? "-"}</td>
+            //                                     <td><div class="btn-group ms-auto">
+            //             <a href="/manager/profile/${item.owner.managername ?? "-"}" class="btn btn-sm btn-primary-light">${item.owner.managername ?? "-"}</a>
+            //             <button class="btn btn-sm btn-primary">${roleName}</button>
+            //         </div></td>
+            //                                 </tr>
+            //                             `;
+            //                         });
+                            
+            //                         $("#dashboard_search_result").html(html);
+            //                         $("#dashboard_subscriber_found").html(response.total_found);
+                                    
+            //                         $("#dashboard_subscriber_found").show();
+            //                         $("#dashboard_search_spinner").hide();
+                                    
+            //             },
+            //             error: function (xhr) {
+            //                 console.error("Error:", xhr.responseText);
+            //             }
+            //         });
+            //     });
+            
+             $(document).ready(function() {
+            $('#dashboard-search').on('keyup', function() {
+                $("#results").show();
+                let query = $(this).val();
+                let type = $("#type").val();
+                let u_idd = "{{ session('user_id') }}";
+                
+                
+                
+
+                if (query.length > 1) {
+                    $.ajax({
+                        url: baseUrls+"/dashboard_search_all_type/"+type+"/"+query+"/10/"+u_idd,
+                        type: 'GET',
+                        data: { query: query },
+                         success: function(data) {
+                    $('#results').empty().removeClass('d-none');
+
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            $('#results').append(`
+                                <li class="list-group-item" data-username="${item.username}">
+                                    <strong>${item.result}</strong>
+                                </li>
+                            `);
+                        });
+                    } else {
+                        $('#results').append(`<li class="list-group-item text-muted">No results found</li>`);
+                    }
+                }
+                    });
+                } else {
+                    $('#result').empty();
+                }
+            });
+        });
                 
            
         </script>

@@ -3,10 +3,45 @@
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                    <div class="input-group">
-                        <a href="javascript:void(0);" class="input-group-text" id="Search-Grid"><i class="fe fe-search header-link-icon fs-18"></i></a>
-                        <input id="dashboard-search" type="search" class="form-control border-0 px-2" placeholder="Quick Subscriber Search" aria-label="Search">
+                    <!--<div class="input-group">-->
+                    <!--    <a href="javascript:void(0);" class="input-group-text" id="Search-Grid"><i class="fe fe-search header-link-icon fs-18"></i></a>-->
+                    <!--    <input id="dashboard-search" type="search" class="form-control border-0 px-2" placeholder="Quick Subscriber Search" aria-label="Search"  autocomplete="off">-->
+                         <style>
+        .search-box {
+            position: relative;
+        }
+        .list-group {
+            position: absolute;
+            width: 100%;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 0 0 0.5rem 0.5rem;
+            border-top: none;
+        }
+        .list-group-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
                       
+                    <!--</div>-->
+                    <div class="search-box">
+                        <div style="display:flex;">
+                            <a href="javascript:void(0);" class="input-group-text" id="Search-Grid"><i class="fe fe-search header-link-icon fs-18"></i></a>
+                            
+                            <select class="form-select" style="width:auto;" id="type">
+                                <option value="1">User ID</option>
+                                <option value="2">Full Name</option>
+                                <option value="3">Mobile</option>
+                                <option value="4">Address</option>
+                            </select>
+                        <input type="text" id="dashboard-search" class="form-control form-control-lg" placeholder="Type username..." autocomplete="off">
+                        </div>
+                        <ul class="list-group mt-1 d-none" id="results"></ul>
                     </div>
                     <!--<div class="mt-4">-->
                     <!--    <p class="font-weight-semibold text-muted mb-2">Are You Looking For...</p>-->
