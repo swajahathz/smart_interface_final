@@ -1358,6 +1358,8 @@
             let username = "{{$subscriber[0]['username_radacct']}}";
             let u = "{{$subscriber[0]['username']}}";
             let host = "{{ request()->getHost() }}";
+             let expireCheck = "{{$subscriber[0]['status']}}";
+        let onlineCheck = "{{$subscriber[0]['onlinestatus']}}";
 
 
 
@@ -1840,8 +1842,7 @@ $("#change_service").on('click',function(e){
         let rechrageUsername = $(this).attr("data-username"); 
         let rechargeTranId = $(this).attr("data-tranId");
         
-        let expireCheck = "{{$subscriber[0]['status']}}";
-        let onlineCheck = "{{$subscriber[0]['onlinestatus']}}";
+       
 
         $('.recharge_card').hide();
         $('.tran_card').css('display', 'flex');
