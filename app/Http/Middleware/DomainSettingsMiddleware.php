@@ -402,7 +402,7 @@ class DomainSettingsMiddleware
             ];
             
             // config(['app.api_base_url' => 'https://apimynet.smartispsolutions.com/api']);
-            config(['app.api_base_url' => 'https://apimynet.atozsofts.com/api']);
+            config(['app.api_base_url' => 'https://mynetapi.smartispsolutions.net/api']);
         }
         
         elseif ($host === 'partner.mylink.com.pk') {
