@@ -286,7 +286,7 @@ class DomainSettingsMiddleware
             
             
              // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
-                config(['app.api_base_url' => 'https://rdsapi.smartispsolutions.net/api']);
+                config(['app.api_base_url' => 'https://rdsserverapi.smartispsolutions.net/api']);
                 
                 
         }elseif ($host === 'al-awad.atozsofts.com') {
@@ -416,7 +416,7 @@ class DomainSettingsMiddleware
             ];
             
             // config(['app.api_base_url' => 'https://apimynet.smartispsolutions.com/api']);
-            config(['app.api_base_url' => 'https://apimynet.atozsofts.com/api']);
+            config(['app.api_base_url' => 'https://mynetapi.smartispsolutions.net/api']);
         }
 
         // Share settings with all views

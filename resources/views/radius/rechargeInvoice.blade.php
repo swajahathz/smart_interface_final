@@ -76,6 +76,7 @@
                                                 <th>Renew Date</th>
                                                 <th>TranID</th>
                                                 <th>Subscriber</th>
+                                                <th>FullName</th>
                                                 <th>Last Exp.</th>
                                                 <th>New Exp.</th>
                                                 <th>Type</th>
@@ -183,6 +184,7 @@ $("#searchBtn").on('click',function(){
                                 { "data": "datetime" },
                                 { "data": "tranID" },
                                 { "data": "username" },
+                                { "data": "firstname" },
                                 { "data": "lastExpirationDate" },
                                 { "data": "newExpirationDate" },
                                 { "data": "Invtype" },
@@ -214,14 +216,13 @@ $("#searchBtn").on('click',function(){
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
-                                        const initials = (row.username.charAt(0)).toUpperCase();
                                         return `
                                             
                                             
                                             <div class="d-flex">
                                          
                                                             <div class="ms-2">
-                                                            <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}">  ${(row.firstname ?? '')} ${(row.subscriber?.lastname ?? '')}</a></p>
+                                                            <p class="fw-semibold mb-0 d-flex align-items-center">
                                                             <a href="/subscriber_info/${row.username}" class="text-primary fw-semibold">${row.subscriber.username}</a>
                                                             </div>
                                                         </div>
@@ -229,7 +230,24 @@ $("#searchBtn").on('click',function(){
                                     }
                                 },
                                 {
-                                    "targets": 6,  // Last column for action buttons
+                                    "targets": 4,  // Last column for action buttons
+                                    "searchable": false,
+                                    "orderable": false,
+                                    "render": function(data, type, row, meta) {
+                                        return `
+                                            
+                                            
+                                            <div class="d-flex">
+                                         
+                                                            <div class="ms-2">
+                                                            <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}">  ${(row.firstname ?? '')} ${(row.subscriber?.lastname ?? '')}</a></p>
+                                                            </div>
+                                                        </div>
+                                        `;
+                                    }
+                                },
+                                {
+                                    "targets": 7,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
@@ -242,7 +260,7 @@ $("#searchBtn").on('click',function(){
                                      
     
     
-                                    "targets": 8,  // Last column for action buttons
+                                    "targets": 9,  // Last column for action buttons
                                     "searchable": false,
                                     "orderable": false,
                                     "render": function(data, type, row, meta) {
