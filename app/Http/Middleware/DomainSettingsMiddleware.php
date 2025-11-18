@@ -286,7 +286,7 @@ class DomainSettingsMiddleware
             
             
              // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
-                config(['app.api_base_url' => 'https://rdsserverapi.smartispsolutions.net/api']);
+                config(['app.api_base_url' => 'https://rdsapi.smartispsolutions.net/api']);
                 
                 
         }elseif ($host === 'al-awad.atozsofts.com') {
@@ -392,6 +392,18 @@ class DomainSettingsMiddleware
             config(['app.api_base_url' => 'https://apiwhc.atozsofts.com/api']);
             
         }elseif ($host === 'bill.mynet.pk') {
+            $settings = [
+                'title' => 'MyNet BroadBand | CRM',
+                'logo' => '<img src="/build/assets/images/Mynet.png" style="width: 160px;"/>',
+                'fav' => '/build/assets/images/mynet-fav.png',
+                'description' => 'MyNet BroadBand CRM',
+                'primary' => '--primary-rgb: 0, 126, 191;',
+                'sidebar' => '',
+            ];
+            
+            // config(['app.api_base_url' => 'https://apimynet.smartispsolutions.com/api']);
+            config(['app.api_base_url' => 'https://mynetapi.smartispsolutions.net/api']);
+        }elseif ($host === '103.156.136.14') {
             $settings = [
                 'title' => 'MyNet BroadBand | CRM',
                 'logo' => '<img src="/build/assets/images/Mynet.png" style="width: 160px;"/>',

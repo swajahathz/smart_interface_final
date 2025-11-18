@@ -193,7 +193,7 @@
                                       <button id="sync" class="btn btn-danger btn-raised-shadow btn-wave btn-sm">Sync</button>
                                       
                                       
-                                    @if(request()->getHost() == "portal.citylinkscommunications.com")
+                                    @if(request()->getHost() == "portal.citylinksnetwork.com")
                                         <a href="/jazz/inv/{{ $subscriber[0]['username'] }}/{{ $subscriber[0]['password'] }}" target="_blank" class="btn btn-danger btn-sm">JazzCash Invoice</a>
                                     @endif
                                       

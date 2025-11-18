@@ -23,6 +23,7 @@ use App\Http\Controllers\radius\RechargeController;
 use App\Http\Controllers\radius\SettingController;
 use App\Http\Controllers\radius\LocationInfoController;
 use App\Http\Controllers\radius\OnlinePaymentController;
+use App\Http\Controllers\radius\SwichPayInController;
 
 use App\Http\Controllers\local_api_call\NasLocalController;
 
@@ -409,6 +410,20 @@ Route::get('/jazz/inv/{username}/{password}', [OnlinePaymentController::class, '
 Route::get('/jazzcashstatus/{status}', [OnlinePaymentController::class, 'jazzcash_merchant_status'])->name('jazzcash_merchant_status');
 Route::post('/jazzcash_status', [OnlinePaymentController::class, 'jazzcash_merchant_form'])->name('jazzcash_merchant_form');
 Route::get('/jazz_status/{status}/{amount}/{tid}', [OnlinePaymentController::class, 'jazzcash_merchant_status'])->name('jazzcash_merchant_status');
+
+
+
+// SWITCH PAYMENT GATEWAY
+Route::get('/api/swich/payin/callback/success', [SwichPayInController::class, 'successCallback'])
+    ->name('swich.payin.callback.success');
+
+// Failure Callback URL - Called when payment fails or is rejected
+Route::get('/api/swich/payin/callback/failure', [SwichPayInController::class, 'failureCallback'])
+    ->name('swich.payin.callback.failure');
+
+// Legacy Callback URL (for backward compatibility - optional)
+Route::get('/api/swich/payin/callback', [SwichPayInController::class, 'callback'])
+    ->name('swich.payin.callback');
 
 
 
