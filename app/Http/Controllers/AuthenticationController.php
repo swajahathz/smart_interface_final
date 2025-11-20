@@ -99,6 +99,10 @@ class AuthenticationController extends Controller
             if ($host === 'partnerz.alburakinternet.net.pk') {
                 return view('radius/auth/sblink.signin');
             }
+            
+            if ($host === 'ebilling.hashtagbb.net') {
+                return view('radius/auth/hashtagbb.signin');
+            }
 
             if ($host === 'billing.glownet.net.pk') {
                 return view('radius/auth/fiberish.signin');

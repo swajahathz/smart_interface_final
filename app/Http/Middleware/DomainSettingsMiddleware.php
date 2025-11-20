@@ -346,6 +346,25 @@ class DomainSettingsMiddleware
                 config(['app.api_base_url' => 'https://smartradapi.alburakinternet.net.pk/api']);
                 
                 
+        }elseif ($host === 'ebilling.hashtagbb.net') {
+            $settings = [
+                'title' => 'HashTag | Users billing system',
+                'logo' => '<img src="/build/assets/images/hashtag.png" style="width: 220px;"/>',
+                'fav' => '/build/assets/images/hashtag_icon.png',
+                'description' => 'HashTag user billing system',
+                'primary' => '--primary-rgb: 0, 60, 29;',
+                'sidebar' => '[data-menu-styles=dark][data-theme-mode=light] {
+            --menu-bg: #003c1d;
+            --menu-prime-color: #b9b9b9;
+        }',
+        'card_box' => '#003c1d',
+            ];
+            
+            
+             // config(['app.api_base_url' => 'https://api.smartispsolutions.com/api']);
+                config(['app.api_base_url' => 'https://api.fiber-beam.net/api']);
+                
+                
         }elseif ($host === 'cloudradius.alburakinternet.net.pk') {
             $settings = [
                 'title' => 'ALBURAK CLOUD RADIUS SYSTEM',

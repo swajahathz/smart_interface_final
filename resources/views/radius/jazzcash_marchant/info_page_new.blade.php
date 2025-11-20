@@ -280,7 +280,7 @@ $("#jazzcashSubmit").on('click', function () {
     $("#form_jazz").hide();
     
      // Show countdown + loader
-  let timeLeft = 60;
+  let timeLeft = 30;
   $("#counterArea").show();
   $("#loader").show();
   $("#counter").text(timeLeft);
@@ -324,10 +324,10 @@ $("#jazzcashSubmit").on('click', function () {
                  
                  console.log(data);
                 if(data.response.pp_ResponseCode === "999"){
-                    window.location.href = "https://portal.citylinkscommunications.com/jazz_status/0/1000/546848";
+                    window.location.href = "https://portal.citylinksnetwork.com/jazz_status/0/1000/546848";
                 }
                 if(data.response.pp_ResponseCode === "000"){
-                    window.location.href = "https://portal.citylinkscommunications.com/jazz_status/1/1000/546848";
+                    window.location.href = "https://portal.citylinksnetwork.com/jazz_status/1/1000/546848";
                 }
                 
               },

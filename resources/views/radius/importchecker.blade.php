@@ -150,7 +150,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                         
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <ul>
+                                <li>Username must be start with small Charector.</li>
+                            </ul>
+                        </div>
+                    </div>          
                     
                     <div class="col-xl-12">
                         <div class="card custom-card">

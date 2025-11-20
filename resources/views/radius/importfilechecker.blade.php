@@ -151,7 +151,18 @@
                                             </div>
                                         </div>
                                          
-                    
+                       <div class="col-xl-12">
+                        <div class="card custom-card p-3">
+                            <h4>Instructions:</h4>
+<ul>
+    <li>Download the demo file: <a href="/demo.xlsx" class="text-primary">Click Here</a></li>
+    <li>The username must start with a lowercase letter.</li>
+    <li>The first name can be up to 40 characters long. (Mandatory)</li>
+    <li>The Service ID (srvid) is mandatory.</li>
+</ul>
+
+                        </div>
+                    </div> 
                     <div class="col-xl-12">
                         <div class="card custom-card">
                             <div class="card-header" style="justify-content: center;">
