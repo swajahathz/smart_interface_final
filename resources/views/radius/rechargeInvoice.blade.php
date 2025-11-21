@@ -240,7 +240,7 @@ $("#searchBtn").on('click',function(){
                                             <div class="d-flex">
                                          
                                                             <div class="ms-2">
-                                                            <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}">  ${(row.firstname ?? '')} ${(row.subscriber?.lastname ?? '')}</a></p>
+                                                            <p class="fw-semibold mb-0 d-flex align-items-center"><a href="/subscriber_info/${row.username}">  ${(row.subscriber.firstname ?? '')} ${(row.subscriber.lastname ?? '')}</a></p>
                                                             </div>
                                                         </div>
                                         `;
